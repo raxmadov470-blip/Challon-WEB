@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CHALLON — Study. Challenge. Win.</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:    #1E293B;
+  --blue:    #3B82F6;
+  --blue-d:  #1D4ED8;
+  --c-navy:  #223278;
+  --c-red:   #C42C2E;
+  --c-green: #34C788;
+  --white:   #FFFFFF;
+  --gray-50: #F8FAFC;
+  --gray-100:#F1F5F9;
+  --gray-200:#E2E8F0;
+  --gray-400:#94A3B8;
+  --gray-600:#475569;
+  --gray-800:#1E293B;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #fff; color: var(--navy); overflow-x: hidden; }
+
+/* ── LANG SWITCHER ── */
+.lang-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: var(--navy);
+  display: flex; justify-content: flex-end; align-items: center;
+  padding: 6px 48px; gap: 4px;
+}
+.lang-btn {
+  background: transparent; border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600;
+  padding: 4px 12px; border-radius: 4px; cursor: pointer; letter-spacing: 0.5px;
+  transition: all .15s;
+}
+.lang-btn.active, .lang-btn:hover {
+  background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.5);
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 29px; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.96); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--gray-200);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 62px;
+}
+.logo { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; text-decoration: none; }
+.logo .ch { color: var(--c-navy); }
+.logo .o  { color: var(--c-red); }
+.logo .n  { color: var(--c-green); }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a { font-size: 13px; font-weight: 500; color: var(--gray-600); text-decoration: none; transition: color .15s; }
+.nav-links a:hover { color: var(--navy); }
+.nav-cta {
+  background: var(--blue); color: #fff; font-size: 13px; font-weight: 700;
+  padding: 9px 22px; border-radius: 8px; text-decoration: none; transition: background .15s;
+}
+.nav-cta:hover { background: var(--blue-d); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: 160px 48px 80px;
+  background: linear-gradient(160deg, #fff 50%, #EFF6FF 100%);
+  position: relative; overflow: hidden;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -200px; right: -200px;
+  width: 700px; height: 700px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(52,199,136,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.hero-left {}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #EFF6FF; border: 1px solid #BFDBFE;
+  padding: 5px 14px; border-radius: 100px; margin-bottom: 28px;
+}
+.hero-tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--c-green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+.hero-tag span { font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 1px; text-transform: uppercase; }
+.hero-word {
+  font-size: clamp(56px, 8vw, 88px); font-weight: 900;
+  letter-spacing: -3px; line-height: 1; margin-bottom: 24px;
+}
+.hero-word .ch { color: var(--c-navy); }
+.hero-word .o  { color: var(--c-red); }
+.hero-word .n  { color: var(--c-green); }
+.hero-desc { font-size: 18px; color: var(--gray-600); line-height: 1.7; margin-bottom: 10px; }
+.hero-italic { font-size: 15px; font-style: italic; color: var(--blue); margin-bottom: 40px; font-weight: 500; }
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-main {
+  background: var(--blue); color: #fff; font-size: 15px; font-weight: 700;
+  padding: 14px 32px; border-radius: 10px; text-decoration: none; display: inline-block;
+  transition: transform .15s, background .15s; box-shadow: 0 4px 16px rgba(59,130,246,0.35);
+}
+.btn-main:hover { background: var(--blue-d); transform: translateY(-1px); }
+.btn-ghost {
+  background: transparent; color: var(--navy); font-size: 15px; font-weight: 600;
+  padding: 14px 28px; border-radius: 10px; text-decoration: none; display: inline-block;
+  border: 1.5px solid var(--gray-200); transition: border-color .15s;
+}
+.btn-ghost:hover { border-color: var(--navy); }
+
+/* Hero right: feature cards */
+.hero-right { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.feat-card {
+  background: #fff; border: 1px solid var(--gray-200); border-radius: 14px;
+  padding: 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: transform .2s, box-shadow .2s;
+}
+.feat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.feat-card:first-child { grid-column: span 2; background: var(--c-navy); border-color: transparent; }
+.feat-card:first-child .feat-icon { background: rgba(255,255,255,0.1); }
+.feat-card:first-child .feat-title { color: #fff; }
+.feat-card:first-child .feat-sub { color: rgba(255,255,255,0.6); }
+.feat-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 12px; }
+.feat-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.feat-sub { font-size: 12px; color: var(--gray-600); line-height: 1.5; }
+
+/* ── SECTIONS ── */
+section { padding: 96px 48px; }
+.inner { max-width: 1100px; margin: 0 auto; }
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; margin-bottom: 10px; }
+.sec-title { font-size: clamp(28px,4vw,42px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.15; margin-bottom: 14px; }
+.sec-sub { font-size: 16px; color: var(--gray-600); line-height: 1.75; max-width: 600px; }
+.bar { height: 3px; width: 44px; background: var(--blue); margin: 18px 0 44px; border-radius: 2px; }
+
+/* ── HOW IT WORKS ── */
+.how-bg { background: var(--gray-50); }
+.steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+.step { position: relative; }
+.step-num {
+  font-size: 11px; font-weight: 800; letter-spacing: 2px; color: var(--blue);
+  background: #EFF6FF; display: inline-block; padding: 4px 10px; border-radius: 4px; margin-bottom: 16px;
+}
+.step-icon { font-size: 36px; margin-bottom: 12px; }
+.step-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.step-desc { font-size: 14px; color: var(--gray-600); line-height: 1.65; }
+.step-arrow {
+  position: absolute; top: 28px; right: -24px;
+  color: var(--gray-200); font-size: 24px; font-weight: 300;
+}
+.step:last-child .step-arrow { display: none; }
+
+/* ── PAIN ── */
+.pain-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
+.pain-card {
+  background: #fff; border: 1px solid var(--gray-200); border-left: 4px solid var(--blue);
+  border-radius: 0 12px 12px 0; padding: 28px;
+}
+.pain-stat { font-size: 44px; font-weight: 900; color: var(--c-red); letter-spacing: -2px; line-height: 1; margin-bottom: 6px; }
+.pain-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.pain-desc { font-size: 13px; color: var(--gray-600); line-height: 1.65; }
+.pain-note { margin-top: 40px; text-align: center; font-size: 15px; font-weight: 700; color: var(--blue); padding: 20px; background: #EFF6FF; border-radius: 10px; }
+
+/* ── WALLET ── */
+.wallet-bg { background: var(--navy); }
+.wallet-bg .eyebrow { color: var(--c-green); }
+.wallet-bg .sec-title { color: #fff; }
+.wallet-bg .sec-sub { color: var(--gray-400); }
+.wallet-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.wallet-card {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px; padding: 36px;
+}
+.wallet-row { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.wallet-row:last-child { border-bottom: none; }
+.w-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.w-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+.w-desc { font-size: 12px; color: var(--gray-400); line-height: 1.5; }
+.wallet-science { margin-top: 32px; padding: 20px; background: rgba(52,199,136,0.1); border: 1px solid rgba(52,199,136,0.25); border-radius: 12px; }
+.wallet-science p { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.65; }
+.wallet-science strong { color: var(--c-green); }
+
+/* ── FEATURES GRID ── */
+.features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.f-card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 14px; padding: 28px; transition: box-shadow .2s; }
+.f-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+.f-ico { font-size: 32px; margin-bottom: 14px; }
+.f-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.f-desc { font-size: 13px; color: var(--gray-600); line-height: 1.65; }
+.f-tag { display: inline-block; margin-top: 12px; font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+.f-tag.only { background: #FEF3C7; color: #92400E; }
+.f-tag.new  { background: #D1FAE5; color: #065F46; }
+
+/* ── TOPIK ── */
+.topik-bg { background: var(--gray-50); }
+.topik-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.topik-levels { display: flex; flex-direction: column; gap: 14px; }
+.level-bar { display: flex; align-items: center; gap: 16px; }
+.level-label { font-size: 13px; font-weight: 700; color: var(--navy); width: 70px; flex-shrink: 0; }
+.level-track { flex: 1; height: 10px; background: var(--gray-200); border-radius: 5px; overflow: hidden; }
+.level-fill { height: 100%; border-radius: 5px; transition: width 1s ease; }
+.l1,.l2 { background: var(--c-green); }
+.l3,.l4 { background: var(--blue); }
+.l5,.l6 { background: var(--c-navy); }
+.level-pct { font-size: 12px; font-weight: 700; color: var(--gray-400); width: 36px; text-align: right; }
+.topik-info { }
+.topik-stat { font-size: 48px; font-weight: 900; color: var(--c-navy); letter-spacing: -2px; }
+.topik-stat-label { font-size: 14px; color: var(--gray-600); margin-bottom: 24px; }
+.topik-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.topik-list li { font-size: 14px; color: var(--gray-600); display: flex; align-items: flex-start; gap: 10px; line-height: 1.6; }
+.topik-list li::before { content: '✓'; color: var(--c-green); font-weight: 800; flex-shrink: 0; margin-top: 2px; }
+
+/* ── PRICING ── */
+.price-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.price-card { border: 1.5px solid var(--gray-200); border-radius: 16px; padding: 32px; position: relative; }
+.price-card.featured { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
+.price-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--blue); color: #fff; font-size: 10px; font-weight: 700; padding: 4px 14px; border-radius: 100px; letter-spacing: 1px; white-space: nowrap; }
+.price-name { font-size: 13px; font-weight: 700; color: var(--gray-600); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.price-val { font-size: 40px; font-weight: 900; color: var(--navy); letter-spacing: -2px; margin-bottom: 4px; }
+.price-val span { font-size: 18px; font-weight: 500; color: var(--gray-400); }
+.price-period { font-size: 13px; color: var(--gray-400); margin-bottom: 24px; }
+.price-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+.price-list li { font-size: 13px; color: var(--gray-600); display: flex; align-items: center; gap: 8px; }
+.price-list li::before { content: '✓'; color: var(--c-green); font-weight: 800; }
+.price-list li.off { color: var(--gray-400); }
+.price-list li.off::before { content: '–'; color: var(--gray-300); }
+.price-btn {
+  display: block; text-align: center; padding: 12px; border-radius: 8px;
+  font-size: 14px; font-weight: 700; text-decoration: none;
+  background: var(--gray-100); color: var(--navy); transition: background .15s;
+}
+.price-card.featured .price-btn { background: var(--blue); color: #fff; }
+.price-btn:hover { opacity: 0.9; }
+
+/* ── TESTIMONIAL ── */
+.testi-bg { background: var(--c-navy); }
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.testi-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px; }
+.testi-stars { font-size: 14px; margin-bottom: 12px; color: #FCD34D; }
+.testi-text { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+.testi-name { font-size: 13px; font-weight: 700; color: #fff; }
+.testi-sub { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+/* ── FAQ ── */
+.faq-list { display: flex; flex-direction: column; gap: 2px; max-width: 780px; }
+.faq-item { border: 1px solid var(--gray-200); border-radius: 10px; overflow: hidden; }
+.faq-q {
+  width: 100%; text-align: left; padding: 18px 24px; background: #fff;
+  font-size: 15px; font-weight: 600; color: var(--navy); cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center; border: none;
+}
+.faq-q .arr { color: var(--blue); font-size: 18px; transition: transform .2s; }
+.faq-a { padding: 0 24px; max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s; }
+.faq-a.open { max-height: 300px; padding: 0 24px 18px; }
+.faq-a p { font-size: 14px; color: var(--gray-600); line-height: 1.7; }
+
+/* ── CTA FINAL ── */
+.cta-final {
+  background: linear-gradient(135deg, var(--c-navy) 0%, #111827 100%);
+  text-align: center; padding: 120px 48px;
+}
+.cta-word { font-size: clamp(48px,7vw,80px); font-weight: 900; letter-spacing: -3px; margin-bottom: 16px; }
+.cta-word .ch { color: rgba(255,255,255,.9); }
+.cta-word .o  { color: var(--c-red); }
+.cta-word .n  { color: var(--c-green); }
+.cta-slogan { font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+.cta-tagline-main { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 48px; }
+.cta-stores { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.store-btn {
+  background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15);
+  color: #fff; padding: 14px 28px; border-radius: 12px; text-decoration: none;
+  font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+  transition: background .15s;
+}
+.store-btn:hover { background: rgba(255,255,255,0.15); }
+.store-btn .s-icon { font-size: 22px; }
+.cta-sub { margin-top: 48px; font-size: 13px; color: rgba(255,255,255,0.3); }
+
+/* ── FOOTER ── */
+footer {
+  background: #0F172A; padding: 48px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 40px;
+}
+.footer-brand .logo { display: block; margin-bottom: 12px; }
+.footer-brand p { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.7; }
+.footer-col h4 { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 16px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul li a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; }
+.footer-col ul li a:hover { color: rgba(255,255,255,0.8); }
+.footer-bottom { background: #0F172A; border-top: 1px solid rgba(255,255,255,0.06); padding: 20px 48px; text-align: center; font-size: 12px; color: rgba(255,255,255,0.25); }
+
+/* ── LANGUAGE CONTENT ── */
+[data-lang] { display: none; }
+[data-lang].active { display: block; }
+[data-lang-inline] { display: none; }
+[data-lang-inline].active { display: inline; }
+
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .lang-bar { padding: 6px 20px; }
+  section { padding: 64px 20px; }
+  .hero { padding: 120px 20px 64px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+  .hero-right { display: none; }
+  .steps { grid-template-columns: 1fr; }
+  .step-arrow { display: none; }
+  .pain-grid, .features-grid, .price-grid, .testi-grid { grid-template-columns: 1fr; }
+  .wallet-inner, .topik-grid { grid-template-columns: 1fr; }
+  footer { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- LANG BAR -->
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" onclick="setLang('ko')">한국어</button>
+  <button class="lang-btn" onclick="setLang('uz')">O'Z</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo"><span class="ch">CHALL</span><span class="o">O</span><span class="n">N</span></a>
+  <ul class="nav-links">
+    <li><a href="#how" data-nav="how">How it works</a></li>
+    <li><a href="#features" data-nav="features">Features</a></li>
+    <li><a href="#pricing" data-nav="pricing">Pricing</a></li>
+    <li><a href="#faq" data-nav="faq">FAQ</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">
+    <span data-lang="en" class="active">Get Early Access</span>
+    <span data-lang="ko">얼리 액세스 신청</span>
+    <span data-lang="uz">Erta kirish</span>
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-tag">
+        <div class="dot"></div>
+        <span data-lang="en" class="active">NOW IN BETA · TOPIK PLATFORM</span>
+        <span data-lang="ko">베타 출시 · TOPIK 플랫폼</span>
+        <span data-lang="uz">BETA DAVRI · TOPIK PLATFORMASI</span>
+      </div>
+      <div class="hero-word"><span class="ch">CHALL</span><span class="o">O</span><span class="n">N</span></div>
+
+      <p class="hero-desc" data-lang="en" style="display:block">The only platform that makes sure you don't quit studying for TOPIK.</p>
+      <p class="hero-desc" data-lang="ko">TOPIK 공부를 끝까지 할 수 있도록 설계된 유일한 플랫폼.</p>
+      <p class="hero-desc" data-lang="uz">TOPIK tayyorgarligini oxirigacha olib borishingizni ta'minlaydigan yagona platforma.</p>
+
+      <p class="hero-italic" data-lang="en" style="display:block">"We built what nobody else was willing to build."</p>
+      <p class="hero-italic" data-lang="ko">"아무도 만들지 않으려 했던 것을 우리가 만들었습니다."</p>
+      <p class="hero-italic" data-lang="uz">"Hech kim yaratishni istamaganni biz yaratdik."</p>
+
+      <div class="hero-btns">
+        <a href="#cta" class="btn-main">
+          <span data-lang="en" class="active">Start Free</span>
+          <span data-lang="ko">무료로 시작하기</span>
+          <span data-lang="uz">Bepul boshlash</span>
+        </a>
+        <a href="#how" class="btn-ghost">
+          <span data-lang="en" class="active">See How It Works</span>
+          <span data-lang="ko">작동 방식 보기</span>
+          <span data-lang="uz">Qanday ishlashini ko'rish</span>
+        </a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="feat-card">
+        <div class="feat-icon">💰</div>
+        <div class="feat-title">Challenge Wallet™</div>
+        <div class="feat-sub">Deposit money. Study. Get it back — plus rewards. Quit and lose it. Real stakes, real results.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🧠</div>
+        <div class="feat-title">AI Diagnosis</div>
+        <div class="feat-sub">Your exact TOPIK level in 15 questions. Not 50.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">✍️</div>
+        <div class="feat-title">Writing Coach</div>
+        <div class="feat-sub">Only platform with AI correction for Q53/Q54 essays.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">👥</div>
+        <div class="feat-title">Squad Mode</div>
+        <div class="feat-sub">Study with 4–6 people at your level. Nobody disappears.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section style="background:var(--gray-50)">
+  <div class="inner">
+    <div class="eyebrow" data-lang="en" style="display:block">The Real Problem</div>
+    <div class="eyebrow" data-lang="ko">진짜 문제</div>
+    <div class="eyebrow" data-lang="uz">Asosiy muammo</div>
+
+    <h2 class="sec-title" data-lang="en" style="display:block">A million people start TOPIK every year. Most quit.</h2>
+    <h2 class="sec-title" data-lang="ko">매년 100만 명이 TOPIK을 시작합니다. 대부분 포기합니다.</h2>
+    <h2 class="sec-title" data-lang="uz">Har yil million kishi TOPIK'ni boshlaydi. Ko'pchiligi tashlab ketadi.</h2>
+
+    <div class="bar"></div>
+
+    <p class="sec-sub" data-lang="en" style="display:block">Not because Korean is hard. Because nothing keeps them going. Existing apps teach content. None stop people from quitting.</p>
+    <p class="sec-sub" data-lang="ko">한국어가 어려워서가 아닙니다. 계속할 이유가 없기 때문입니다. 기존 앱들은 콘텐츠를 가르칩니다. 하지만 포기를 막아주는 앱은 없습니다.</p>
+    <p class="sec-sub" data-lang="uz">Koreys tili qiyin bo'lgani uchun emas. Davom ettiradigan narsa yo'qligi sababli. Mavjud ilovalar faqat kontent o'rgatadi. Lekin hech biri tashlab ketishni to'xtatmaydi.</p>
+
+    <div style="margin-top:44px" class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-stat">71%</div>
+        <div class="pain-title" data-lang="en" style="display:block">Drop Out</div>
+        <div class="pain-title" data-lang="ko">중도 포기</div>
+        <div class="pain-title" data-lang="uz">Tark etish</div>
+        <div class="pain-desc" data-lang="en" style="display:block">7 in 10 candidates quit within 60 days. Months of solo study with no feedback wears people down.</div>
+        <div class="pain-desc" data-lang="ko">10명 중 7명이 60일 내에 포기합니다. 피드백 없이 혼자 공부하는 것은 사람을 지치게 합니다.</div>
+        <div class="pain-desc" data-lang="uz">10 ta nomzoddan 7 tasi 60 kun ichida tashlab ketadi. Fikr-mulohazasiz yolg'iz o'qish odamni charchatadi.</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-stat">84%</div>
+        <div class="pain-title" data-lang="en" style="display:block">Study Alone</div>
+        <div class="pain-title" data-lang="ko">혼자 공부</div>
+        <div class="pain-title" data-lang="uz">Yolg'iz o'qish</div>
+        <div class="pain-desc" data-lang="en" style="display:block">Most candidates have nobody checking in. No accountability partner. No one who notices when they disappear.</div>
+        <div class="pain-desc" data-lang="ko">대부분의 수험생에게는 확인해줄 사람이 없습니다. 책임감을 나눌 파트너도, 사라져도 알아차릴 사람도 없습니다.</div>
+        <div class="pain-desc" data-lang="uz">Ko'pchilik nomzodlarning hech kimi nazorat qilmaydi. Mas'uliyatli hamkor yo'q. Yo'qolganini sezadigan hech kim yo'q.</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-stat">60%+</div>
+        <div class="pain-title" data-lang="en" style="display:block">No Stakes</div>
+        <div class="pain-title" data-lang="ko">아무 대가 없음</div>
+        <div class="pain-title" data-lang="uz">Hech narsa yo'qotmaysan</div>
+        <div class="pain-desc" data-lang="en" style="display:block">Quitting is free. No financial stake, no social stake. When it costs nothing to quit, a lot of people quit.</div>
+        <div class="pain-desc" data-lang="ko">포기해도 잃을 게 없습니다. 재정적, 사회적 위험 부담이 없습니다. 포기에 대가가 없으면 많은 사람들이 포기합니다.</div>
+        <div class="pain-desc" data-lang="uz">Tashlab ketish bepul. Moliyaviy yo'qotish yo'q, ijtimoiy yo'qotish ham yo'q. Hech narsa ketmasa, ko'pchilik ketib qoladi.</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-stat">#1</div>
+        <div class="pain-title" data-lang="en" style="display:block">Writing Barrier</div>
+        <div class="pain-title" data-lang="ko">쓰기 장벽</div>
+        <div class="pain-title" data-lang="uz">Yozish to'sig'i</div>
+        <div class="pain-desc" data-lang="en" style="display:block">TOPIK II Q53/Q54 essays fail more candidates than anything else. No existing app offers AI correction for them.</div>
+        <div class="pain-desc" data-lang="ko">TOPIK II Q53/Q54 에세이는 어떤 요소보다 많은 수험생을 탈락시킵니다. 이를 AI로 교정해주는 앱은 존재하지 않습니다.</div>
+        <div class="pain-desc" data-lang="uz">TOPIK II Q53/Q54 insholari eng ko'p nomzodlarni yiqitadi. Hech qanday mavjud ilova ular uchun AI to'g'rilashni taklif qilmaydi.</div>
+      </div>
+    </div>
+    <div class="pain-note">
+      <span data-lang="en" style="display:block">Every other app teaches content. None make sure you finish. That's what Challon does.</span>
+      <span data-lang="ko">다른 모든 앱은 콘텐츠를 가르칩니다. 끝까지 할 수 있도록 도와주는 앱은 없습니다. 그게 바로 Challon입니다.</span>
+      <span data-lang="uz">Boshqa barcha ilovalar kontent o'rgatadi. Hech biri oxirigacha yetkazishni ta'minlamaydi. Bu Challon'ning ishi.</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="inner">
+    <div class="eyebrow" data-lang="en" style="display:block">How It Works</div>
+    <div class="eyebrow" data-lang="ko">작동 방식</div>
+    <div class="eyebrow" data-lang="uz">Qanday ishlaydi</div>
+
+    <h2 class="sec-title" data-lang="en" style="display:block">Three steps to actually passing TOPIK.</h2>
+    <h2 class="sec-title" data-lang="ko">TOPIK 합격을 위한 3단계.</h2>
+    <h2 class="sec-title" data-lang="uz">TOPIK'dan o'tish uchun 3 qadam.</h2>
+    <div class="bar"></div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-arrow">→</div>
+        <div class="step-num">STEP 01</div>
+        <div class="step-icon">🎯</div>
+        <div class="step-title" data-lang="en" style="display:block">Get diagnosed</div>
+        <div class="step-title" data-lang="ko">레벨 진단받기</div>
+        <div class="step-title" data-lang="uz">Darajangizni aniqlang</div>
+        <div class="step-desc" data-lang="en" style="display:block">15 adaptive questions. Our IRT engine pinpoints your exact TOPIK level — weak spots and all. No wasted time on what you already know.</div>
+        <div class="step-desc" data-lang="ko">15개의 적응형 문제로 정확한 TOPIK 레벨과 취약점을 파악합니다. 이미 아는 내용에 시간을 낭비하지 않습니다.</div>
+        <div class="step-desc" data-lang="uz">15 ta moslashtirilgan savol. IRT tizimimiz sizning aniq TOPIK darajangizni — zaif tomonlaringiz bilan birga aniqlaydi.</div>
+      </div>
+      <div class="step">
+        <div class="step-arrow">→</div>
+        <div class="step-num">STEP 02</div>
+        <div class="step-icon">💰</div>
+        <div class="step-title" data-lang="en" style="display:block">Join a challenge</div>
+        <div class="step-title" data-lang="ko">챌린지 참가하기</div>
+        <div class="step-title" data-lang="uz">Challengega qo'shiling</div>
+        <div class="step-desc" data-lang="en" style="display:block">Deposit money into your Challenge Wallet. Pick a squad of 4–6 at your level. Set your exam date. Now quitting has a real cost.</div>
+        <div class="step-desc" data-lang="ko">챌린지 지갑에 돈을 입금하세요. 비슷한 수준의 4~6명으로 팀을 구성하세요. 시험 날짜를 설정하세요. 이제 포기에는 실질적인 대가가 따릅니다.</div>
+        <div class="step-desc" data-lang="uz">Challenge Wallet'ingizga pul qo'ying. O'z darajangizda 4-6 kishilik jamoa tanlang. Imtihon sanangizni belgilang. Endi tashlab ketishning haqiqiy narxi bor.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">STEP 03</div>
+        <div class="step-icon">🏆</div>
+        <div class="step-title" data-lang="en" style="display:block">Study. Finish. Win.</div>
+        <div class="step-title" data-lang="ko">공부. 완수. 합격.</div>
+        <div class="step-title" data-lang="uz">O'qing. Tugating. Yuting.</div>
+        <div class="step-desc" data-lang="en" style="display:block">Adaptive study plan, AI writing coach for essays, burnout detection, daily squad check-ins. Complete the challenge — get your money back plus rewards.</div>
+        <div class="step-desc" data-lang="ko">적응형 학습 계획, 에세이를 위한 AI 글쓰기 코치, 번아웃 감지, 매일 팀 체크인. 챌린지를 완수하면 돈과 보상을 받습니다.</div>
+        <div class="step-desc" data-lang="uz">Moslashtirilgan o'quv rejasi, insho uchun AI yozish murabbiyi, charchash aniqlash, kunlik jamoa tekshiruvi. Challengeni bajaring — pulingizni va mukofotlarni oling.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WALLET -->
+<section class="wallet-bg">
+  <div class="inner">
+    <div class="wallet-inner">
+      <div>
+        <div class="eyebrow">Challenge Wallet™</div>
+        <h2 class="sec-title" data-lang="en" style="display:block">Money on the line changes everything.</h2>
+        <h2 class="sec-title" data-lang="ko">돈이 걸리면 모든 것이 달라집니다.</h2>
+        <h2 class="sec-title" data-lang="uz">Pul xavf ostida bo'lsa, hamma narsa o'zgaradi.</h2>
+        <div class="bar" style="background:var(--c-green)"></div>
+        <p class="sec-sub" data-lang="en" style="display:block">Loss aversion (Kahneman & Tversky): people are 2–3× more motivated by the prospect of losing something than gaining something equivalent. We built this into the product.</p>
+        <p class="sec-sub" data-lang="ko">손실 회피(카너먼 & 트버스키): 사람들은 동등한 것을 얻는 것보다 잃는 것에 2~3배 더 동기 부여됩니다. 우리는 이를 제품에 반영했습니다.</p>
+        <p class="sec-sub" data-lang="uz">Yo'qotishdan qo'rqish (Kahneman & Tversky): odamlar tengdosh narsani olishdan ko'ra yo'qotish ehtimolidan 2-3 marta ko'proq rag'batlanadi. Biz buni mahsulotga qo'shdik.</p>
+        <div class="wallet-science">
+          <p data-lang="en" style="display:block">When quitting costs <strong>real money</strong>, the dropout rate drops dramatically. That's not a feature — that's the core of Challon.</p>
+          <p data-lang="ko">포기에 <strong>실제 비용</strong>이 따를 때, 중도 포기율은 극적으로 낮아집니다. 이것은 단순한 기능이 아니라 Challon의 핵심입니다.</p>
+          <p data-lang="uz">Tashlab ketish <strong>haqiqiy pulga</strong> tushganda, to'xtatish darajasi keskin kamayadi. Bu shunchaki xususiyat emas — bu Challon'ning asosi.</p>
+        </div>
+      </div>
+      <div class="wallet-card">
+        <div class="wallet-row">
+          <div class="w-icon">💳</div>
+          <div>
+            <div class="w-title" data-lang="en" style="display:block">Deposit to join</div>
+            <div class="w-title" data-lang="ko">참가 시 보증금 예치</div>
+            <div class="w-title" data-lang="uz">Qo'shilish uchun depozit</div>
+            <div class="w-desc" data-lang="en" style="display:block">Choose your challenge amount. It's held securely until the challenge ends.</div>
+            <div class="w-desc" data-lang="ko">챌린지 금액을 선택하세요. 챌린지가 끝날 때까지 안전하게 보관됩니다.</div>
+            <div class="w-desc" data-lang="uz">Challenge miqdorini tanlang. Challenge tugamaguncha xavfsiz saqlanadi.</div>
+          </div>
+        </div>
+        <div class="wallet-row">
+          <div class="w-icon">📅</div>
+          <div>
+            <div class="w-title" data-lang="en" style="display:block">Complete daily goals</div>
+            <div class="w-title" data-lang="ko">매일 목표 달성</div>
+            <div class="w-title" data-lang="uz">Kunlik maqsadlarni bajaring</div>
+            <div class="w-desc" data-lang="en" style="display:block">AI assigns your daily study tasks. Miss too many — your deposit is at risk.</div>
+            <div class="w-desc" data-lang="ko">AI가 일일 학습 과제를 배정합니다. 너무 많이 빠지면 보증금이 위험해집니다.</div>
+            <div class="w-desc" data-lang="uz">AI kunlik o'quv vazifalarini belgilaydi. Ko'p o'tkazib yuborsangiz — depozitingiz xavf ostida.</div>
+          </div>
+        </div>
+        <div class="wallet-row">
+          <div class="w-icon">🎁</div>
+          <div>
+            <div class="w-title" data-lang="en" style="display:block">Finish → get rewarded</div>
+            <div class="w-title" data-lang="ko">완수 → 보상 수령</div>
+            <div class="w-title" data-lang="uz">Tugating → mukofot oling</div>
+            <div class="w-desc" data-lang="en" style="display:block">Complete the challenge and get your full deposit back plus bonus rewards from the pool.</div>
+            <div class="w-desc" data-lang="ko">챌린지를 완수하면 보증금 전액과 함께 풀에서 보너스 보상을 받습니다.</div>
+            <div class="w-desc" data-lang="uz">Challengeni bajaring va to'liq depozitingizni hamda havzadan bonus mukofotlarni oling.</div>
+          </div>
+        </div>
+        <div class="wallet-row">
+          <div class="w-icon">⚡</div>
+          <div>
+            <div class="w-title" data-lang="en" style="display:block">Quit → forfeit</div>
+            <div class="w-title" data-lang="ko">포기 → 몰수</div>
+            <div class="w-title" data-lang="uz">Tashlang → yo'qoting</div>
+            <div class="w-desc" data-lang="en" style="display:block">Drop out and lose your deposit. It goes into the reward pool for finishers. Now you have a reason to show up.</div>
+            <div class="w-desc" data-lang="ko">중도 포기하면 보증금을 잃게 됩니다. 완주자들의 보상 풀로 들어갑니다. 이제 공부할 이유가 생겼습니다.</div>
+            <div class="w-desc" data-lang="uz">Tashlasangiz depozitingizni yo'qotasiz. U tugatadiganlar uchun mukofot havzasiga kiradi. Endi kelish sababingiz bor.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="inner">
+    <div class="eyebrow" data-lang="en" style="display:block">Everything You Need</div>
+    <div class="eyebrow" data-lang="ko">필요한 모든 것</div>
+    <div class="eyebrow" data-lang="uz">Kerakli hamma narsa</div>
+
+    <h2 class="sec-title" data-lang="en" style="display:block">One platform. No excuses.</h2>
+    <h2 class="sec-title" data-lang="ko">하나의 플랫폼. 변명 없음.</h2>
+    <h2 class="sec-title" data-lang="uz">Bitta platforma. Hech qanday bahona yo'q.</h2>
+    <div class="bar"></div>
+
+    <div class="features-grid">
+      <div class="f-card">
+        <div class="f-ico">🧠</div>
+        <div class="f-title" data-lang="en" style="display:block">AI Diagnostic Engine</div>
+        <div class="f-title" data-lang="ko">AI 진단 엔진</div>
+        <div class="f-title" data-lang="uz">AI Diagnostika Tizimi</div>
+        <div class="f-desc" data-lang="en" style="display:block">IRT + CAT + SM-2 spaced repetition. Gets to your accurate TOPIK level in 15 questions. Updates daily based on your performance.</div>
+        <div class="f-desc" data-lang="ko">IRT + CAT + SM-2 간격 반복. 15개 문제로 정확한 TOPIK 레벨을 파악합니다. 성과에 따라 매일 업데이트됩니다.</div>
+        <div class="f-desc" data-lang="uz">IRT + CAT + SM-2 intervalli takrorlash. 15 savolda aniq TOPIK darajangizni aniqlaydi. Har kuni natijalaringizga qarab yangilanadi.</div>
+        <span class="f-tag new">Best-in-class</span>
+      </div>
+      <div class="f-card">
+        <div class="f-ico">✍️</div>
+        <div class="f-title" data-lang="en" style="display:block">AI Writing Coach</div>
+        <div class="f-title" data-lang="ko">AI 글쓰기 코치</div>
+        <div class="f-title" data-lang="uz">AI Yozish Murabbiyi</div>
+        <div class="f-desc" data-lang="en" style="display:block">Instant scoring for TOPIK II Q53/Q54 essays based on official criteria. Sentence-level grammar feedback. Model essay comparison.</div>
+        <div class="f-desc" data-lang="ko">공식 기준에 따른 TOPIK II Q53/Q54 에세이 즉시 채점. 문장 단위 문법 피드백. 모범 에세이 비교.</div>
+        <div class="f-desc" data-lang="uz">Rasmiy mezonlar asosida TOPIK II Q53/Q54 insholar uchun tezkor baholash. Jumlalar darajasida grammatika fikri. Model insho taqqoslash.</div>
+        <span class="f-tag only">Only platform</span>
+      </div>
+      <div class="f-card">
+        <div class="f-ico">🔥</div>
+        <div class="f-title" data-lang="en" style="display:block">Burnout Predictor</div>
+        <div class="f-title" data-lang="ko">번아웃 예측기</div>
+        <div class="f-title" data-lang="uz">Charchash Prediktor</div>
+        <div class="f-desc" data-lang="en" style="display:block">Detects dropout signals 7 days in advance. Watches for inconsistent sessions, declining scores, missed check-ins. Adjusts your load automatically.</div>
+        <div class="f-desc" data-lang="ko">7일 전에 포기 신호를 감지합니다. 불규칙한 학습, 점수 하락, 체크인 누락을 관찰합니다. 학습량을 자동으로 조정합니다.</div>
+        <div class="f-desc" data-lang="uz">Tashlab ketish signallarini 7 kun oldin aniqlaydi. Tartibsiz sessiyalar, pasayib borayotgan ballar, o'tkazib yuborilgan tekshiruvlarni kuzatadi.</div>
+        <span class="f-tag only">Only platform</span>
+      </div>
+      <div class="f-card">
+        <div class="f-ico">👥</div>
+        <div class="f-title" data-lang="en" style="display:block">Squad Challenges</div>
+        <div class="f-title" data-lang="ko">스쿼드 챌린지</div>
+        <div class="f-title" data-lang="uz">Jamoa Challengelari</div>
+        <div class="f-desc" data-lang="en" style="display:block">Groups of 4–6 matched by level and exam date. Share progress daily. Compete on a leaderboard. Nobody studies alone.</div>
+        <div class="f-desc" data-lang="ko">레벨과 시험 날짜로 매칭된 4~6인 그룹. 매일 진행 상황 공유. 리더보드 경쟁. 아무도 혼자 공부하지 않습니다.</div>
+        <div class="f-desc" data-lang="uz">Daraja va imtihon sanasi bo'yicha mos kelgan 4-6 kishilik guruhlar. Har kuni taraqqiyotni ulashing. Liderlar jadvalida raqobatlashing.</div>
+      </div>
+      <div class="f-card">
+        <div class="f-ico">📚</div>
+        <div class="f-title" data-lang="en" style="display:block">Adaptive Study Plan</div>
+        <div class="f-title" data-lang="ko">적응형 학습 계획</div>
+        <div class="f-title" data-lang="uz">Moslashtirilgan O'quv Rejasi</div>
+        <div class="f-desc" data-lang="en" style="display:block">Personalized daily plan based on your weak spots, study history, and exam date. Vocabulary cards with spaced repetition built in.</div>
+        <div class="f-desc" data-lang="ko">취약점, 학습 이력, 시험 날짜를 바탕으로 개인화된 일일 계획. 간격 반복이 내장된 어휘 카드.</div>
+        <div class="f-desc" data-lang="uz">Zaif tomonlaringiz, o'quv tarixingiz va imtihon sanangiz asosida shaxsiylashtirilgan kunlik reja. Intervalli takrorlash bilan lug'at kartochkalari.</div>
+      </div>
+      <div class="f-card">
+        <div class="f-ico">📝</div>
+        <div class="f-title" data-lang="en" style="display:block">Exam Registration</div>
+        <div class="f-title" data-lang="ko">시험 등록</div>
+        <div class="f-title" data-lang="uz">Imtihon Ro'yxatdan O'tish</div>
+        <div class="f-desc" data-lang="en" style="display:block">Register for TOPIK directly inside the app. ₩3,000 per transaction. International payments via PayPal. One-stop experience.</div>
+        <div class="f-desc" data-lang="ko">앱 내에서 직접 TOPIK에 등록하세요. 거래당 ₩3,000. PayPal을 통한 국제 결제. 원스톱 경험.</div>
+        <div class="f-desc" data-lang="uz">TOPIK'ga to'g'ridan-to'g'ri ilovada ro'yxatdan o'ting. Tranzaksiya uchun ₩3,000. PayPal orqali xalqaro to'lovlar.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOPIK INFO -->
+<section class="topik-bg">
+  <div class="inner">
+    <div class="topik-grid">
+      <div class="topik-info">
+        <div class="eyebrow" data-lang="en" style="display:block">Why TOPIK?</div>
+        <div class="eyebrow" data-lang="ko">왜 TOPIK인가요?</div>
+        <div class="eyebrow" data-lang="uz">Nima uchun TOPIK?</div>
+        <h2 class="sec-title" data-lang="en" style="display:block">600,000+ people. 87 countries. One exam.</h2>
+        <h2 class="sec-title" data-lang="ko">60만 명 이상. 87개국. 하나의 시험.</h2>
+        <h2 class="sec-title" data-lang="uz">600,000+ odam. 87 mamlakat. Bitta imtihon.</h2>
+        <div class="bar"></div>
+        <div class="topik-stat">14–15%</div>
+        <div class="topik-stat-label" data-lang="en" style="display:block">annual growth rate (2021–2025)</div>
+        <div class="topik-stat-label" data-lang="ko">연간 성장률 (2021–2025)</div>
+        <div class="topik-stat-label" data-lang="uz">yillik o'sish sur'ati (2021–2025)</div>
+        <ul class="topik-list">
+          <li data-lang="en" style="display:flex">Required for university admission in Korea</li>
+          <li data-lang="en" style="display:flex">Required for work visas and permanent residency</li>
+          <li data-lang="en" style="display:flex">Career passport for 87+ countries</li>
+          <li data-lang="en" style="display:flex">3 million+ active Korean language learners globally</li>
+          <li data-lang="ko" style="display:none">한국 대학 입학에 필수</li>
+          <li data-lang="ko" style="display:none">취업비자 및 영주권 취득에 필수</li>
+          <li data-lang="ko" style="display:none">87개국 이상의 커리어 패스포트</li>
+          <li data-lang="ko" style="display:none">전 세계 300만 명 이상의 한국어 학습자</li>
+          <li data-lang="uz" style="display:none">Koreyada universitetga kirish uchun talab qilinadi</li>
+          <li data-lang="uz" style="display:none">Ish vizalari va doimiy yashash uchun talab qilinadi</li>
+          <li data-lang="uz" style="display:none">87+ mamlakatda martaba pasporti</li>
+          <li data-lang="uz" style="display:none">Jahon bo'ylab 3 million+ faol koreys tili o'quvchilari</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:13px;font-weight:700;color:var(--gray-600);margin-bottom:24px;" data-lang="en">TOPIK Level Distribution of Users</p>
+        <p style="font-size:13px;font-weight:700;color:var(--gray-600);margin-bottom:24px;" data-lang="ko">사용자 TOPIK 레벨 분포</p>
+        <p style="font-size:13px;font-weight:700;color:var(--gray-600);margin-bottom:24px;" data-lang="uz">Foydalanuvchilarning TOPIK darajasi taqsimoti</p>
+        <div class="topik-levels">
+          <div class="level-bar"><span class="level-label">Level 1</span><div class="level-track"><div class="level-fill l1" style="width:55%"></div></div><span class="level-pct">55%</span></div>
+          <div class="level-bar"><span class="level-label">Level 2</span><div class="level-track"><div class="level-fill l2" style="width:70%"></div></div><span class="level-pct">70%</span></div>
+          <div class="level-bar"><span class="level-label">Level 3</span><div class="level-track"><div class="level-fill l3" style="width:48%"></div></div><span class="level-pct">48%</span></div>
+          <div class="level-bar"><span class="level-label">Level 4</span><div class="level-track"><div class="level-fill l4" style="width:35%"></div></div><span class="level-pct">35%</span></div>
+          <div class="level-bar"><span class="level-label">Level 5</span><div class="level-track"><div class="level-fill l5" style="width:20%"></div></div><span class="level-pct">20%</span></div>
+          <div class="level-bar"><span class="level-label">Level 6</span><div class="level-track"><div class="level-fill l6" style="width:10%"></div></div><span class="level-pct">10%</span></div>
+        </div>
+        <p style="font-size:11px;color:var(--gray-400);margin-top:16px;" data-lang="en">Challon's adaptive engine works across all levels</p>
+        <p style="font-size:11px;color:var(--gray-400);margin-top:16px;" data-lang="ko">Challon의 적응형 엔진은 모든 레벨에서 작동합니다</p>
+        <p style="font-size:11px;color:var(--gray-400);margin-top:16px;" data-lang="uz">Challon'ning moslashtirilgan tizimi barcha darajalarda ishlaydi</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="background:var(--gray-50)">
+  <div class="inner">
+    <div class="eyebrow" data-lang="en" style="display:block">Pricing</div>
+    <div class="eyebrow" data-lang="ko">요금제</div>
+    <div class="eyebrow" data-lang="uz">Narxlar</div>
+    <h2 class="sec-title" data-lang="en" style="display:block">Start free. Go premium when you're ready.</h2>
+    <h2 class="sec-title" data-lang="ko">무료로 시작하세요. 준비되면 프리미엄으로.</h2>
+    <h2 class="sec-title" data-lang="uz">Bepul boshlang. Tayyor bo'lganingizda premium ga o'ting.</h2>
+    <div class="bar"></div>
+    <div class="price-grid">
+      <div class="price-card">
+        <div class="price-name" data-lang="en" style="display:block">Free</div>
+        <div class="price-name" data-lang="ko">무료</div>
+        <div class="price-name" data-lang="uz">Bepul</div>
+        <div class="price-val">₩0</div>
+        <div class="price-period" data-lang="en" style="display:block">forever free</div>
+        <div class="price-period" data-lang="ko">영원히 무료</div>
+        <div class="price-period" data-lang="uz">abadiy bepul</div>
+        <ul class="price-list">
+          <li data-lang="en" style="display:flex">Basic flashcards & quizzes</li>
+          <li data-lang="en" style="display:flex">Community access</li>
+          <li data-lang="en" style="display:flex">Level diagnostic (1×)</li>
+          <li class="off" data-lang="en" style="display:flex">AI Writing Coach</li>
+          <li class="off" data-lang="en" style="display:flex">Challenge Wallet</li>
+          <li class="off" data-lang="en" style="display:flex">Burnout Predictor</li>
+          <li data-lang="ko" style="display:none">기본 플래시카드 및 퀴즈</li>
+          <li data-lang="ko" style="display:none">커뮤니티 접근</li>
+          <li data-lang="ko" style="display:none">레벨 진단 (1회)</li>
+          <li class="off" data-lang="ko" style="display:none">AI 글쓰기 코치</li>
+          <li class="off" data-lang="ko" style="display:none">챌린지 지갑</li>
+          <li class="off" data-lang="ko" style="display:none">번아웃 예측기</li>
+          <li data-lang="uz" style="display:none">Asosiy kartochkalar va testlar</li>
+          <li data-lang="uz" style="display:none">Jamiyatga kirish</li>
+          <li data-lang="uz" style="display:none">Daraja diagnostikasi (1×)</li>
+          <li class="off" data-lang="uz" style="display:none">AI Yozish Murabbiyi</li>
+          <li class="off" data-lang="uz" style="display:none">Challenge Wallet</li>
+          <li class="off" data-lang="uz" style="display:none">Charchash Prediktor</li>
+        </ul>
+        <a href="#cta" class="price-btn" data-lang="en">Get Started Free</a>
+        <a href="#cta" class="price-btn" data-lang="ko">무료로 시작</a>
+        <a href="#cta" class="price-btn" data-lang="uz">Bepul boshlash</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge" data-lang="en">MOST POPULAR</div>
+        <div class="price-badge" data-lang="ko">가장 인기</div>
+        <div class="price-badge" data-lang="uz">ENG MASHHUR</div>
+        <div class="price-name" data-lang="en" style="display:block">Premium</div>
+        <div class="price-name" data-lang="ko">프리미엄</div>
+        <div class="price-name" data-lang="uz">Premium</div>
+        <div class="price-val">₩9,900<span>/mo</span></div>
+        <div class="price-period" data-lang="en" style="display:block">~$7.50 USD/month</div>
+        <div class="price-period" data-lang="ko">월 약 $7.50 USD</div>
+        <div class="price-period" data-lang="uz">oyiga ~$7.50 USD</div>
+        <ul class="price-list">
+          <li data-lang="en" style="display:flex">Everything in Free</li>
+          <li data-lang="en" style="display:flex">AI Writing Coach (unlimited)</li>
+          <li data-lang="en" style="display:flex">Burnout Predictor</li>
+          <li data-lang="en" style="display:flex">Full adaptive study plan</li>
+          <li data-lang="en" style="display:flex">Challenge Wallet access</li>
+          <li data-lang="en" style="display:flex">Squad matching</li>
+          <li data-lang="ko" style="display:none">무료 플랜의 모든 기능</li>
+          <li data-lang="ko" style="display:none">AI 글쓰기 코치 (무제한)</li>
+          <li data-lang="ko" style="display:none">번아웃 예측기</li>
+          <li data-lang="ko" style="display:none">완전한 적응형 학습 계획</li>
+          <li data-lang="ko" style="display:none">챌린지 지갑 이용</li>
+          <li data-lang="ko" style="display:none">스쿼드 매칭</li>
+          <li data-lang="uz" style="display:none">Bepuldagi hamma narsa</li>
+          <li data-lang="uz" style="display:none">AI Yozish Murabbiyi (cheksiz)</li>
+          <li data-lang="uz" style="display:none">Charchash Prediktor</li>
+          <li data-lang="uz" style="display:none">To'liq moslashtirilgan o'quv rejasi</li>
+          <li data-lang="uz" style="display:none">Challenge Wallet kirish</li>
+          <li data-lang="uz" style="display:none">Jamoa moslashtirish</li>
+        </ul>
+        <a href="#cta" class="price-btn" data-lang="en">Start Premium</a>
+        <a href="#cta" class="price-btn" data-lang="ko">프리미엄 시작</a>
+        <a href="#cta" class="price-btn" data-lang="uz">Premiumni boshlash</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name" data-lang="en" style="display:block">Institution</div>
+        <div class="price-name" data-lang="ko">기관</div>
+        <div class="price-name" data-lang="uz">Muassasa</div>
+        <div class="price-val">₩5M<span>/yr</span></div>
+        <div class="price-period" data-lang="en" style="display:block">per university or academy</div>
+        <div class="price-period" data-lang="ko">대학교 또는 학원당</div>
+        <div class="price-period" data-lang="uz">universitet yoki akademiya uchun</div>
+        <ul class="price-list">
+          <li data-lang="en" style="display:flex">Unlimited student seats</li>
+          <li data-lang="en" style="display:flex">Teacher dashboard</li>
+          <li data-lang="en" style="display:flex">Class analytics</li>
+          <li data-lang="en" style="display:flex">Custom challenge pools</li>
+          <li data-lang="en" style="display:flex">Priority support</li>
+          <li data-lang="ko" style="display:none">무제한 학생 좌석</li>
+          <li data-lang="ko" style="display:none">교사 대시보드</li>
+          <li data-lang="ko" style="display:none">수업 분석</li>
+          <li data-lang="ko" style="display:none">맞춤형 챌린지 풀</li>
+          <li data-lang="ko" style="display:none">우선 지원</li>
+          <li data-lang="uz" style="display:none">Cheksiz talaba o'rinlari</li>
+          <li data-lang="uz" style="display:none">O'qituvchi paneli</li>
+          <li data-lang="uz" style="display:none">Sinf tahlili</li>
+          <li data-lang="uz" style="display:none">Maxsus challenge havzalari</li>
+          <li data-lang="uz" style="display:none">Ustuvor qo'llab-quvvatlash</li>
+        </ul>
+        <a href="mailto:challon@challon.ai" class="price-btn" data-lang="en">Contact Us</a>
+        <a href="mailto:challon@challon.ai" class="price-btn" data-lang="ko">문의하기</a>
+        <a href="mailto:challon@challon.ai" class="price-btn" data-lang="uz">Bog'laning</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-bg">
+  <div class="inner">
+    <div class="eyebrow" style="color:var(--c-green)" data-lang="en">Early Users</div>
+    <div class="eyebrow" style="color:var(--c-green)" data-lang="ko">얼리 유저</div>
+    <div class="eyebrow" style="color:var(--c-green)" data-lang="uz">Dastlabki foydalanuvchilar</div>
+    <h2 class="sec-title" style="color:#fff" data-lang="en">Real people. Real stakes. Real results.</h2>
+    <h2 class="sec-title" style="color:#fff" data-lang="ko">실제 사람들. 실제 위험 부담. 실제 결과.</h2>
+    <h2 class="sec-title" style="color:#fff" data-lang="uz">Haqiqiy odamlar. Haqiqiy xavf. Haqiqiy natijalar.</h2>
+    <div class="bar" style="background:var(--c-green)"></div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text" data-lang="en">"I failed TOPIK twice studying alone. Three weeks into Challon with ₩50,000 on the line — I haven't missed a single day."</p>
+        <p class="testi-text" data-lang="ko">"혼자 공부하다 TOPIK에 두 번 떨어졌어요. Challon을 시작하고 3주, ₩50,000이 걸린 상황에서 하루도 빠지지 않았습니다."</p>
+        <p class="testi-text" data-lang="uz">"Yolg'iz o'qib TOPIK'dan ikki marta yiqildim. ₩50,000 xavf ostida Challon'da 3 hafta — bitta ham kun o'tkazib yubormedim."</p>
+        <div class="testi-name">Dilnoza T.</div>
+        <div class="testi-sub">Tashkent, Uzbekistan · TOPIK Level 3 target</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text" data-lang="en">"The essay correction is unreal. I got feedback on my Q54 essay that my Korean teacher couldn't even give me. Passed TOPIK II on my first try."</p>
+        <p class="testi-text" data-lang="ko">"에세이 교정이 정말 놀랍습니다. Q54 에세이에 대해 한국어 선생님도 못 해줬던 피드백을 받았어요. TOPIK II에 첫 번째 시도에 합격했습니다."</p>
+        <p class="testi-text" data-lang="uz">"Insho to'g'rilash inanilmas. Q54 inshom bo'yicha koreys tili o'qituvchim bera olmagan fikrlarni oldim. TOPIK II'dan birinchi urinishda o'tdim."</p>
+        <div class="testi-name">Park Ji-young</div>
+        <div class="testi-sub">Seoul, Korea · TOPIK II Level 5</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text" data-lang="en">"My squad kept me going when I wanted to quit. The money helped too. But honestly — knowing four people are counting on you is the real thing."</p>
+        <p class="testi-text" data-lang="ko">"포기하고 싶을 때 팀이 저를 버텨줬어요. 돈도 도움이 됐지만, 솔직히 — 네 명이 나를 믿고 있다는 걸 아는 게 진짜입니다."</p>
+        <p class="testi-text" data-lang="uz">"Tashlab ketmoqchi bo'lganimda jamoam davom ettirishga undadi. Pul ham yordam berdi. Lekin rostini aytsam — to'rt kishi sizga ishonib turganini bilish eng muhim narsa."</p>
+        <div class="testi-name">Nguyen Minh Anh</div>
+        <div class="testi-sub">Ho Chi Minh City, Vietnam · TOPIK Level 4</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="inner">
+    <div class="eyebrow" data-lang="en" style="display:block">FAQ</div>
+    <div class="eyebrow" data-lang="ko">자주 묻는 질문</div>
+    <div class="eyebrow" data-lang="uz">Ko'p so'raladigan savollar</div>
+    <h2 class="sec-title" data-lang="en" style="display:block">Questions answered.</h2>
+    <h2 class="sec-title" data-lang="ko">궁금한 것들.</h2>
+    <h2 class="sec-title" data-lang="uz">Javoblar.</h2>
+    <div class="bar"></div>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-lang="en" style="display:inline">What happens to my money if I quit?</span>
+          <span data-lang="ko">포기하면 내 돈은 어떻게 되나요?</span>
+          <span data-lang="uz">Tashlab ketsam pulim nima bo'ladi?</span>
+          <span class="arr">+</span>
+        </button>
+        <div class="faq-a">
+          <p data-lang="en" style="display:block">If you don't complete the challenge, your deposit is forfeited. It goes into the reward pool, shared among users who do complete their challenge. That's the point — quitting has a real cost.</p>
+          <p data-lang="ko">챌린지를 완수하지 못하면 보증금이 몰수됩니다. 이는 챌린지를 완수한 사용자들이 공유하는 보상 풀로 들어갑니다. 그게 핵심입니다 — 포기에는 실질적인 대가가 따릅니다.</p>
+          <p data-lang="uz">Agar challengeni bajara olmasangiz, depozitingiz musodara qilinadi. U challengeni bajargan foydalanuvchilar o'rtasida taqsimlanadigan mukofot havzasiga kiradi. Maqsad shu — tashlab ketishning haqiqiy narxi bor.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-lang="en" style="display:inline">Is Challon only for beginners?</span>
+          <span data-lang="ko">Challon은 초보자만을 위한 것인가요?</span>
+          <span data-lang="uz">Challon faqat boshlang'ichlar uchunmi?</span>
+          <span class="arr">+</span>
+        </button>
+        <div class="faq-a">
+          <p data-lang="en" style="display:block">No. Challon covers all TOPIK levels from 1 to 6. The AI Diagnostic Engine determines your exact level and builds a personalized plan. The AI Writing Coach is specifically designed for TOPIK II (Level 3–6) candidates.</p>
+          <p data-lang="ko">아닙니다. Challon은 1에서 6까지 모든 TOPIK 레벨을 다룹니다. AI 진단 엔진이 정확한 레벨을 결정하고 개인화된 계획을 수립합니다. AI 글쓰기 코치는 특히 TOPIK II (레벨 3-6) 수험생을 위해 설계되었습니다.</p>
+          <p data-lang="uz">Yo'q. Challon 1 dan 6 gacha barcha TOPIK darajalarini qamrab oladi. AI Diagnostika Tizimi aniq darajangizni aniqlaydi va shaxsiylashtirilgan reja tuzadi. AI Yozish Murabbiyi maxsus TOPIK II (3-6 daraja) nomzodlari uchun mo'ljallangan.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-lang="en" style="display:inline">What if I need to pause for a real emergency?</span>
+          <span data-lang="ko">실제 긴급 상황으로 잠시 멈춰야 한다면?</span>
+          <span data-lang="uz">Haqiqiy favqulodda vaziyat tufayli to'xtatishim kerak bo'lsa?</span>
+          <span class="arr">+</span>
+        </button>
+        <div class="faq-a">
+          <p data-lang="en" style="display:block">Each challenge includes a set number of "pause days" for real-life situations. The Burnout Predictor also detects when you're at risk and automatically adjusts your daily load to help you stay on track without burning out.</p>
+          <p data-lang="ko">각 챌린지에는 실생활 상황을 위한 정해진 수의 "일시 정지 일수"가 포함됩니다. 번아웃 예측기도 위험에 처했을 때를 감지하고 번아웃 없이 궤도를 유지할 수 있도록 일일 학습량을 자동으로 조정합니다.</p>
+          <p data-lang="uz">Har bir challenge haqiqiy hayot holatlari uchun belgilangan "to'xtatish kunlari" sonini o'z ichiga oladi. Charchash Prediktor ham xavf ostida bo'lganingizda aniqlaydi va charchamay yo'lda qolishingizga yordam berish uchun kunlik yukingizni avtomatik ravishda moslaydi.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-lang="en" style="display:inline">Which countries can use Challon?</span>
+          <span data-lang="ko">어느 나라에서 Challon을 사용할 수 있나요?</span>
+          <span data-lang="uz">Qaysi mamlakatlar Challon'dan foydalana oladi?</span>
+          <span class="arr">+</span>
+        </button>
+        <div class="faq-a">
+          <p data-lang="en" style="display:block">Challon is available globally. TOPIK is offered in 87 countries. We support international payments via PayPal. Our initial focus markets are Korea, Uzbekistan, and Vietnam — three of the largest TOPIK candidate populations.</p>
+          <p data-lang="ko">Challon은 전 세계적으로 이용 가능합니다. TOPIK은 87개국에서 제공됩니다. PayPal을 통한 국제 결제를 지원합니다. 초기 집중 시장은 한국, 우즈베키스탄, 베트남으로 가장 큰 TOPIK 수험생 집단입니다.</p>
+          <p data-lang="uz">Challon butun dunyo bo'ylab mavjud. TOPIK 87 mamlakatda taklif etiladi. PayPal orqali xalqaro to'lovlarni qo'llab-quvvatlaymiz. Dastlabki e'tibor bozorlarimiz Koreya, O'zbekiston va Vyetnam — eng katta TOPIK nomzodlari aholi guruhlaridan uchtasi.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-lang="en" style="display:inline">When does the app launch?</span>
+          <span data-lang="ko">앱은 언제 출시되나요?</span>
+          <span data-lang="uz">Ilova qachon chiqadi?</span>
+          <span class="arr">+</span>
+        </button>
+        <div class="faq-a">
+          <p data-lang="en" style="display:block">We're currently in beta with our first cohort of Korean university students. Full MVP launch is planned for Q3–Q4 2026 on iOS and Android. Sign up for early access to be first in line.</p>
+          <p data-lang="ko">현재 한국 대학생 첫 번째 코호트와 함께 베타 테스트 중입니다. 전체 MVP 출시는 2026년 3-4분기에 iOS 및 Android에서 예정되어 있습니다. 얼리 액세스를 신청하여 가장 먼저 이용하세요.</p>
+          <p data-lang="uz">Biz hozirda koreys universiteti talabalarining birinchi guruhi bilan beta-testdan o'tmoqdamiz. To'liq MVP chiqarish 2026-yil Q3–Q4 da iOS va Android'da rejalashtirilgan. Birinchi bo'lish uchun erta kirish uchun ro'yxatdan o'ting.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-final" id="cta">
+  <div class="cta-word"><span class="ch">CHALL</span><span class="o">O</span><span class="n">N</span></div>
+  <p class="cta-slogan" data-lang="en">AI-Powered TOPIK Exam Accountability Platform</p>
+  <p class="cta-slogan" data-lang="ko">AI 기반 TOPIK 시험 책임 플랫폼</p>
+  <p class="cta-slogan" data-lang="uz">AI-asosidagi TOPIK imtihon mas'uliyat platformasi</p>
+  <p class="cta-tagline-main" data-lang="en">Study. Challenge. Win.</p>
+  <p class="cta-tagline-main" data-lang="ko">공부. 도전. 합격.</p>
+  <p class="cta-tagline-main" data-lang="uz">O'qi. Challen qil. Yut.</p>
+  <div class="cta-stores">
+    <a href="#" class="store-btn">
+      <span class="s-icon">📱</span>
+      <div>
+        <div style="font-size:10px;opacity:.6;" data-lang="en">Available on</div>
+        <div style="font-size:10px;opacity:.6;" data-lang="ko">출시 예정</div>
+        <div style="font-size:10px;opacity:.6;" data-lang="uz">Mavjud</div>
+        <div style="font-weight:700">App Store</div>
+      </div>
+    </a>
+    <a href="#" class="store-btn">
+      <span class="s-icon">🤖</span>
+      <div>
+        <div style="font-size:10px;opacity:.6;" data-lang="en">Available on</div>
+        <div style="font-size:10px;opacity:.6;" data-lang="ko">출시 예정</div>
+        <div style="font-size:10px;opacity:.6;" data-lang="uz">Mavjud</div>
+        <div style="font-weight:700">Google Play</div>
+      </div>
+    </a>
+    <a href="mailto:challon@challon.ai" class="store-btn">
+      <span class="s-icon">✉️</span>
+      <div>
+        <div style="font-size:10px;opacity:.6;" data-lang="en">Get early access</div>
+        <div style="font-size:10px;opacity:.6;" data-lang="ko">얼리 액세스 신청</div>
+        <div style="font-size:10px;opacity:.6;" data-lang="uz">Erta kirish</div>
+        <div style="font-weight:700">challon@challon.ai</div>
+      </div>
+    </a>
+  </div>
+  <p class="cta-sub">Challon Inc. · Gyeonggi-do, Gimpo City, South Korea · 2026</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <a href="#" class="logo"><span class="ch">CHALL</span><span class="o">O</span><span class="n">N</span></a>
+    <p data-lang="en">The only platform that makes sure you don't quit TOPIK. Study. Challenge. Win.</p>
+    <p data-lang="ko">TOPIK을 포기하지 않도록 돕는 유일한 플랫폼.</p>
+    <p data-lang="uz">TOPIK'dan tashlab ketmasligingizni ta'minlaydigan yagona platforma.</p>
+  </div>
+  <div class="footer-col">
+    <h4 data-lang="en">Product</h4>
+    <h4 data-lang="ko">제품</h4>
+    <h4 data-lang="uz">Mahsulot</h4>
+    <ul>
+      <li><a href="#how">
+        <span data-lang="en">How it works</span>
+        <span data-lang="ko">작동 방식</span>
+        <span data-lang="uz">Qanday ishlaydi</span>
+      </a></li>
+      <li><a href="#features">
+        <span data-lang="en">Features</span>
+        <span data-lang="ko">기능</span>
+        <span data-lang="uz">Xususiyatlar</span>
+      </a></li>
+      <li><a href="#pricing">
+        <span data-lang="en">Pricing</span>
+        <span data-lang="ko">요금제</span>
+        <span data-lang="uz">Narxlar</span>
+      </a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4 data-lang="en">Company</h4>
+    <h4 data-lang="ko">회사</h4>
+    <h4 data-lang="uz">Kompaniya</h4>
+    <ul>
+      <li><a href="#">
+        <span data-lang="en">About</span>
+        <span data-lang="ko">소개</span>
+        <span data-lang="uz">Haqida</span>
+      </a></li>
+      <li><a href="mailto:challon@challon.ai">
+        <span data-lang="en">Contact</span>
+        <span data-lang="ko">연락처</span>
+        <span data-lang="uz">Aloqa</span>
+      </a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4 data-lang="en">Legal</h4>
+    <h4 data-lang="ko">법적 정보</h4>
+    <h4 data-lang="uz">Huquqiy</h4>
+    <ul>
+      <li><a href="#">
+        <span data-lang="en">Privacy Policy</span>
+        <span data-lang="ko">개인정보처리방침</span>
+        <span data-lang="uz">Maxfiylik siyosati</span>
+      </a></li>
+      <li><a href="#">
+        <span data-lang="en">Terms of Service</span>
+        <span data-lang="ko">서비스 이용약관</span>
+        <span data-lang="uz">Xizmat shartlari</span>
+      </a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  © 2026 Challon Inc. All rights reserved. · Gyeonggi-do, Gimpo City, South Korea
+</div>
+
+<script>
+// ── LANGUAGE SWITCHER ──
+function setLang(lang) {
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    if (b.textContent.trim() === (lang === 'en' ? 'EN' : lang === 'ko' ? '한국어' : "O'Z")) {
+      b.classList.add('active');
+    }
+  });
+
+  // Show/hide block elements
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    if (el.classList.contains('active')) el.classList.remove('active');
+    if (el.getAttribute('data-lang') === lang) el.classList.add('active');
+  });
+
+  // Handle list items with inline display
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    const elLang = el.getAttribute('data-lang');
+    const tag = el.tagName.toLowerCase();
+    if (elLang === lang) {
+      if (tag === 'li') el.style.display = 'flex';
+      else if (tag === 'span') el.style.display = 'inline';
+      else if (tag === 'p') el.style.display = 'block';
+      else if (tag === 'h2' || tag === 'h4') el.style.display = 'block';
+      else if (tag === 'div') el.style.display = 'block';
+      else if (tag === 'a') el.style.display = 'inline-block';
+      else el.style.display = 'block';
+    } else {
+      el.style.display = 'none';
+    }
+  });
+
+  // Keep active class for nav cta spans
+  document.querySelectorAll('.nav-cta [data-lang]').forEach(el => {
+    el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+  });
+
+  document.documentElement.lang = lang;
+  localStorage.setItem('challon-lang', lang);
+}
+
+// ── FAQ ──
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const arr = btn.querySelector('.arr');
+  const isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-a.open').forEach(a => {
+    a.classList.remove('open');
+    a.previousElementSibling.querySelector('.arr').textContent = '+';
+  });
+  if (!isOpen) {
+    answer.classList.add('open');
+    arr.textContent = '−';
+  }
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('challon-lang') || 'en';
+  setLang(saved);
+});
+</script>
+</body>
+</html>
