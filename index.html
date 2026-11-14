@@ -1112,7 +1112,7 @@ function bars(sk) {
 }
 function vResult() {
   if (!last) { view = "home"; return draw(); }
-  var r = last.r, st = S.state, h = '<div class="top">' + brand() + "</div><h1>" + esc(t("result")) + "</h1>";
+  var r = last.r, st = S.state, h = '<div class="top">' + brand() + '</div><h1>' + (last.kind === "place" ? "Initial Placement Test Result" : esc(t("result"))) + '</h1>';
   if (last.kind === "prac") {
     h += '<div class="card center"><div class="bigscore">' + r.correct + " / " + r.n + '</div><div class="xp">+' + r.xp + " " + esc(t("xp_earned")) + "</div></div>";
     r.events.forEach(function (e) {
