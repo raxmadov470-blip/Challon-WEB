@@ -1203,6 +1203,10 @@ function vGame() {
 }
 function tap() { var now = Date.now(); game.active += Math.min(20, (now - game.lastTap) / 1000); game.lastTap = now; }
 function newRound() {
+  if (game.correct >= 10) {
+    endGame();
+    return;
+  }
   if (game.mode === "match") { var w = E.gameWords(S.state, B, rnd, 4); game.left = E.shuffle(w, rnd); game.right = E.shuffle(w, rnd); game.done = {}; game.pick = null; game.miss = null; }
   else { var x = E.gameWords(S.state, B, rnd, 1)[0], ty = ["MV", "VM", "MV", "VM", "LW"][Math.floor(rnd() * (audioModeNoFile() === "tts" ? 5 : 4))]; game.item = E.makeItem(x, ty, B, rnd, lang); game.shown = null; }
 }
