@@ -1074,7 +1074,11 @@ function vRun() {
   if (!ok) {
   h += '<div class="note" style="margin-top:12px;padding:14px;background:#fff3e0;border-radius:8px;">';
   h += '<b>Nima uchun xato?</b><p>';
-  h += esc(it.explanation || "Bu savolga noto‘g‘ri javob berdingiz. To‘g‘ri javobni yuqorida ko‘rib, qayta o‘rganing.");
+  h += esc(it.explanation || (
+  (it.stem || "").includes("음악을") ?
+  "들으면서 = tinglayotgan holda. -(으)면서 grammatikasi ikki harakat bir vaqtda bajarilishini bildiradi. 음악을 들으면서 공부해요 — Musiqa tinglab dars qilaman." :
+  "To‘g‘ri javobni yuqorida ko‘ring. Savolning grammatik tuzilishini qayta o‘rganing."
+));
   h += '</p></div>';
   }
 }
