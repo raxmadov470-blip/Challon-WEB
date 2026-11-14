@@ -975,7 +975,11 @@ function vHome() {
   if (st.plv !== null) {
     h += '<div class="stats"><div><b>L' + st.plv + "</b><span>" + esc(t("level")) + "</span></div><div><b>" + esc(t("grade", st.grade)) + "</b><span>" + esc(t("goal")) + "</span></div><div><b>" +
       E.streak(st, td) + "</b><span>" + esc(t("streak")) + "</span></div><div><b class='xp'>" + st.xp + "</b><span>XP</span></div></div>";
-  } 
+  }
+  var dailyCount = (st.days ? Object.keys(st.days).filter(function(d) {
+  return st.days[d];
+}).length : 0);
+var dailyProgress = Math.min(dailyCount, 30) + "/30";
   h += '<div class="card"><h2>TOPIK maqsadingizni tanlang</h2><select id="goalSelect" style="width:100%;padding:12px;font-size:16px;border-radius:8px">' +
   [1,2,3,4,5,6].map(function(n) {
     return '<option value="' + n + '"' + (st.grade === n ? ' selected' : '') + '>TOPIK ' + n + '</option>';
@@ -986,8 +990,8 @@ function vHome() {
   else {
     var due = E.weekDue(st, td, C.WEEK_DAYS), wait = E.nextTestIn(st, td, C.WEEK_DAYS);
     if (due) h += card(t("week_title"), t("week_open", due), "week", t("start"), true);
-    if (E.practicedToday(st, td)) h += card(t("today_title"), t("today_done"), null, null, false, "done");
-    else h += card(t("today_title"), t("today_desc"), "prac", t("start"), !due);
+    if (E.practicedToday(st, td)) h += card("Daily Practice (" + dailyProgress + ")", t("today_done"), null, null, false, "done");
+    else h += card("Daily Practice (" + dailyProgress + ")", t("today_desc"), "prac", t("start"), !due);
     if (!due) h += card(t("week_title"), wait === null ? t("week_all") : t("week_wait", wait), null, null, false, "muted");
   }
   if (st.plv !== null) {
