@@ -1052,6 +1052,13 @@ function vRun() {
     if (meta.am === "text") h += '<div class="note">' + esc(t("text_mode")) + '</div><div class="passage">' + esc(it.script || it.audio).replace(/\n/g, "<br>") + "</div>";
     else h += '<div class="center"><button class="audio" id="play">▶ ' + esc(t("play")) + '</button><br><button class="link small" id="nosound">' + esc(t("no_sound")) + "</button></div>";
   }
+  if (it.audio && cur.fb && !E.check(it, respValue(cur.i))) {
+  h += '<div class="note" style="padding:14px;margin-top:12px;background:#fff3e0;border-radius:8px;">';
+  h += '<b>Listening Hint — Tinglash uchun yordam</b>';
+  h += '<p>Audio matnini qayta o‘qing va asosiy so‘zlarni aniqlang:</p>';
+  h += '<p>' + esc(it.script || it.audio) + '</p>';
+  h += '</div>';
+}
   if (it.stem) h += '<div class="' + (it.big ? "stem big" : it.q ? "passage" : "stem") + '">' + esc(it.stem) + "</div>";
   if (it.q) h += '<div class="question">' + esc(it.q) + "</div>";
   var locked = cur.fb;
