@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CHALLON Admin</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f3ee;color:#172b3a;font-family:Arial,sans-serif}
+header{background:#105b53;color:white;padding:22px 5%;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:22px;letter-spacing:3px}
+main{max-width:1100px;margin:30px auto;padding:0 20px}
+.card{background:white;border:1px solid #e5e3dd;border-radius:14px;padding:24px;margin-bottom:20px}
+input,button{padding:13px;border-radius:8px;font-size:15px}
+input{border:1px solid #ccc;width:100%;margin:10px 0}
+button{border:0;background:#105b53;color:white;cursor:pointer}
+button:hover{background:#0a4740}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.stat{background:white;border-radius:12px;padding:22px;text-align:center}
+.stat strong{display:block;font-size:30px;color:#105b53}
+.stat span{font-size:13px;color:#667}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:12px;border-bottom:1px solid #eee}
+th{background:#f5f3ee}
+.tablewrap{overflow-x:auto}
+#error{color:#b42318}
+#dashboard{display:none}
+@media(max-width:650px){.stats{grid-template-columns:1fr}header{padding:18px}}
+</style>
+</head>
+<body>
+<header>
+<h1>CHALLON</h1>
+<span>Admin Dashboard</span>
+</header>
+<main>
+<section class="card" id="login">
+<h2>Administrator kirishi</h2>
+<p>Admin kalitini kiriting.</p>
+<input id="key" type="password" placeholder="ADMIN_KEY">
+<button id="load">Kirish</button>
+<p id="error"></p>
+</section>
+
+<section id="dashboard">
+<div class="stats">
+<div class="stat"><strong id="total">0</strong><span>O‘quvchilar</span></div>
+<div class="stat"><strong id="active">0</strong><span>Placement topshirganlar</span></div>
+<div class="stat"><strong id="xp">0</strong><span>Jami XP</span></div>
+</div>
+<div class="card" style="margin-top:20px">
+<h2>O‘quvchilar</h2>
+<input id="search" placeholder="Ism yoki email bo‘yicha qidirish">
+<div class="tablewrap">
+<table>
+<thead><tr><th>Ism</th><th>Email / Username</th><th>Daraja</th><th>TOPIK maqsadi</th><th>XP</th></tr></thead>
+<tbody id="rows"></tbody>
+</table>
+</div>
+</div>
+<button id="refresh">Yangilash</button>
+</section>
+</main>
+<script>
+const API="https://script.google.com/macros/s/AKfycbzvbsDw5n-gOkB3z7AHA3Zjem2lyBEp9nl0uLiaFv7-I-sUSPYaK7x_pZudcs8mSK7xRw/exec";
+let users=[];
+function render(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const list=users.filter(u=>((u.name||"")+" "+(u.username||"")).toLowerCase().includes(q));
+ document.getElementById("rows").replaceChildren();
+ for(const u of list){
+  const st=u.state||{};
+  const tr=document.createElement("tr");
+  for(const value of [u.name||"",u.username||"",st.plv==null?"—":"L"+st.plv,st.grade==null?"—":"TOPIK "+st.grade,st.xp||0]){
+   const td=document.createElement("td");
+   td.textContent=String(value);
+   tr.appendChild(td);
+  }
+  document.getElementById("rows").appendChild(tr);
+ }
+}
+async function load(){
+ const key=document.getElementById("key").value;
+ const error=document.getElementById("error");
+ error.textContent="Yuklanmoqda...";
+ try{
+  const res=await fetch(API,{
+   method:"POST",
+   headers:{"Content-Type":"text/plain;charset=utf-8"},
+   body:JSON.stringify({action:"admin",key})
+  });
+  const data=await res.json();
+  if(!data.ok)throw Error(data.error||"Admin kirishi rad etildi");
+  users=data.users||[];
+  document.getElementById("total").textContent=users.length;
+  document.getElementById("active").textContent=users.filter(u=>u.state&&u.state.plv!=null).length;
+  document.getElementById("xp").textContent=users.reduce((s,u)=>s+Number(u.state&&u.state.xp||0),0);
+  document.getElementById("login").style.display="none";
+  document.getElementById("dashboard").style.display="block";
+  render();
+ }catch(e){error.textContent="Xatolik: "+e.message}
+}
+document.getElementById("load").onclick=load;
+document.getElementById("refresh").onclick=load;
+document.getElementById("search").oninput=render;
+</script>
+</body>
+</html>
