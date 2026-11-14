@@ -897,8 +897,12 @@ function draw() {
   ({ login: vLogin, home: vHome, run: vRun, result: vResult, progress: vProgress, game: vGame })[view]();
 }
 function on(sel, fn) { Array.prototype.forEach.call(app.querySelectorAll(sel), function (el) { el.addEventListener("click", function (ev) { fn(el, ev); }); }); }
-function brand() { return '<div class="brand" onclick="go(\'home\')" style="cursor:pointer">CHALLON</div>'; }
-
+function brand() { return '<div class="brand" data-home style="cursor:pointer">CHALLON</div>'; }
+document.addEventListener("click", function(e) {
+  if (e.target.closest("[data-home]")) {
+    if (view !== "login") go("home");
+  }
+});
 /* ---------- login ---------- */
 function vLogin() {
   var h = '<div class="login">' + brand() + '<p class="tag">' + esc(t("tagline")) + '</p>' +
