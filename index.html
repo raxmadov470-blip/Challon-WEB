@@ -1071,7 +1071,13 @@ function vRun() {
   if (locked) {
     var ok = E.check(it, respValue(cur.i));
     h += '<div class="fb ' + (ok ? "good" : "bad") + '"><b>' + esc(t(ok ? "correct" : "wrong")) + "</b>" + (ok ? "" : "<div>" + esc(t("answer_is")) + ": " + esc(it.mode === "tiles" ? it.answer : it.opts[it.ans]) + "</div>") + '<div class="reveal">' + esc(it.reveal) + "</div></div>";
+  if (!ok) {
+  h += '<div class="note" style="margin-top:12px;padding:14px;background:#fff3e0;border-radius:8px;">';
+  h += '<b>Nima uchun xato?</b><p>';
+  h += esc(it.explanation || "Bu savolga noto‘g‘ri javob berdingiz. To‘g‘ri javobni yuqorida ko‘rib, qayta o‘rganing.");
+  h += '</p></div>';
   }
+}
   var lastQ = cur.i === n - 1;
   h += '<div class="foot">';
   if (isTest()) h += '<button class="btn ghost" id="prev"' + (canPrev() ? "" : " disabled") + ">" + esc(t("prev")) + "</button>";
