@@ -975,7 +975,12 @@ function vHome() {
   if (st.plv !== null) {
     h += '<div class="stats"><div><b>L' + st.plv + "</b><span>" + esc(t("level")) + "</span></div><div><b>" + esc(t("grade", st.grade)) + "</b><span>" + esc(t("goal")) + "</span></div><div><b>" +
       E.streak(st, td) + "</b><span>" + esc(t("streak")) + "</span></div><div><b class='xp'>" + st.xp + "</b><span>XP</span></div></div>";
-  }
+  } 
+  h += '<div class="card"><h2>TOPIK maqsadingizni tanlang</h2><select id="goalSelect" style="width:100%;padding:12px;font-size:16px;border-radius:8px">' +
+  [1,2,3,4,5,6].map(function(n) {
+    return '<option value="' + n + '"' + (st.grade === n ? ' selected' : '') + '>TOPIK ' + n + '</option>';
+  }).join('') +
+  '</select><button class="btn" id="saveGoal" style="margin-top:10px">Saqlash</button></div>';
   if (S.cur) h += card(S.cur.kind === "prac" ? t("today_title") : S.cur.kind === "place" ? t("place_title") : t("week_title"), (S.cur.i + 1) + " / " + S.cur.items.length, "resume", t("resume"), true);
   else if (st.plv === null) h += card(t("place_title"), t("place_desc"), "place", t("start"), true);
   else {
@@ -990,6 +995,13 @@ function vHome() {
     h += '<button class="btn ghost" id="prog">' + esc(t("progress")) + "</button>";
   }
   app.innerHTML = h;
+  on("#saveGoal", function () {
+  var selected = document.getElementById("goalSelect");
+  if (!selected) return;
+  S.state.grade = Number(selected.value);
+  save();
+  draw();
+});
   on("#out", function () {
     if (gsiState === 2) google.accounts.id.disableAutoSelect(); // so a shared phone does not sign the next learner in as this one
     S.profile = null; save(); view = "login"; draw();
