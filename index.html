@@ -1057,6 +1057,33 @@ function vRun() {
   h += '<b>Listening Hint — Tinglash uchun yordam</b>';
   h += '<p>Audio matnini qayta o‘qing va asosiy so‘zlarni aniqlang:</p>';
   h += '<p>' + esc(it.script || it.audio) + '</p>';
+    var vocab = {
+  "여자": "ayol",
+  "남자": "erkak",
+  "얼마예요": "qancha turadi?",
+  "지금": "hozir",
+  "사시면": "sotib olsangiz",
+  "양말": "paypoq",
+  "드려요": "beraman",
+  "병원": "kasalxona",
+  "옆": "yonida",
+  "가게": "do‘kon",
+  "직원": "xodim",
+  "학교": "maktab",
+  "선생님": "o‘qituvchi"
+};
+
+var script = it.script || it.audio || "";
+var words = Object.keys(vocab).filter(function(w) {
+  return script.includes(w);
+});
+
+if (words.length) {
+  h += '<p><b>Asosiy so‘zlar:</b></p>';
+  h += '<ul>' + words.map(function(w) {
+    return '<li>' + esc(w) + ' — ' + esc(vocab[w]) + '</li>';
+  }).join('') + '</ul>';
+}
   h += '</div>';
 }
   if (it.stem) h += '<div class="' + (it.big ? "stem big" : it.q ? "passage" : "stem") + '">' + esc(it.stem) + "</div>";
