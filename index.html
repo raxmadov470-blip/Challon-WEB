@@ -897,7 +897,7 @@ function draw() {
   ({ login: vLogin, home: vHome, run: vRun, result: vResult, progress: vProgress, game: vGame })[view]();
 }
 function on(sel, fn) { Array.prototype.forEach.call(app.querySelectorAll(sel), function (el) { el.addEventListener("click", function (ev) { fn(el, ev); }); }); }
-function brand() { return '<div class="brand">CHALLON</div>'; }
+function brand() { return '<div class="brand" onclick="go(\'home\')" style="cursor:pointer">CHALLON</div>'; }
 
 /* ---------- login ---------- */
 function vLogin() {
