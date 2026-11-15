@@ -1,109 +1,204 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CHALLON Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHALLON — Admin Dashboard v2</title>
 <style>
+:root{--green:#105b53;--dark:#172b3a;--muted:#64748b;--bg:#f5f3ee;--line:#e5e3dd}
 *{box-sizing:border-box}
-body{margin:0;background:#f5f3ee;color:#172b3a;font-family:Arial,sans-serif}
-header{background:#105b53;color:white;padding:22px 5%;display:flex;justify-content:space-between;align-items:center}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:Arial,sans-serif}
+header{background:var(--green);color:#fff;padding:22px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px}
 header h1{margin:0;font-size:22px;letter-spacing:3px}
-main{max-width:1100px;margin:30px auto;padding:0 20px}
-.card{background:white;border:1px solid #e5e3dd;border-radius:14px;padding:24px;margin-bottom:20px}
-input,button{padding:13px;border-radius:8px;font-size:15px}
-input{border:1px solid #ccc;width:100%;margin:10px 0}
-button{border:0;background:#105b53;color:white;cursor:pointer}
-button:hover{background:#0a4740}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-.stat{background:white;border-radius:12px;padding:22px;text-align:center}
-.stat strong{display:block;font-size:30px;color:#105b53}
-.stat span{font-size:13px;color:#667}
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:12px;border-bottom:1px solid #eee}
-th{background:#f5f3ee}
-.tablewrap{overflow-x:auto}
-#error{color:#b42318}
-#dashboard{display:none}
-@media(max-width:650px){.stats{grid-template-columns:1fr}header{padding:18px}}
+header span{font-size:15px}
+main{max-width:1200px;margin:30px auto;padding:0 20px 50px}
+h2{font-size:20px;margin:0 0 16px}h3{font-size:17px;margin:0 0 14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:20px}
+input,button,select{padding:12px;border-radius:8px;font-size:15px;font-family:inherit}
+input,select{border:1px solid #cbd5e1;background:#fff;color:var(--dark)}
+input{width:100%;margin:8px 0 12px}
+button{border:0;background:var(--green);color:#fff;cursor:pointer}
+button:hover{background:#0a4740}button:disabled{opacity:.55;cursor:wait}
+.btn-light{background:#e5efec;color:var(--green)}.btn-light:hover{background:#d6e7e1}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;text-align:center}
+.stat strong{display:block;font-size:30px;color:var(--green);margin-bottom:6px}
+.stat span,.muted{font-size:13px;color:var(--muted)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:600px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid #eee;font-size:14px}
+th{background:var(--bg);white-space:nowrap}
+tr.selected{background:#eaf5f0}tr.clickable{cursor:pointer}tr.clickable:hover{background:#f2f8f5}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pill{display:inline-block;background:#eaf5f0;color:var(--green);padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
+.bar{height:10px;border-radius:10px;background:#e9eeec;overflow:hidden;min-width:100px}
+.bar>div{height:100%;background:var(--green)}
+.skill{display:grid;grid-template-columns:110px 1fr 90px;align-items:center;gap:12px;margin:14px 0}
+.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.detail-grid>div{background:var(--bg);padding:15px;border-radius:10px}
+.detail-grid strong{display:block;margin-top:7px;font-size:19px}
+#dashboard{display:none}#error{color:#b42318;white-space:pre-wrap}
+#status{color:var(--muted);font-size:13px;margin:0 0 14px}
+.empty{color:var(--muted);font-size:14px;padding:10px 0}
+@media(max-width:850px){.grid2{grid-template-columns:1fr}.detail-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.stats{grid-template-columns:1fr}header{padding:18px}main{padding:0 12px}.card{padding:16px}.skill{grid-template-columns:80px 1fr 65px}}
 </style>
 </head>
 <body>
-<header>
-<h1>CHALLON</h1>
-<span>Admin Dashboard</span>
-</header>
+<header><h1>CHALLON</h1><span>Admin Dashboard v2</span></header>
 <main>
 <section class="card" id="login">
 <h2>Administrator kirishi</h2>
 <p>Admin kalitini kiriting.</p>
-<input id="key" type="password" placeholder="ADMIN_KEY">
+<input id="key" type="password" placeholder="ADMIN_KEY" autocomplete="off">
 <button id="load">Kirish</button>
-<p id="error"></p>
+<p id="error" role="alert"></p>
 </section>
-
 <section id="dashboard">
+<div class="actions"><button id="refresh">Yangilash</button><button id="logout" class="btn-light">Chiqish</button></div>
+<p id="status" aria-live="polite"></p>
 <div class="stats">
 <div class="stat"><strong id="total">0</strong><span>O‘quvchilar</span></div>
 <div class="stat"><strong id="active">0</strong><span>Placement topshirganlar</span></div>
 <div class="stat"><strong id="xp">0</strong><span>Jami XP</span></div>
+<div class="stat"><strong id="sessionCount">0</strong><span>Jami mashg‘ulotlar</span></div>
+<div class="stat"><strong id="practiceCount">0</strong><span>Daily Practice</span></div>
+<div class="stat"><strong id="gameCount">0</strong><span>O‘yinlar</span></div>
 </div>
-<div class="card" style="margin-top:20px">
+<div class="card">
 <h2>O‘quvchilar</h2>
-<input id="search" placeholder="Ism yoki email bo‘yicha qidirish">
-<div class="tablewrap">
-<table>
-<thead><tr><th>Ism</th><th>Email / Username</th><th>Daraja</th><th>TOPIK maqsadi</th><th>XP</th></tr></thead>
+<input id="search" placeholder="Ism yoki username bo‘yicha qidirish" aria-label="Talabani qidirish">
+<div class="tablewrap"><table>
+<thead><tr><th>Ism</th><th>Username</th><th>Daraja</th><th>TOPIK maqsadi</th><th>XP</th><th>Ko‘rish</th></tr></thead>
 <tbody id="rows"></tbody>
-</table>
+</table></div>
 </div>
+<section id="studentSection" style="display:none">
+<div class="card">
+<h2 id="studentTitle">Talaba tafsilotlari</h2>
+<div class="detail-grid" id="studentSummary"></div>
 </div>
-<button id="refresh">Yangilash</button>
+<div class="grid2">
+<div class="card"><h3>Placement Test</h3><div id="placementResult" class="empty">Ma’lumot yo‘q</div></div>
+<div class="card"><h3>Skill Analysis</h3><p class="muted">Ko‘rilgan savollardagi javoblar asosida. Bu AI diagnostikasi emas.</p><div id="skillResults"></div></div>
+</div>
+<div class="card">
+<h2>Practice History / Test Results</h2>
+<label for="kindFilter" class="muted">Mashg‘ulot turi</label>
+<select id="kindFilter"><option value="all">Barchasi</option><option value="place">Placement Test</option><option value="prac">Daily Practice</option><option value="game">Games</option></select>
+<div class="tablewrap" style="margin-top:12px"><table>
+<thead><tr><th>Sana</th><th>Turi</th><th>Natija</th><th>Ball</th><th>Vaqt</th><th>XP</th></tr></thead>
+<tbody id="historyRows"></tbody>
+</table></div>
+</div>
+</section>
 </section>
 </main>
 <script>
-const API="https://script.google.com/macros/s/AKfycbzvbsDw5n-gOkB3z7AHA3Zjem2lyBEp9nl0uLiaFv7-I-sUSPYaK7x_pZudcs8mSK7xRw/exec";
-let users=[];
-function render(){
- const q=document.getElementById("search").value.toLowerCase();
- const list=users.filter(u=>((u.name||"")+" "+(u.username||"")).toLowerCase().includes(q));
- document.getElementById("rows").replaceChildren();
+'use strict';
+const API='https://script.google.com/macros/s/AKfycbzvbsDw5n-gOkB3z7AHA3Zjem2lyBEp9nl0uLiaFv7-I-sUSPYaK7x_pZudcs8mSK7xRw/exec';
+let users=[],sessions=[],responses=[],selectedUid=null;
+const el=id=>document.getElementById(id);
+const num=v=>Number(v)||0;
+const text=v=>v===null||v===undefined||v===''?'—':String(v);
+const labelKind={place:'Placement Test',prac:'Daily Practice',game:'Game'};
+function cell(tr,value){const td=document.createElement('td');td.textContent=text(value);tr.appendChild(td);return td;}
+function setText(id,value){el(id).textContent=String(value);}
+function dateText(v){return text(v).slice(0,10);}
+function percent(correct,total){return total>0?Math.round(correct/total*100):0;}
+function makeEmpty(tbody,colspan,message){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=colspan;td.className='empty';td.textContent=message;tr.appendChild(td);tbody.appendChild(tr);}
+function renderUsers(){
+ const q=el('search').value.trim().toLowerCase();
+ const list=users.filter(u=>((u.name||'')+' '+(u.username||'')).toLowerCase().includes(q));
+ const tbody=el('rows');tbody.replaceChildren();
+ if(!list.length)makeEmpty(tbody,6,'Talaba topilmadi.');
  for(const u of list){
-  const st=u.state||{};
-  const tr=document.createElement("tr");
-  for(const value of [u.name||"",u.username||"",st.plv==null?"—":"L"+st.plv,st.grade==null?"—":"TOPIK "+st.grade,st.xp||0]){
-   const td=document.createElement("td");
-   td.textContent=String(value);
-   tr.appendChild(td);
-  }
-  document.getElementById("rows").appendChild(tr);
+  const st=u.state||{};const tr=document.createElement('tr');tr.className='clickable'+(String(u.uid)===selectedUid?' selected':'');
+  cell(tr,u.name||'');cell(tr,u.username||'');cell(tr,st.plv==null?'—':'L'+st.plv);cell(tr,st.grade==null?'—':'TOPIK '+st.grade);cell(tr,num(st.xp));
+  const td=document.createElement('td'),btn=document.createElement('button');btn.textContent='Batafsil';btn.className='btn-light';btn.onclick=()=>selectStudent(String(u.uid));td.appendChild(btn);tr.appendChild(td);
+  tr.onclick=e=>{if(e.target!==btn)selectStudent(String(u.uid));};tbody.appendChild(tr);
  }
 }
-async function load(){
- const key=document.getElementById("key").value;
- const error=document.getElementById("error");
- error.textContent="Yuklanmoqda...";
- try{
-  const res=await fetch(API,{
-   method:"POST",
-   headers:{"Content-Type":"text/plain;charset=utf-8"},
-   body:JSON.stringify({action:"admin",key})
-  });
-  const data=await res.json();
-  if(!data.ok)throw Error(data.error||"Admin kirishi rad etildi");
-  users=data.users||[];
-  document.getElementById("total").textContent=users.length;
-  document.getElementById("active").textContent=users.filter(u=>u.state&&u.state.plv!=null).length;
-  document.getElementById("xp").textContent=users.reduce((s,u)=>s+Number(u.state&&u.state.xp||0),0);
-  document.getElementById("login").style.display="none";
-  document.getElementById("dashboard").style.display="block";
-  render();
- }catch(e){error.textContent="Xatolik: "+e.message}
+function summaryBox(parent,label,value){const div=document.createElement('div'),small=document.createElement('span'),strong=document.createElement('strong');small.className='muted';small.textContent=label;strong.textContent=text(value);div.append(small,strong);parent.appendChild(div);}
+function selectStudent(uid){selectedUid=uid;renderUsers();renderStudent();}
+function renderStudent(){
+ const u=users.find(x=>String(x.uid)===selectedUid);if(!u){el('studentSection').style.display='none';return;}
+ el('studentSection').style.display='block';setText('studentTitle',(u.name||'Talaba')+' — batafsil natijalar');
+ const st=u.state||{};const mine=sessions.filter(s=>String(s.uid)===selectedUid);
+ const summary=el('studentSummary');summary.replaceChildren();
+ summaryBox(summary,'Daraja',st.plv==null?'—':'L'+st.plv);
+ summaryBox(summary,'TOPIK maqsadi',st.grade==null?'—':'TOPIK '+st.grade);
+ summaryBox(summary,'Jami XP',num(st.xp));
+ summaryBox(summary,'Mashg‘ulotlar',mine.length);
+ const placement=mine.filter(s=>s.kind==='place').sort((a,b)=>String(b.ts).localeCompare(String(a.ts)));
+ const p=el('placementResult');p.replaceChildren();
+ if(placement.length){const s=placement[0],d=document.createElement('div');
+ d.textContent='Sana: '+dateText(s.date)+' | To‘g‘ri: '+num(s.correct)+'/'+num(s.n)+' | Ball: '+(s.score==null?'—':s.score)+'/100';p.appendChild(d);
+ }else{p.textContent='Placement Test natijasi mavjud emas.';}
+ renderSkills();renderHistory();
 }
-document.getElementById("load").onclick=load;
-document.getElementById("refresh").onclick=load;
-document.getElementById("search").oninput=render;
+function renderSkills(){
+ const root=el('skillResults');root.replaceChildren();
+ const rows=responses.filter(r=>String(r.uid)===selectedUid);
+ const names={R:'Reading',L:'Listening',W:'Writing'};
+ let hasAny=false;
+ for(const skill of ['R','L','W']){
+  const viewed=rows.filter(r=>String(r.skill||'').toUpperCase()===skill&&Number(r.seen)===1);
+  if(!viewed.length)continue;hasAny=true;
+  const correct=viewed.filter(r=>Number(r.ok)===1).length;
+  const rate=percent(correct,viewed.length);
+  const item=document.createElement('div');item.className='skill';
+  const name=document.createElement('strong');name.textContent=names[skill];
+  const bar=document.createElement('div');bar.className='bar';const fill=document.createElement('div');fill.style.width=rate+'%';bar.appendChild(fill);
+  const count=document.createElement('span');count.className='muted';count.textContent=correct+'/'+viewed.length+' ('+rate+'%)';
+  item.append(name,bar,count);root.appendChild(item);
+ }
+ if(!hasAny){const d=document.createElement('p');d.className='empty';d.textContent='Ko‘nikmalar bo‘yicha ma’lumot yo‘q.';root.appendChild(d);}
+}
+function renderHistory(){
+ const kind=el('kindFilter').value;
+ const mine=sessions.filter(s=>String(s.uid)===selectedUid&&(kind==='all'||s.kind===kind))
+  .sort((a,b)=>String(b.ts).localeCompare(String(a.ts)));
+ const tbody=el('historyRows');tbody.replaceChildren();
+ if(!mine.length)makeEmpty(tbody,6,'Hozircha mashg‘ulot mavjud emas.');
+ for(const s of mine){const tr=document.createElement('tr');
+  cell(tr,dateText(s.date));cell(tr,labelKind[s.kind]||s.kind);
+  cell(tr,num(s.correct)+' / '+num(s.n)+' ('+percent(num(s.correct),num(s.n))+'%)');
+  cell(tr,s.score==null?'—':s.score);
+  cell(tr,num(s.sec)+' s');cell(tr,num(s.xp));tbody.appendChild(tr);
+ }
+}
+function updateDashboard(){
+ setText('total',users.length);
+ setText('active',users.filter(u=>u.state&&u.state.plv!=null).length);
+ setText('xp',users.reduce((sum,u)=>sum+num(u.state&&u.state.xp),0));
+ setText('sessionCount',sessions.length);
+ setText('practiceCount',sessions.filter(s=>s.kind==='prac').length);
+ setText('gameCount',sessions.filter(s=>s.kind==='game').length);
+ renderUsers();if(selectedUid&&users.some(u=>String(u.uid)===selectedUid))renderStudent();
+ else if(users.length)selectStudent(String(users[0].uid));else el('studentSection').style.display='none';
+}
+async function load(){
+ const key=el('key').value;
+ const error=el('error');const button=el('dashboard').style.display==='block'?el('refresh'):el('load');
+ if(!key){error.textContent='ADMIN_KEY ni kiriting.';return;}
+ button.disabled=true;error.textContent='Yuklanmoqda...';el('status').textContent='Ma’lumotlar yangilanmoqda...';
+ try{
+  const res=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin',key})});
+  if(!res.ok)throw Error('Server javobi: '+res.status);
+  const data=await res.json();if(!data.ok)throw Error(data.error||'Admin kirishi rad etildi');
+  if(!Array.isArray(data.users)||!Array.isArray(data.sessions)||!Array.isArray(data.responses))
+   throw Error('Backend sessions/responses ma’lumotlarini qaytarmadi. Version 3 deploymentni tekshiring.');
+  users=data.users;sessions=data.sessions;responses=data.responses;
+  el('login').style.display='none';el('dashboard').style.display='block';error.textContent='';
+  updateDashboard();el('status').textContent='Yangilandi: '+new Date().toLocaleString('uz-UZ');
+ }catch(e){error.textContent='Xatolik: '+e.message;el('status').textContent='Yangilashda xatolik: '+e.message;}
+ finally{button.disabled=false;}
+}
+function logout(){users=[];sessions=[];responses=[];selectedUid=null;el('key').value='';el('dashboard').style.display='none';el('login').style.display='block';el('error').textContent='';}
+el('load').onclick=load;el('refresh').onclick=load;el('logout').onclick=logout;
+el('search').oninput=renderUsers;el('kindFilter').onchange=renderHistory;
+el('key').addEventListener('keydown',e=>{if(e.key==='Enter')load();});
 </script>
 </body>
 </html>
