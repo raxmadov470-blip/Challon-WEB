@@ -1,204 +1,1631 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CHALLON — Admin Dashboard v2</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>CHALLON 관리자</title>
 <style>
-:root{--green:#105b53;--dark:#172b3a;--muted:#64748b;--bg:#f5f3ee;--line:#e5e3dd}
+:root{--bg:#F4F2EC;--card:#fff;--ink:#16202E;--mut:#5C6675;--line:#E2DED3;--pri:#0E5A52;--tint:#E6F0EE;--good:#2F7D4F;--bad:#B3402E;--amber:#B9741A}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--dark);font-family:Arial,sans-serif}
-header{background:var(--green);color:#fff;padding:22px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px}
-header h1{margin:0;font-size:22px;letter-spacing:3px}
-header span{font-size:15px}
-main{max-width:1200px;margin:30px auto;padding:0 20px 50px}
-h2{font-size:20px;margin:0 0 16px}h3{font-size:17px;margin:0 0 14px}
-.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:20px}
-input,button,select{padding:12px;border-radius:8px;font-size:15px;font-family:inherit}
-input,select{border:1px solid #cbd5e1;background:#fff;color:var(--dark)}
-input{width:100%;margin:8px 0 12px}
-button{border:0;background:var(--green);color:#fff;cursor:pointer}
-button:hover{background:#0a4740}button:disabled{opacity:.55;cursor:wait}
-.btn-light{background:#e5efec;color:var(--green)}.btn-light:hover{background:#d6e7e1}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;text-align:center}
-.stat strong{display:block;font-size:30px;color:var(--green);margin-bottom:6px}
-.stat span,.muted{font-size:13px;color:var(--muted)}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:600px}
-th,td{text-align:left;padding:12px;border-bottom:1px solid #eee;font-size:14px}
-th{background:var(--bg);white-space:nowrap}
-tr.selected{background:#eaf5f0}tr.clickable{cursor:pointer}tr.clickable:hover{background:#f2f8f5}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.pill{display:inline-block;background:#eaf5f0;color:var(--green);padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
-.bar{height:10px;border-radius:10px;background:#e9eeec;overflow:hidden;min-width:100px}
-.bar>div{height:100%;background:var(--green)}
-.skill{display:grid;grid-template-columns:110px 1fr 90px;align-items:center;gap:12px;margin:14px 0}
-.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.detail-grid>div{background:var(--bg);padding:15px;border-radius:10px}
-.detail-grid strong{display:block;margin-top:7px;font-size:19px}
-#dashboard{display:none}#error{color:#b42318;white-space:pre-wrap}
-#status{color:var(--muted);font-size:13px;margin:0 0 14px}
-.empty{color:var(--muted);font-size:14px;padding:10px 0}
-@media(max-width:850px){.grid2{grid-template-columns:1fr}.detail-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:650px){.stats{grid-template-columns:1fr}header{padding:18px}main{padding:0 12px}.card{padding:16px}.skill{grid-template-columns:80px 1fr 65px}}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR","Malgun Gothic",sans-serif}
+#app{max-width:1180px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:20px;margin:0}h2{font-size:15px;margin:0 0 10px}
+.brand{font-weight:800;letter-spacing:.2em;color:var(--pri);font-size:13px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.warn{background:#FBF1DF;border:1px solid #EBD5A8;color:#7A5210;border-radius:10px;padding:10px 14px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}.kpi b{display:block;font-size:24px;line-height:1.2}.kpi span{color:var(--mut);font-size:12.5px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:820px){.grid{grid-template-columns:1fr}}
+input,button,select{font:inherit}
+input{padding:9px 12px;border:1px solid var(--line);border-radius:8px;min-width:220px}
+button{border:1px solid var(--pri);background:var(--pri);color:#fff;border-radius:8px;padding:9px 14px;font-weight:600;cursor:pointer}
+button.ghost{background:#fff;color:var(--pri)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-size:12.5px;color:var(--mut);font-weight:600;cursor:pointer;user-select:none;position:sticky;top:0;background:#fff}
+tbody tr{cursor:pointer}tbody tr:hover{background:#FAF8F3}tr.sel{background:var(--tint)}
+.up{color:var(--good);font-weight:700}.down{color:var(--bad);font-weight:700}.mut{color:var(--mut)}
+.barrow{display:flex;align-items:center;gap:10px;margin:7px 0}.barrow span{width:110px}.barrow .bar{flex:1;height:14px;background:#ECE8DE;border-radius:4px;overflow:hidden}.barrow i{display:block;height:100%;background:var(--pri)}.barrow b{width:86px;text-align:right}
+.pill{display:inline-block;background:var(--tint);color:var(--pri);border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;margin:0 4px 4px 0}
+.pill.w{background:#FAEAE6;color:var(--bad)}
+svg text{font-size:11px;fill:#5C6675}
+h2.sec{font-size:16px;margin:22px 0 10px;color:var(--pri)}
+.big{font-size:44px;font-weight:800;line-height:1.1;color:var(--pri)}
+.big small{font-size:18px;color:var(--mut);font-weight:600}
+.small{font-size:12.5px}
+select{padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;margin-bottom:10px}
+.card h2{color:var(--ink)}
 </style>
 </head>
 <body>
-<header><h1>CHALLON</h1><span>Admin Dashboard v2</span></header>
-<main>
-<section class="card" id="login">
-<h2>Administrator kirishi</h2>
-<p>Admin kalitini kiriting.</p>
-<input id="key" type="password" placeholder="ADMIN_KEY" autocomplete="off">
-<button id="load">Kirish</button>
-<p id="error" role="alert"></p>
-</section>
-<section id="dashboard">
-<div class="actions"><button id="refresh">Yangilash</button><button id="logout" class="btn-light">Chiqish</button></div>
-<p id="status" aria-live="polite"></p>
-<div class="stats">
-<div class="stat"><strong id="total">0</strong><span>O‘quvchilar</span></div>
-<div class="stat"><strong id="active">0</strong><span>Placement topshirganlar</span></div>
-<div class="stat"><strong id="xp">0</strong><span>Jami XP</span></div>
-<div class="stat"><strong id="sessionCount">0</strong><span>Jami mashg‘ulotlar</span></div>
-<div class="stat"><strong id="practiceCount">0</strong><span>Daily Practice</span></div>
-<div class="stat"><strong id="gameCount">0</strong><span>O‘yinlar</span></div>
-</div>
-<div class="card">
-<h2>O‘quvchilar</h2>
-<input id="search" placeholder="Ism yoki username bo‘yicha qidirish" aria-label="Talabani qidirish">
-<div class="tablewrap"><table>
-<thead><tr><th>Ism</th><th>Username</th><th>Daraja</th><th>TOPIK maqsadi</th><th>XP</th><th>Ko‘rish</th></tr></thead>
-<tbody id="rows"></tbody>
-</table></div>
-</div>
-<section id="studentSection" style="display:none">
-<div class="card">
-<h2 id="studentTitle">Talaba tafsilotlari</h2>
-<div class="detail-grid" id="studentSummary"></div>
-</div>
-<div class="grid2">
-<div class="card"><h3>Placement Test</h3><div id="placementResult" class="empty">Ma’lumot yo‘q</div></div>
-<div class="card"><h3>Skill Analysis</h3><p class="muted">Ko‘rilgan savollardagi javoblar asosida. Bu AI diagnostikasi emas.</p><div id="skillResults"></div></div>
-</div>
-<div class="card">
-<h2>Practice History / Test Results</h2>
-<label for="kindFilter" class="muted">Mashg‘ulot turi</label>
-<select id="kindFilter"><option value="all">Barchasi</option><option value="place">Placement Test</option><option value="prac">Daily Practice</option><option value="game">Games</option></select>
-<div class="tablewrap" style="margin-top:12px"><table>
-<thead><tr><th>Sana</th><th>Turi</th><th>Natija</th><th>Ball</th><th>Vaqt</th><th>XP</th></tr></thead>
-<tbody id="historyRows"></tbody>
-</table></div>
-</div>
-</section>
-</section>
-</main>
+<div id="app"></div>
 <script>
-'use strict';
-const API='https://script.google.com/macros/s/AKfycbzvbsDw5n-gOkB3z7AHA3Zjem2lyBEp9nl0uLiaFv7-I-sUSPYaK7x_pZudcs8mSK7xRw/exec';
-let users=[],sessions=[],responses=[],selectedUid=null;
-const el=id=>document.getElementById(id);
-const num=v=>Number(v)||0;
-const text=v=>v===null||v===undefined||v===''?'—':String(v);
-const labelKind={place:'Placement Test',prac:'Daily Practice',game:'Game'};
-function cell(tr,value){const td=document.createElement('td');td.textContent=text(value);tr.appendChild(td);return td;}
-function setText(id,value){el(id).textContent=String(value);}
-function dateText(v){return text(v).slice(0,10);}
-function percent(correct,total){return total>0?Math.round(correct/total*100):0;}
-function makeEmpty(tbody,colspan,message){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=colspan;td.className='empty';td.textContent=message;tr.appendChild(td);tbody.appendChild(tr);}
-function renderUsers(){
- const q=el('search').value.trim().toLowerCase();
- const list=users.filter(u=>((u.name||'')+' '+(u.username||'')).toLowerCase().includes(q));
- const tbody=el('rows');tbody.replaceChildren();
- if(!list.length)makeEmpty(tbody,6,'Talaba topilmadi.');
- for(const u of list){
-  const st=u.state||{};const tr=document.createElement('tr');tr.className='clickable'+(String(u.uid)===selectedUid?' selected':'');
-  cell(tr,u.name||'');cell(tr,u.username||'');cell(tr,st.plv==null?'—':'L'+st.plv);cell(tr,st.grade==null?'—':'TOPIK '+st.grade);cell(tr,num(st.xp));
-  const td=document.createElement('td'),btn=document.createElement('button');btn.textContent='Batafsil';btn.className='btn-light';btn.onclick=()=>selectStudent(String(u.uid));td.appendChild(btn);tr.appendChild(td);
-  tr.onclick=e=>{if(e.target!==btn)selectStudent(String(u.uid));};tbody.appendChild(tr);
- }
+window.CHALLON_CONFIG = { API: "https://script.google.com/macros/s/AKfycbzvbsDw5n-gOkB3z7AHA3Zjem2lyBEp9nl0uLiaFv7-I-sUSPYaK7x_pZudcs8mSK7xRw/exec" }; // Apps Script 웹앱 주소(…/exec). 비워 두면 가상 데이터만 볼 수 있습니다.
+</script>
+<script>
+/* CHALLON item bank v1 (AI-authored draft, not yet reviewed by native experts)
+   Levels: 0 = beginner (Hangul + first words), 1 = TOPIK 1, 2 = TOPIK 2, 3 = TOPIK 3, 4 = TOPIK 4+
+   WORDS  : "ko|emoji|uz|ru|en"
+   SENTS  : "sentence with [blank]|distractor,distractor,distractor"
+   PASS   : "text|question|correct|wrong|wrong|wrong"   (reading)
+   DLG    : "script|question|correct|wrong|wrong|wrong" (listening) */
+(function (root) {
+var D = {};
+
+D.WORDS = [
+/* L0 */ [
+"사과|🍎|olma|яблоко|apple","물|💧|suv|вода|water","집|🏠|uy|дом|house","책|📖|kitob|книга|book",
+"학교|🏫|maktab|школа|school","친구|🧑‍🤝‍🧑|do'st|друг|friend","엄마|👩|ona|мама|mom","아빠|👨|ota|папа|dad",
+"개|🐶|it|собака|dog","고양이|🐱|mushuk|кошка|cat","밥|🍚|guruch ovqat|рис, еда|cooked rice, meal","빵|🍞|non|хлеб|bread",
+"우유|🥛|sut|молоко|milk","차|🍵|choy|чай|tea","버스|🚌|avtobus|автобус|bus","자동차|🚗|mashina|машина|car",
+"비행기|✈️|samolyot|самолёт|airplane","전화|📞|telefon|телефон|phone","시계|⌚|soat|часы|clock, watch","돈|💵|pul|деньги|money",
+"눈|👁️|ko'z|глаз|eye","손|✋|qo'l|рука|hand","발|🦶|oyoq|стопа|foot","해|☀️|quyosh|солнце|sun",
+"달|🌙|oy|луна|moon","비|🌧️|yomg'ir|дождь|rain","꽃|🌸|gul|цветок|flower","나무|🌳|daraxt|дерево|tree",
+"산|⛰️|tog'|гора|mountain","바다|🌊|dengiz|море|sea","의자|🪑|stul|стул|chair","문|🚪|eshik|дверь|door",
+"가방|🎒|sumka|сумка|bag","모자|🧢|shapka|шапка|hat","신발|👟|oyoq kiyim|обувь|shoes","옷|👕|kiyim|одежда|clothes",
+"병원|🏥|kasalxona|больница|hospital","가게|🏪|do'kon|магазин|store","선생님|👩‍🏫|o'qituvchi|учитель|teacher","학생|🧑‍🎓|o'quvchi|ученик|student"
+],
+/* L1 */ [
+"가다||bormoq|идти|to go","오다||kelmoq|приходить|to come","먹다|🍽️|yemoq|есть|to eat","마시다|🥤|ichmoq|пить|to drink",
+"자다|😴|uxlamoq|спать|to sleep","읽다||kitob o'qimoq|читать|to read","쓰다|✍️|yozmoq|писать|to write","보다|👀|ko'rmoq|смотреть|to see",
+"듣다|👂|eshitmoq|слушать|to listen","만나다||uchrashmoq|встречаться|to meet","사다|🛒|sotib olmoq|покупать|to buy","일하다||ishlamoq|работать|to work",
+"공부하다||dars qilmoq|учиться|to study","좋다|👍|yaxshi|хороший|good","나쁘다|👎|yomon|плохой|bad","크다||katta|большой|big",
+"작다||kichik|маленький|small","많다||ko'p|много|many","적다||kam|мало|few","덥다|🥵|havo issiq|жарко|hot (weather)",
+"춥다|🥶|sovuq|холодно|cold","맛있다|😋|mazali|вкусный|delicious","비싸다||qimmat|дорогой|expensive","싸다||arzon|дешёвый|cheap",
+"오늘||bugun|сегодня|today","내일||ertaga|завтра|tomorrow","어제||kecha|вчера|yesterday","아침|🌅|ertalab|утро|morning",
+"저녁|🌆|kechqurun|вечер|evening","시간||vaqt|время|time","주말||dam olish kunlari|выходные|weekend","가족|👨‍👩‍👧|oila|семья|family",
+"이름||ism|имя|name","나라||mamlakat|страна|country","음식||ovqat|еда|food","날씨||ob-havo|погода|weather",
+"영화|🎬|kino|фильм|movie","음악|🎵|musiqa|музыка|music","운동|🏃|jismoniy mashq|спорт, тренировка|exercise","여행|🧳|sayohat|путешествие|travel"
+],
+/* L2 */ [
+"약속||uchrashuv, va'da|договорённость, встреча|appointment, promise","준비하다||tayyorlamoq|готовить(ся)|to prepare","도착하다||yetib kelmoq|прибывать|to arrive",
+"출발하다||jo'nab ketmoq|отправляться|to depart","빌리다||qarzga olmoq|брать взаймы|to borrow","돌아오다||qaytib kelmoq|возвращаться|to come back",
+"잃어버리다||yo'qotmoq|потерять|to lose","찾다||qidirmoq, topmoq|искать, находить|to look for, to find","바꾸다||almashtirmoq|менять|to change",
+"걱정하다||xavotir olmoq|беспокоиться|to worry","초대하다||taklif qilmoq|приглашать|to invite","연습하다||mashq qilmoq|практиковаться|to practice",
+"편리하다||qulay|удобный|convenient","복잡하다||murakkab, gavjum|сложный, многолюдный|complicated, crowded","조용하다||jim, tinch|тихий|quiet",
+"시끄럽다||shovqinli|шумный|noisy","가깝다||yaqin|близкий|near","멀다||uzoq|далёкий|far",
+"건강||sog'liq|здоровье|health","경험||tajriba|опыт|experience","계획||reja|план|plan",
+"교통||transport, yo'l harakati|транспорт|traffic, transport","문화||madaniyat|культура|culture","회사||kompaniya|компания|company",
+"취미||xobbi|хобби|hobby","선물|🎁|sovg'a|подарок|gift","기분||kayfiyat|настроение|mood",
+"방법||usul|способ|method","이유||nima uchunligi, sabab|почему, причина|reason","갑자기||to'satdan|внезапно|suddenly"
+],
+/* L3 */ [
+"결정하다||qaror qilmoq|принимать решение|to decide","참석하다||qatnashmoq|присутствовать|to attend","신청하다||ariza bermoq|подавать заявку|to apply",
+"취소하다||bekor qilmoq|отменять|to cancel","확인하다||tekshirmoq, tasdiqlamoq|проверять, подтверждать|to check, to confirm","설명하다||tushuntirmoq|объяснять|to explain",
+"해결하다||muammoni hal qilmoq|решать проблему|to solve","줄이다||kamaytirmoq|уменьшать|to reduce","늘다||ko'paymoq|увеличиваться|to increase",
+"비교하다||taqqoslamoq|сравнивать|to compare","포기하다||voz kechmoq|сдаваться|to give up","익숙하다||o'rganib qolgan, tanish|привычный|familiar, used to",
+"부족하다||yetarli emas|недостаточный|insufficient","충분하다||yetarli|достаточный|sufficient","다양하다||xilma-xil|разнообразный|diverse",
+"정확하다||aniq|точный|accurate","환경||atrof-muhit|окружающая среда|environment","관심||qiziqish|интерес|interest",
+"결과||natija|результат|result","원인||kelib chiqish sababi|источник, причина|cause","기회||imkoniyat|возможность|opportunity",
+"습관||odat|привычка|habit","성격||xarakter|характер|personality","분위기||muhit|атмосфера|atmosphere",
+"정보||ma'lumot|информация|information","의견||fikr|мнение|opinion","물가||narx-navo|уровень цен|prices, cost of living",
+"자료||materiallar|материалы|materials, data","오히려||aksincha|наоборот|rather, on the contrary","드디어||nihoyat|наконец|finally"
+],
+/* L4 */ [
+"영향||ta'sir|влияние|influence","발전하다||rivojlanmoq|развиваться|to develop","증가하다||ortmoq|возрастать|to increase",
+"감소하다||kamaymoq|сокращаться|to decrease","유지하다||saqlab turmoq|поддерживать|to maintain","제공하다||taqdim etmoq|предоставлять|to provide",
+"극복하다||yengib o'tmoq|преодолевать|to overcome","예상하다||taxmin qilmoq|предполагать|to expect","주장하다||da'vo qilmoq|утверждать|to claim",
+"강조하다||urg'u bermoq|подчёркивать|to emphasize","개선하다||yaxshilamoq|улучшать|to improve","활용하다||foydalanmoq|использовать|to utilize",
+"적응하다||moslashmoq|адаптироваться|to adapt","효과||samara|эффект|effect","경쟁||raqobat|конкуренция|competition",
+"책임||mas'uliyat|ответственность|responsibility","가치||qadriyat, qiymat|ценность|value","태도||munosabat, xulq|отношение, поведение|attitude",
+"현상||hodisa|явление|phenomenon","세대||avlod|поколение|generation","갈등||ziddiyat|конфликт|conflict",
+"조사||tadqiqot, so'rov|исследование, опрос|survey, investigation","비용||xarajat|расходы|cost","대책||chora-tadbir|меры|countermeasure",
+"전문가||mutaxassis|специалист|expert","긍정적||ijobiy|положительный|positive","부정적||salbiy|отрицательный|negative",
+"꾸준히||muntazam|регулярно|steadily","반드시||albatta|обязательно|without fail","심각하다||jiddiy|серьёзный|serious"
+]];
+
+D.SENTS = [
+/* L0 */ [],
+/* L1 */ [
+"저는 학교[에] 가요.|를,이,와",
+"저는 사과[를] 먹어요.|에,가,에서",
+"이것[은] 책이에요.|을,에,에서",
+"저는 한국어를 [공부해요].|마셔요,입어요,타요",
+"어제 친구를 [만났어요].|만나요,만날 거예요,만나세요",
+"내일 영화를 [볼 거예요].|봤어요,보았어요,봤습니다",
+"도서관[에서] 책을 읽어요.|에게,을,이",
+"물을 [마셔요].|입어요,읽어요,타요",
+"날씨가 [추워요]. 그래서 옷을 많이 입어요.|더워요,맑아요,따뜻해요",
+"아침에 [일어나서] 세수를 해요.|자서,앉아서,닫아서",
+"이 가방은 [비싸요]. 돈이 없어서 못 사요.|싸요,작아요,가벼워요",
+"우리 가족은 모두 네 [명]이에요.|개,권,마리",
+"저는 버스를 [타고] 학교에 가요.|먹고,입고,읽고",
+"주말에 친구[와] 영화를 봤어요.|를,에,의",
+"[무엇]을 먹고 싶어요? 저는 비빔밥을 먹고 싶어요.|언제,어디,누구",
+"[어디]에 가요? 시장에 가요.|언제,무엇,누가",
+"저는 동생이 [없어요]. 혼자예요.|있어요,많아요,와요",
+"오늘은 [월요일]이에요. 내일은 화요일이에요.|수요일,일요일,토요일",
+"배가 [고파요]. 밥을 먹고 싶어요.|불러요,커요,예뻐요",
+"저는 우즈베키스탄 [사람]이에요.|음식,나라,말",
+"이 음식은 정말 [맛있어요]. 더 먹고 싶어요.|맛없어요,멀어요,추워요",
+"시간이 [없어서] 아침을 못 먹었어요.|있어서,많아서,좋아서",
+"한국어는 어렵[지만] 재미있어요.|어서,으면,으니까",
+"같이 점심을 [먹을까요]?|먹었어요,먹습니다,먹지만",
+"문을 좀 [닫아 주세요]. 추워요.|닫고,닫지만,닫았어요"
+],
+/* L2 */ [
+"비가 [와서] 우산을 샀어요.|오면,오지만,오려고",
+"시간이 [있으면] 같이 영화를 봐요.|있어서,있지만,있는데도",
+"한국에 [온 지] 일 년이 되었어요.|오는 데,올 때,오기 전",
+"저는 수영을 할 [수] 있어요.|것,때,번",
+"손을 [씻은 후에] 밥을 먹어요.|씻는 후에,씻을 후에,씻어 후에",
+"감기에 걸려서 약을 [먹어야] 해요.|먹어도,먹으면,먹고",
+"여기에서 사진을 [찍어도] 돼요?|찍으니까,찍지만,찍어서",
+"주말에 보통 집에서 [쉬거나] 친구를 만나요.|쉬어서,쉬면,쉬려고",
+"한국 음식을 [먹어 본] 적이 있어요.|먹어 보는,먹어 볼,먹어 보고",
+"음악을 [들으면서] 공부해요.|듣지만,들으려면,들은 지",
+"내일 비가 [올 것 같아요]. 우산을 가져가세요.|온 적이 있어요,오고 있었어요,오지 마세요",
+"이 옷이 저에게 좀 [작은] 것 같아요. 더 큰 것 없어요?|큰,긴,비싼",
+"지하철이 버스[보다] 빨라요.|에게,마다,밖에",
+"약속 시간에 [늦지 않도록] 일찍 출발했어요.|늦어서,늦으면,늦지만",
+"동생은 키가 [커서] 농구를 잘해요.|작아서,크지만,크면",
+"한국어를 잘하[려면] 매일 연습해야 해요.|지만,어서,거나",
+"어제 너무 피곤해서 일찍 [잤어요].|일어났어요,일했어요,뛰었어요",
+"길을 [몰라서] 사람들에게 물어봤어요.|알아서,알면,모르지만",
+"이 식당은 음식이 맛있어서 손님이 [많아요].|적어요,없어요,멀어요",
+"버스를 [잘못] 타서 학교에 늦었어요.|일찍,자주,천천히",
+"생일 [선물]로 친구에게 책을 줬어요.|약속,날씨,교통",
+"방이 너무 [더워서] 창문을 열었어요.|추워서,어두워서,조용해서",
+"저는 매운 음식을 못 [먹어요].|입어요,타요,열어요",
+"수업이 [끝나자마자] 집에 갔어요.|끝나려고,끝나거나,끝나면서",
+"친구가 저[에게] 선물을 줬어요.|를,에서,으로"
+],
+/* L3 */ [
+"일이 많아서 주말[에도] 회사에 가야 해요.|밖에,처럼,보다",
+"아무리 [바빠도] 아침은 꼭 먹어요.|바빠서,바쁘면,바쁘니까",
+"버스를 놓치는 [바람에] 회의에 늦었어요.|덕분에,대신에,동안에",
+"친구 [덕분에] 한국 생활에 빨리 익숙해졌어요.|대신에,바람에,만큼",
+"운동을 꾸준히 [했더니] 건강이 좋아졌어요.|하더라도,하려면,하든지",
+"그 영화는 [볼수록] 재미있어요.|보자마자,보느라고,보다가",
+"시험 공부를 [하느라고] 잠을 못 잤어요.|하거든,하도록,할수록",
+"값이 [싼 데다가] 품질도 좋아서 인기가 많아요.|싼 대신에,싼 반면에,싸더라도",
+"날씨가 추우니까 따뜻하게 [입도록] 하세요.|입느라고,입더니,입을수록",
+"회의 시간이 바뀌었다고 [들었어요].|들을게요,들읍시다,들으세요",
+"선생님께서 내일까지 숙제를 [내라고] 하셨어요.|내다라고,내으라고,냈라고",
+"이 일은 생각[만큼] 쉽지 않아요.|조차,마저,이나",
+"그는 모르는 [척하고] 그냥 지나갔어요.|김에,대로,탓에",
+"시장에 가는 [김에] 과일도 좀 사 오세요.|탓에,바람에,척에",
+"환경을 보호하기 [위해서] 일회용품을 줄여야 해요.|덕분에,대신에,만큼",
+"물가가 올라서 생활비가 많이 [들어요].|내려요,줄어요,남아요",
+"이 문제를 [해결하려면] 모두의 도움이 필요해요.|해결하더니,해결하느라고,해결할수록",
+"처음에는 힘들었지만 지금은 [익숙해졌어요].|부족해졌어요,복잡해졌어요,불편해졌어요",
+"행사에 참석하려면 미리 [신청해야] 합니다.|취소해야,포기해야,비교해야",
+"스트레스의 [원인]은 사람마다 달라요.|기회,분위기,습관",
+"좋은 [습관]을 만들려면 시간이 걸려요.|물가,날씨,원인",
+"약속을 [취소할 수밖에] 없었어요. 갑자기 일이 생겼거든요.|취소할 뿐,취소할 만큼,취소할 테니",
+"그 소식을 듣고 깜짝 [놀랐어요].|늘었어요,줄였어요,익숙했어요",
+"직접 해 보지 않으면 [알 수 없어요].|알 만해요,알 뻔했어요,아는 척해요",
+"비가 오는데도 [불구하고] 많은 사람이 참석했어요.|덕분에,대신에,위해서"
+],
+/* L4 */ [
+"인구가 [감소함에 따라] 빈집이 늘고 있다.|감소하기 위해,감소하는 대신,감소하더라도",
+"전문가들은 물가가 계속 오를 [것으로 예상하고] 있다.|것을 포기하고,것에 익숙하고,것처럼 줄이고",
+"그는 실패에도 [불구하고] 다시 도전했다.|의하면,따르면,비하면",
+"조사 결과에 [따르면] 청소년의 독서량이 줄고 있다.|대해서,비해서,불구하고",
+"스마트폰은 생활을 편리하게 해 주는 [반면에] 건강에 나쁜 영향을 줄 수도 있다.|덕분에,김에,바람에",
+"이 제도는 시민의 의견을 [바탕으로] 만들어졌다.|불구하고,막론하고,통틀어",
+"건강을 [유지하기 위해서는] 꾸준한 운동이 필요하다.|유지하는 탓에,유지하는 바람에,유지하더니",
+"아이는 부모의 태도에 큰 [영향]을 받는다.|비용,경쟁,대책",
+"정부는 문제를 해결하기 위한 [대책]을 발표했다.|갈등,현상,세대",
+"세대 간의 [갈등]을 줄이려면 대화가 필요하다.|효과,가치,비용",
+"그 약은 두통에 [효과]가 있다.|책임,경쟁,태도",
+"새로운 환경에 [적응하는] 데 시간이 걸렸다.|주장하는,강조하는,제공하는",
+"회사는 직원들에게 무료 점심을 [제공한다].|극복한다,예상한다,적응한다",
+"그는 어려움을 [극복하고] 마침내 성공했다.|감소하고,제공하고,강조하고",
+"물은 [반드시] 끓여서 마셔야 한다.|오히려,드디어,갑자기",
+"매출이 지난해에 [비해] 두 배로 증가했다.|의해,대해,관해",
+"그 계획은 비용이 많이 [든다는] 문제가 있다.|드는지,들자는,들라는",
+"사람은 누구나 [실수하기 마련이니까] 너무 걱정하지 마세요.|실수할 리가 없으니까,실수하면 안 되니까,실수한 적이 없으니까",
+"이 책은 어려워서 아이들이 읽기에는 [적절하지 않다].|충분히 쉽다,매우 익숙하다,아주 긍정적이다",
+"그는 자신의 잘못에 대해 [책임]을 지겠다고 말했다.|현상,효과,세대",
+"꾸준히 연습하다 [보면] 실력이 늘 것이다.|말고,못해,시피",
+"날씨가 추워진 [탓에] 감기 환자가 증가했다.|김에,척에,대로",
+"이번 조사는 20대를 [대상으로] 실시되었다.|바탕에서,반면으로,결과로",
+"그 영화는 기대했던 것[만큼] 재미있지는 않았다.|조차,마저,부터",
+"환경 문제가 갈수록 [심각해지고] 있다.|긍정적이고,충분해지고,정확해지고"
+]];
+
+var Q_SAME = "이 글의 내용과 같은 것을 고르십시오.";
+var Q_MAIN = "이 글의 중심 생각을 고르십시오.";
+var Q_TOPIC = "무엇에 대한 글입니까?";
+
+D.PASS = [[], [],
+/* L2 */ [
+"저는 매일 아침 공원에서 운동을 합니다. 운동을 하면 기분이 좋아집니다. 그래서 비가 오는 날에도 집에서 운동을 합니다.|" + Q_SAME + "|이 사람은 비가 와도 운동을 합니다.|이 사람은 저녁에 운동을 합니다.|이 사람은 운동을 싫어합니다.|이 사람은 공원에 가지 않습니다.",
+"우리 집 앞에 새 빵집이 생겼습니다. 빵이 싸고 맛있어서 사람이 많습니다. 저는 주말마다 그 빵집에 갑니다.|" + Q_SAME + "|이 빵집은 손님이 많습니다.|이 빵집은 빵이 비쌉니다.|저는 매일 빵집에 갑니다.|빵집은 학교 앞에 있습니다.",
+"저는 지난달에 한국에 왔습니다. 처음에는 한국말을 몰라서 힘들었습니다. 지금은 한국 친구가 생겨서 즐겁게 지냅니다.|" + Q_SAME + "|이 사람은 지금 한국 생활이 즐겁습니다.|이 사람은 한국에 온 지 일 년이 되었습니다.|이 사람은 한국 친구가 없습니다.|이 사람은 처음부터 한국말을 잘했습니다.",
+"도서관은 아침 9시부터 저녁 6시까지 엽니다. 월요일에는 쉽니다. 책은 한 번에 다섯 권까지 빌릴 수 있습니다.|" + Q_SAME + "|월요일에는 도서관에 갈 수 없습니다.|도서관은 밤에도 엽니다.|책을 열 권 빌릴 수 있습니다.|도서관은 매일 엽니다.",
+"저는 요리를 좋아합니다. 주말에는 가족을 위해 음식을 만듭니다. 가족들이 맛있게 먹으면 저도 행복합니다.|" + Q_TOPIC + "|취미|날씨|교통|쇼핑",
+"내일은 친구의 생일입니다. 그래서 오늘 백화점에서 선물을 샀습니다. 친구가 좋아하는 모자를 샀습니다.|" + Q_SAME + "|이 사람은 친구에게 모자를 줄 것입니다.|오늘은 친구의 생일입니다.|이 사람은 시장에서 선물을 샀습니다.|친구는 모자를 싫어합니다.",
+"저는 회사까지 지하철로 갑니다. 지하철은 빠르지만 아침에는 사람이 너무 많습니다. 그래서 요즘은 조금 일찍 집에서 나갑니다.|" + Q_SAME + "|이 사람은 요즘 일찍 출발합니다.|이 사람은 버스로 회사에 갑니다.|아침에는 지하철에 사람이 없습니다.|지하철은 버스보다 느립니다.",
+"감기에 걸리면 물을 많이 마시고 푹 쉬어야 합니다. 그리고 따뜻한 옷을 입는 것이 좋습니다. 열이 많이 나면 병원에 가야 합니다.|" + Q_TOPIC + "|감기에 걸렸을 때 하는 일|병원에 가는 방법|옷을 사는 방법|물을 마시는 시간"
+],
+/* L3 */ [
+"요즘 혼자 밥을 먹는 사람이 늘고 있습니다. 식당들도 혼자 온 손님을 위한 자리를 만들고 있습니다. 혼자 먹으면 자기가 먹고 싶은 음식을 편하게 고를 수 있어서 좋다고 합니다.|" + Q_SAME + "|혼자 온 손님을 위한 자리가 있는 식당이 있습니다.|혼자 밥을 먹는 사람이 줄고 있습니다.|혼자 먹으면 음식을 고르기 어렵습니다.|식당들은 혼자 온 손님을 받지 않습니다.",
+"저는 아침에 일어나자마자 물을 한 잔 마십니다. 이 습관을 시작한 후로 몸이 가벼워졌습니다. 작은 습관이지만 건강에 큰 도움이 됩니다.|" + Q_MAIN + "|작은 습관이 건강에 도움이 됩니다.|물은 저녁에 마셔야 합니다.|아침에는 일찍 일어나야 합니다.|습관을 바꾸는 것은 어렵습니다.",
+"우리 동네 주민 센터에서는 무료로 컴퓨터 수업을 합니다. 수업은 매주 화요일 저녁에 있고 누구나 신청할 수 있습니다. 신청은 전화나 인터넷으로 하면 됩니다.|" + Q_SAME + "|이 수업은 돈을 내지 않아도 됩니다.|수업은 주말에 있습니다.|신청은 직접 가서 해야 합니다.|학생만 신청할 수 있습니다.",
+"여행을 가기 전에 계획을 세우는 것이 좋습니다. 계획이 있으면 시간과 돈을 아낄 수 있기 때문입니다. 하지만 계획이 너무 많으면 오히려 피곤해질 수 있습니다.|" + Q_MAIN + "|여행 계획은 필요하지만 너무 많으면 좋지 않습니다.|여행은 계획 없이 가야 합니다.|여행을 하면 돈이 많이 듭니다.|여행 계획은 많을수록 좋습니다.",
+"휴대 전화를 오래 보면 눈이 쉽게 피곤해집니다. 그래서 한 시간에 한 번은 먼 곳을 보면서 눈을 쉬게 해야 합니다. 어두운 곳에서 휴대 전화를 보는 것도 피하는 것이 좋습니다.|" + Q_TOPIC + "|눈 건강을 지키는 방법|휴대 전화를 사는 방법|잠을 잘 자는 방법|휴대 전화의 좋은 점",
+"이번 주 토요일에 학교 운동장에서 벼룩시장이 열립니다. 쓰지 않는 물건을 가지고 와서 싸게 팔 수 있습니다. 비가 오면 다음 주로 연기됩니다.|" + Q_SAME + "|비가 오면 벼룩시장은 다음 주에 열립니다.|벼룩시장은 일요일에 열립니다.|새 물건만 팔 수 있습니다.|벼룩시장은 교실에서 열립니다.",
+"저는 처음에 매운 음식을 전혀 못 먹었습니다. 그런데 한국 친구들과 자주 먹다 보니 조금씩 익숙해졌습니다. 이제는 매운 음식이 없으면 밥맛이 없을 정도입니다.|" + Q_SAME + "|이 사람은 지금 매운 음식을 좋아합니다.|이 사람은 지금도 매운 음식을 못 먹습니다.|이 사람은 한국 친구가 없습니다.|이 사람은 처음부터 매운 음식을 잘 먹었습니다.",
+"걷기는 특별한 도구 없이 누구나 할 수 있는 운동입니다. 하루에 30분만 걸어도 스트레스가 줄고 잠을 잘 잘 수 있습니다. 중요한 것은 매일 꾸준히 하는 것입니다.|" + Q_MAIN + "|걷기는 꾸준히 하는 것이 중요합니다.|걷기는 도구가 많이 필요합니다.|걷기는 하루에 세 시간 해야 합니다.|걷기는 스트레스를 늘립니다."
+],
+/* L4 */ [
+"최근 종이책 대신 전자책을 읽는 사람이 증가하고 있다. 전자책은 여러 권을 가볍게 들고 다닐 수 있다는 장점이 있다. 그러나 화면을 오래 보면 눈이 피로해지고 내용이 기억에 덜 남는다는 연구 결과도 있다.|" + Q_SAME + "|전자책은 기억에 덜 남는다는 연구가 있다.|전자책을 읽는 사람이 감소하고 있다.|전자책은 들고 다니기 무겁다.|종이책은 눈을 더 피로하게 한다.",
+"칭찬은 사람을 성장하게 하지만 방법이 중요하다. 결과만 칭찬하면 아이는 실패를 두려워하게 된다. 반면 노력한 과정을 칭찬하면 아이는 어려운 일에도 도전하려는 태도를 갖게 된다.|" + Q_MAIN + "|결과보다 과정을 칭찬하는 것이 좋다.|칭찬은 많이 할수록 좋다.|아이에게 칭찬을 하면 안 된다.|실패한 아이는 칭찬하지 말아야 한다.",
+"도시의 밤이 지나치게 밝아지면서 여러 문제가 나타나고 있다. 밝은 조명 때문에 사람들은 깊이 잠들지 못하고 동물과 식물의 생활도 영향을 받는다. 이에 따라 일부 도시에서는 밤에 불필요한 조명을 끄는 운동을 하고 있다.|" + Q_SAME + "|밤의 밝은 조명은 동식물에게도 영향을 준다.|도시의 밤은 점점 어두워지고 있다.|밝은 조명은 잠을 자는 데 도움이 된다.|모든 도시가 밤에 조명을 끄고 있다.",
+"회의가 길다고 해서 좋은 결론이 나오는 것은 아니다. 오히려 시간이 길어질수록 집중력이 떨어져 중요한 결정을 내리기 어려워진다. 따라서 회의 전에 목적을 분명히 하고 시간을 정해 두는 것이 효과적이다.|" + Q_MAIN + "|회의는 목적과 시간을 정해서 해야 한다.|회의는 길게 할수록 효과적이다.|회의에서는 결정을 내리지 않는 것이 좋다.|회의는 자주 할수록 집중력이 높아진다.",
+"한 조사에 따르면 청소년의 수면 시간이 해마다 줄고 있다. 가장 큰 원인은 늦은 밤까지 스마트폰을 사용하는 습관인 것으로 나타났다. 전문가들은 잠들기 한 시간 전에는 스마트폰을 사용하지 말라고 강조한다.|" + Q_SAME + "|청소년의 수면 시간이 감소하고 있다.|청소년의 수면 시간은 늘고 있다.|전문가들은 스마트폰 사용이 수면에 좋다고 한다.|수면 부족의 원인은 밝혀지지 않았다.",
+"지역 축제는 관광객을 불러 모아 지역 경제에 도움을 준다. 하지만 비슷한 내용의 축제가 많아지면서 관광객의 관심이 줄고 있다. 그 지역만의 특별한 문화를 살린 축제를 만들어야 한다는 의견이 많다.|" + Q_MAIN + "|지역의 특색을 살린 축제가 필요하다.|지역 축제는 경제에 도움이 되지 않는다.|축제의 수를 더 늘려야 한다.|관광객은 비슷한 축제를 좋아한다.",
+"외국어를 배울 때 실수를 두려워하는 사람이 많다. 그러나 실수는 무엇을 모르는지 알려 주는 중요한 정보이다. 실수를 기록하고 다시 연습하는 사람이 그렇지 않은 사람보다 빨리 실력이 는다.|" + Q_MAIN + "|실수를 활용하면 외국어 실력이 빨리 는다.|외국어를 배울 때 실수를 하면 안 된다.|실수를 기록하는 것은 시간 낭비이다.|외국어는 어릴 때만 배울 수 있다.",
+"자원봉사는 남을 돕는 일이지만 봉사하는 사람에게도 긍정적인 영향을 준다. 봉사 활동에 참여한 사람들은 그렇지 않은 사람들보다 삶의 만족도가 높은 것으로 나타났다. 다른 사람에게 도움이 된다는 느낌이 자신의 가치를 느끼게 해 주기 때문이다.|" + Q_SAME + "|봉사 활동을 하는 사람은 삶의 만족도가 높다.|자원봉사는 봉사하는 사람에게 도움이 되지 않는다.|봉사 활동을 하면 만족도가 낮아진다.|자원봉사는 돈을 받고 하는 일이다."
+]];
+
+D.DLG = [[], [],
+/* L2 */ [
+"여자: 실례합니다. 이 근처에 은행이 있어요?\n남자: 네, 저기 병원 옆에 있어요.|은행은 어디에 있습니까?|병원 옆|학교 앞|시장 안|공원 뒤",
+"남자: 주말에 뭐 했어요?\n여자: 친구하고 산에 갔어요. 날씨가 좋아서 사진도 많이 찍었어요.|여자는 주말에 무엇을 했습니까?|산에 갔습니다.|영화를 봤습니다.|집에서 쉬었습니다.|쇼핑을 했습니다.",
+"여자: 이 바지 얼마예요?\n남자: 삼만 원이에요. 지금 사시면 양말도 드려요.|남자는 누구입니까?|가게 직원|학교 선생님|병원 의사|버스 기사",
+"남자: 내일 몇 시에 만날까요?\n여자: 수업이 세 시에 끝나니까 네 시에 만나요.|두 사람은 몇 시에 만납니까?|네 시|세 시|두 시|다섯 시",
+"여자: 어디가 아프세요?\n남자: 어제부터 머리가 아프고 열이 나요.|여기는 어디입니까?|병원|은행|식당|도서관"
+],
+/* L3 */ [
+"남자: 회의가 내일로 바뀌었다고 들었어요.\n여자: 네, 부장님이 오늘 출장을 가셔서 내일 오전 열 시로 바뀌었어요.|회의는 왜 바뀌었습니까?|부장님이 출장을 가서|회의실이 없어서|여자가 아파서|자료가 준비되지 않아서",
+"여자: 요즘 왜 이렇게 피곤해 보여요?\n남자: 시험 준비를 하느라고 며칠 동안 잠을 못 잤어요.|남자는 왜 피곤합니까?|시험 준비로 잠을 못 자서|운동을 너무 많이 해서|회사 일이 많아서|감기에 걸려서",
+"남자: 이 노트북을 환불하고 싶은데요.\n여자: 영수증을 가지고 오셨어요? 구입한 지 일주일이 지나지 않았으면 가능합니다.|남자는 무엇을 하려고 합니까?|노트북을 환불하려고 합니다.|노트북을 사려고 합니다.|노트북을 고치려고 합니다.|영수증을 받으려고 합니다.",
+"여자: 이번 방학에 뭐 할 거예요?\n남자: 고향에 가려고 했는데 비행기 표가 너무 비싸서 그냥 여기에서 아르바이트를 하기로 했어요.|남자는 방학에 무엇을 합니까?|아르바이트를 합니다.|고향에 갑니다.|여행을 갑니다.|비행기 표를 삽니다.",
+"남자: 도서관에 자리가 없네요.\n여자: 시험 기간이라서 그래요. 2층 카페에서 공부하는 게 어때요?|여자는 무엇을 제안했습니까?|카페에서 공부하는 것|도서관에서 기다리는 것|집에 돌아가는 것|시험을 미루는 것"
+],
+/* L4 */ [
+"여자: 요즘 직원들이 회의가 너무 많다고 불만이 많습니다.\n남자: 그럼 꼭 필요한 회의만 남기고, 나머지는 이메일 보고로 바꾸는 게 어떨까요?|남자의 중심 생각은 무엇입니까?|불필요한 회의를 줄여야 한다.|회의를 더 자주 해야 한다.|이메일 보고를 없애야 한다.|직원들의 불만은 중요하지 않다.",
+"남자: 아이들에게 스마트폰을 못 쓰게 하는 것이 좋을까요?\n여자: 무조건 막는 것보다 사용 시간을 스스로 정하게 하는 것이 더 효과적이라고 생각합니다.|여자의 중심 생각은 무엇입니까?|아이가 스스로 사용 시간을 정하게 해야 한다.|아이에게 스마트폰을 주면 안 된다.|스마트폰은 오래 사용할수록 좋다.|부모가 사용 시간을 모두 정해야 한다.",
+"여자: 이번 조사에서 20대의 절반 이상이 저축을 하지 못한다고 답했습니다.\n남자: 월세와 생활비 부담이 커진 것이 가장 큰 원인으로 보입니다.|들은 내용과 같은 것을 고르십시오.|20대의 절반 이상이 저축을 못 하고 있다.|20대의 저축이 크게 늘었다.|월세 부담이 줄어들었다.|조사는 30대를 대상으로 했다.",
+"남자: 전통 시장을 찾는 손님이 계속 줄고 있습니다.\n여자: 주차장을 늘리고 온라인 주문을 받는 등 변화가 필요하다고 봅니다.|여자의 중심 생각은 무엇입니까?|전통 시장도 변화해야 한다.|전통 시장은 없어져야 한다.|손님이 줄어도 괜찮다.|주차장은 필요하지 않다.",
+"여자: 재택근무를 하면 업무 효율이 떨어지지 않을까요?\n남자: 오히려 출퇴근 시간이 없어져서 집중할 수 있는 시간이 늘었다는 직원이 많습니다.|남자의 생각은 무엇입니까?|재택근무로 집중할 시간이 늘 수 있다.|재택근무는 효율을 떨어뜨린다.|출퇴근 시간이 더 길어졌다.|직원들은 재택근무를 싫어한다."
+]];
+
+/* ---- Test forms (never used in practice or games). Form 0 = placement, forms 1-4 = weekly tests.
+   Every form has the same blueprint: 5 levels x 4 items = 20 items (reading 10, listening 5, writing 5). */
+var PLACE = "여기는 어디입니까?";
+D.TEST = [
+{ // form 0
+ w0: ["우산|☂️|soyabon|зонт|umbrella","바나나|🍌|banan|банан|banana","커피|☕|qahva|кофе|coffee","침대|🛏️|karavot|кровать|bed"],
+ w1: "배우다||o'rganmoq|учить, изучать|to learn",
+ s1: ["저는 물[을] 마셔요.|에,이,에서","저는 [주말]에 친구를 만나요.|아침,저녁,내일","오늘은 날씨가 [좋아요].|"],
+ gc: ["배가 [아파서] 병원에 갔어요.|아프면,아프지만,아프려고","약을 [먹었는데도] 감기가 낫지 않아요.|먹었더니,먹느라고,먹도록","기술이 [발전함에 따라] 생활 방식도 변하고 있다.|발전하는 대신,발전하기 위해,발전하더라도"],
+ ws: ["주말에 친구를 [만나려고] 해요.|","회의에 늦지 [않도록] 일찍 출발하세요.|","그는 어려운 환경에도 [불구하고] 꿈을 포기하지 않았다.|"],
+ rd: ["저는 주말에 보통 자전거를 탑니다. 한강 공원까지 가서 친구와 점심을 먹습니다. 날씨가 나쁘면 집에서 책을 읽습니다.|" + Q_SAME + "|이 사람은 날씨가 나쁘면 집에 있습니다.|이 사람은 매일 자전거를 탑니다.|이 사람은 혼자 점심을 먹습니다.|이 사람은 주말에 회사에 갑니다.",
+      "요즘 자전거로 출근하는 사람이 많아졌습니다. 교통비를 아낄 수 있고 운동도 되기 때문입니다. 그래서 자전거 도로를 더 만들어 달라는 요청이 늘고 있습니다.|" + Q_SAME + "|자전거로 출근하면 교통비를 아낄 수 있습니다.|자전거로 출근하는 사람이 줄었습니다.|자전거 도로는 필요하지 않습니다.|자전거를 타면 운동이 되지 않습니다.",
+      "아침 식사를 거르는 학생이 많다. 그러나 아침을 먹지 않으면 오전 수업 시간에 집중력이 떨어진다는 연구 결과가 있다. 간단한 음식이라도 아침을 먹는 습관이 학습에 도움이 된다.|" + Q_MAIN + "|아침 식사는 학습에 도움이 된다.|아침에는 많이 먹어야 한다.|아침 식사를 하면 집중력이 떨어진다.|학생들은 모두 아침을 먹는다."],
+ lp: ["여자: 어서 오세요. 뭘 드릴까요?\n남자: 김치찌개 하나 주세요.|" + PLACE + "|식당|은행|병원|학교",
+      "남자: 왜 어제 모임에 안 왔어요?\n여자: 갑자기 회사에 일이 생겨서 못 갔어요. 미안해요.|여자는 왜 모임에 못 갔습니까?|회사에 일이 생겨서|몸이 아파서|약속을 잊어버려서|비가 많이 와서",
+      "여자: 학생들에게 숙제를 많이 내는 것이 좋을까요?\n남자: 양을 늘리는 것보다 스스로 생각하게 만드는 숙제를 조금 내는 것이 더 효과적이라고 생각합니다.|남자의 중심 생각은 무엇입니까?|숙제는 양보다 질이 중요하다.|숙제는 많을수록 좋다.|숙제를 없애야 한다.|학생은 숙제를 스스로 정해야 한다."]
+},
+{ // form 1
+ w0: ["포도|🍇|uzum|виноград|grapes","기차|🚆|poyezd|поезд|train","안경|👓|ko'zoynak|очки|glasses","열쇠|🔑|kalit|ключ|key"],
+ w1: "기다리다||kutmoq|ждать|to wait",
+ s1: ["저는 도서관[에서] 공부해요.|를,이,와","저는 [저녁]에 운동을 해요.|아침,주말,오늘","이 영화는 정말 [재미있어요].|"],
+ gc: ["시간이 [있으면] 놀러 오세요.|있어서,있지만,있는데도","아무리 [피곤해도] 숙제는 꼭 해요.|피곤해서,피곤하면,피곤하니까","건강을 [유지하려면] 규칙적인 생활이 중요하다.|유지하더니,유지하느라고,유지하는 탓에"],
+ ws: ["저는 김치를 먹을 [수 있어요].|","친구가 도와준 [덕분에] 일을 빨리 끝냈어요.|","조사 결과에 [따르면] 운동하는 사람이 늘고 있다.|"],
+ rd: ["저는 저녁마다 한국 드라마를 봅니다. 드라마를 보면서 새로운 단어를 공책에 씁니다. 그래서 한국어 실력이 좋아졌습니다.|" + Q_SAME + "|이 사람은 드라마로 한국어를 공부합니다.|이 사람은 아침에 드라마를 봅니다.|이 사람은 단어를 쓰지 않습니다.|이 사람은 한국어 실력이 나빠졌습니다.",
+      "요즘 집에서 식물을 키우는 사람이 많아졌습니다. 식물을 보면 마음이 편안해지고 공기도 깨끗해지기 때문입니다. 그래서 꽃집을 찾는 손님이 늘고 있습니다.|" + Q_SAME + "|식물을 키우면 마음이 편안해집니다.|식물을 키우는 사람이 줄었습니다.|꽃집에 손님이 줄고 있습니다.|식물은 공기를 나쁘게 합니다.",
+      "운동을 미루는 직장인이 많다. 그러나 운동을 하지 않으면 오후 업무 시간에 쉽게 피로해진다는 연구 결과가 있다. 짧은 시간이라도 매일 몸을 움직이는 습관이 업무에 도움이 된다.|" + Q_MAIN + "|매일 운동하는 습관은 업무에 도움이 된다.|운동은 오래 해야 효과가 있다.|운동을 하면 업무 중에 더 피로해진다.|직장인들은 모두 운동을 한다."],
+ lp: ["남자: 이 책을 빌리고 싶어요.\n여자: 네, 학생증을 주세요.|" + PLACE + "|도서관|식당|병원|시장",
+      "여자: 왜 이렇게 늦었어요?\n남자: 지하철이 고장 나서 삼십 분이나 기다렸어요. 미안해요.|남자는 왜 늦었습니까?|지하철이 고장 나서|늦잠을 자서|길을 몰라서|버스를 잘못 타서",
+      "남자: 신입 사원 교육을 더 길게 하는 것이 좋을까요?\n여자: 기간을 늘리는 것보다 실제 업무를 직접 해 보게 하는 교육을 짧게 하는 것이 더 효과적이라고 생각합니다.|여자의 중심 생각은 무엇입니까?|교육은 기간보다 내용이 중요하다.|교육은 길수록 좋다.|신입 사원 교육은 필요 없다.|신입 사원이 교육 기간을 정해야 한다."]
+},
+{ // form 2
+ w0: ["수박|🍉|tarvuz|арбуз|watermelon","자전거|🚲|velosiped|велосипед|bicycle","연필|✏️|qalam|карандаш|pencil","달걀|🥚|tuxum|яйцо|egg"],
+ w1: "가르치다||o'rgatmoq|преподавать|to teach",
+ s1: ["저는 빵[을] 먹어요.|에,이,에서","저는 [아침]에 우유를 마셔요.|저녁,주말,어제","제 방은 아주 [깨끗해요].|"],
+ gc: ["길이 [막혀서] 약속에 늦었어요.|막히면,막히지만,막히려고","늦잠을 자는 [바람에] 지각했어요.|덕분에,대신에,동안에","도시는 편리한 [반면에] 공기가 좋지 않다.|덕분에,김에,바람에"],
+ ws: ["여기에 [앉아도] 돼요?|","비가 많이 오는 [바람에] 소풍이 취소됐어요.|","이 프로그램은 초등학생을 [대상으로] 한다.|"],
+ rd: ["우리 학교 식당은 음식이 싸고 맛있습니다. 점심시간에는 학생이 많아서 줄을 서야 합니다. 그래서 저는 조금 일찍 식당에 갑니다.|" + Q_SAME + "|점심시간에 식당에는 학생이 많습니다.|학교 식당은 음식이 비쌉니다.|이 사람은 늦게 식당에 갑니다.|식당에서는 줄을 서지 않습니다.",
+      "요즘 도시락을 가지고 다니는 직장인이 많아졌습니다. 점심값을 아낄 수 있고 건강한 음식을 먹을 수 있기 때문입니다. 그래서 도시락 통을 찾는 사람이 늘고 있습니다.|" + Q_SAME + "|도시락을 가지고 다니면 점심값을 아낄 수 있습니다.|도시락을 가지고 다니는 직장인이 줄었습니다.|도시락 통을 사는 사람이 없습니다.|도시락은 건강에 좋지 않습니다.",
+      "책을 읽지 않는 청소년이 많다. 그러나 책을 읽지 않으면 긴 글을 이해하는 능력이 떨어진다는 연구 결과가 있다. 하루 십 분이라도 책을 읽는 습관이 공부에 도움이 된다.|" + Q_MAIN + "|책을 읽는 습관은 공부에 도움이 된다.|책은 하루에 한 권씩 읽어야 한다.|책을 읽으면 이해하는 능력이 떨어진다.|청소년들은 모두 책을 많이 읽는다."],
+ lp: ["여자: 어디까지 가세요?\n남자: 서울역까지 가 주세요.|" + PLACE + "|택시|교실|병원|식당",
+      "남자: 왜 그 식당에 안 갔어요?\n여자: 가 봤는데 손님이 너무 많아서 한 시간을 기다려야 했어요. 그래서 그냥 왔어요.|여자는 왜 그냥 왔습니까?|오래 기다려야 해서|음식이 비싸서|식당이 문을 닫아서|음식이 맛없어서",
+      "여자: 아이에게 책을 많이 사 주는 것이 좋을까요?\n남자: 책의 수를 늘리는 것보다 아이가 좋아하는 책 한 권을 여러 번 읽게 하는 것이 더 효과적이라고 생각합니다.|남자의 중심 생각은 무엇입니까?|책은 수보다 읽는 방법이 중요하다.|책은 많이 살수록 좋다.|아이에게 책을 사 주면 안 된다.|아이가 책을 직접 사야 한다."]
+},
+{ // form 3
+ w0: ["딸기|🍓|qulupnay|клубника|strawberry","택시|🚕|taksi|такси|taxi","가위|✂️|qaychi|ножницы|scissors","양말|🧦|paypoq|носки|socks"],
+ w1: "일어나다||o'rnidan turmoq|вставать|to get up",
+ s1: ["저는 교실[에서] 한국어를 배워요.|를,이,와","저는 [오늘] 시장에 가요.|내일,어제,주말","이 음식은 조금 [매워요].|"],
+ gc: ["한국에 [간 적이] 있어요.|가는 적이,갈 적이,가고 적이","이 노래는 [들을수록] 좋아요.|듣자마자,듣느라고,듣다가","날씨가 더워진 [탓에] 전기 사용량이 급증했다.|김에,대로,척에"],
+ ws: ["음악을 [들으면서] 걸어요.|","은행에 가는 [김에] 우체국에도 들렀어요.|","이 영화는 실제 사건을 [바탕으로] 만들어졌다.|"],
+ rd: ["저는 어제 시장에서 과일을 샀습니다. 사과가 싸서 많이 샀습니다. 집에 와서 가족과 같이 먹었습니다.|" + Q_SAME + "|이 사람은 가족과 사과를 먹었습니다.|이 사람은 오늘 시장에 갔습니다.|사과가 비싸서 사지 않았습니다.|이 사람은 혼자 과일을 먹었습니다.",
+      "요즘 온라인으로 수업을 듣는 학생이 많아졌습니다. 집에서 편하게 공부할 수 있고 시간을 아낄 수 있기 때문입니다. 그래서 온라인 수업을 여는 학교가 늘고 있습니다.|" + Q_SAME + "|온라인 수업을 들으면 시간을 아낄 수 있습니다.|온라인 수업을 듣는 학생이 줄었습니다.|온라인 수업을 여는 학교가 없습니다.|온라인 수업은 학교에서만 들을 수 있습니다.",
+      "잠을 줄이는 수험생이 많다. 그러나 잠을 충분히 자지 않으면 배운 내용을 기억하기 어렵다는 연구 결과가 있다. 시험 기간이라도 충분히 자는 습관이 성적에 도움이 된다.|" + Q_MAIN + "|충분한 잠은 성적에 도움이 된다.|시험 기간에는 잠을 줄여야 한다.|잠을 많이 자면 기억력이 나빠진다.|수험생들은 모두 충분히 잔다."],
+ lp: ["남자: 이 편지를 우즈베키스탄에 보내고 싶어요.\n여자: 네, 여기에 주소를 써 주세요.|" + PLACE + "|우체국|도서관|식당|극장",
+      "여자: 왜 여행을 취소했어요?\n남자: 태풍 때문에 비행기가 뜨지 못한다고 연락이 왔어요. 아쉽지만 다음에 가야지요.|남자는 왜 여행을 취소했습니까?|비행기가 뜨지 못해서|돈이 부족해서|몸이 아파서|회사 일이 많아서",
+      "남자: 운동 시간을 더 늘리는 것이 좋을까요?\n여자: 시간을 늘리는 것보다 바른 자세로 짧게 집중해서 하는 것이 더 효과적이라고 생각합니다.|여자의 중심 생각은 무엇입니까?|운동은 시간보다 방법이 중요하다.|운동은 오래 할수록 좋다.|운동을 하지 않는 것이 좋다.|운동은 매일 세 시간씩 해야 한다."]
+},
+{ // form 4
+ w0: ["당근|🥕|sabzi|морковь|carrot","지하철|🚇|metro|метро|subway","편지|✉️|xat|письмо|letter","장갑|🧤|qo'lqop|перчатки|gloves"],
+ w1: "쉬다||dam olmoq|отдыхать|to rest",
+ s1: ["저는 차[를] 마셔요.|에,이,에서","저는 [내일] 친구를 만나요.|오늘,어제,아침","우리 학교는 아주 [넓어요].|"],
+ gc: ["밥을 [먹은 후에] 이를 닦아요.|먹는 후에,먹을 후에,먹어 후에","일을 [하느라고] 전화를 못 받았어요.|하거든,하도록,할수록","재택근무가 [확산됨에 따라] 사무실 수요가 줄고 있다.|확산되는 대신,확산되기 위해,확산되더라도"],
+ ws: ["내일은 일찍 [일어나야] 해요.|","책은 [읽을수록] 생각이 깊어져요.|","올해 수출은 작년에 [비해서] 크게 늘었다.|"],
+ rd: ["저는 다음 달에 고향에 갑니다. 부모님께 드릴 선물을 벌써 준비했습니다. 오랜만에 가족을 만날 수 있어서 기쁩니다.|" + Q_SAME + "|이 사람은 선물을 준비했습니다.|이 사람은 지난달에 고향에 갔습니다.|이 사람은 가족을 자주 만납니다.|이 사람은 고향에 가고 싶지 않습니다.",
+      "요즘 주말에 등산을 하는 젊은 사람이 많아졌습니다. 돈이 많이 들지 않고 스트레스를 풀 수 있기 때문입니다. 그래서 등산화를 찾는 손님이 늘고 있습니다.|" + Q_SAME + "|등산을 하면 스트레스를 풀 수 있습니다.|등산을 하는 젊은 사람이 줄었습니다.|등산은 돈이 많이 듭니다.|등산화를 찾는 손님이 없습니다.",
+      "물을 잘 마시지 않는 사람이 많다. 그러나 물을 충분히 마시지 않으면 쉽게 피곤해지고 집중하기 어렵다는 연구 결과가 있다. 조금씩이라도 자주 물을 마시는 습관이 건강에 도움이 된다.|" + Q_MAIN + "|물을 자주 마시는 습관은 건강에 도움이 된다.|물은 한 번에 많이 마셔야 한다.|물을 마시면 집중하기 어렵다.|사람들은 모두 물을 충분히 마신다."],
+ lp: ["여자: 머리를 어떻게 해 드릴까요?\n남자: 조금만 잘라 주세요.|" + PLACE + "|미용실|병원|은행|서점",
+      "남자: 왜 이사를 하려고 해요?\n여자: 지금 집이 회사에서 너무 멀어서 출근하는 데 두 시간이나 걸려요.|여자는 왜 이사를 하려고 합니까?|집이 회사에서 멀어서|집이 너무 작아서|집세가 비싸서|이웃이 시끄러워서",
+      "여자: 단어를 하루에 백 개씩 외우는 것이 좋을까요?\n남자: 개수를 늘리는 것보다 적은 단어를 문장 속에서 여러 번 써 보는 것이 더 효과적이라고 생각합니다.|남자의 중심 생각은 무엇입니까?|단어는 개수보다 외우는 방법이 중요하다.|단어는 많이 외울수록 좋다.|단어를 외울 필요가 없다.|단어는 문장 없이 외워야 한다."]
+}];
+
+
+/* ============================================================
+   차별 기능 데이터 계층 (2026-11-20 추가)
+   - SINO : 한자어 표제어. 중앙아시아 학습자의 최대 격차 가설을 재기 위한 태그
+   - L1   : 모국어 대조 설명. 문항마다가 아니라 "패턴"마다 하나씩 둔다
+   모든 분류는 규칙 기반 자동 분류이며 원어민 검수 전 초안이다.
+   ============================================================ */
+
+D.SINO = [
+"학교","학생","선생","병원","전화","자동차","비행기","시계","모자","의자","우유","공부",
+"시간","주말","가족","음식","영화","음악","운동","여행","약속","준비","도착","출발","초대",
+"연습","편리","복잡","건강","경험","계획","교통","문화","회사","취미","선물","기분","방법","이유",
+"결정","참석","신청","취소","확인","설명","해결","비교","포기","부족","충분","다양","정확",
+"환경","관심","결과","원인","기회","습관","성격","분위기","정보","의견","물가","자료",
+"영향","발전","증가","감소","유지","제공","극복","예상","주장","강조","개선","활용","적응",
+"효과","경쟁","책임","가치","태도","현상","세대","갈등","조사","비용","대책","전문","긍정","부정","심각",
+"교실","수업","시험","문제","질문","대답","사진","지하철","은행","식당","시장","공원","도서관",
+"주차","참여","활동","생활","사용","관리","중요","필요","가능","시작","계속","변화","방문","예약"
+];
+
+/* 연결어미·조사 목록: l1 패턴 자동 판정에 쓴다 */
+D.CONN = ["는데","은데","ㄴ데","어서","아서","으면","면서","자마자","느라고","바람에","덕분에",
+"김에","탓에","거나","지만","더니","수록","도록","니까","려면","으려고","려고","아도","어도",
+"만큼","처럼","대신","불구하고","따라","위해","위해서","반면","바탕","대상","비해","마련"];
+D.PART = ["을","를","이","가","은","는","에","에서","와","과","에게","보다","으로","로","도","만","부터","까지","의"];
+
+/* 모국어 대조 설명. applies = 이 패턴이 어느 영역에서 주로 나타나는가 */
+D.L1 = {
+sino: { ko: "한자어", n: { ko: "한자어", uz: "Xitoy ildizli so'zlar", ru: "Слова китайского корня", en: "Sino-Korean words" }, sk: "R",
+  uz: "Bu so'z xitoy ildizli (한자어). O'zbek va rus tilida bunday umumiy ildiz yo'q, shuning uchun taxmin qilib bo'lmaydi — yodlab olish kerak. Lekin bir ildiz ko'p so'zda takrorlanadi: 학(學)=o'qish → 학교, 학생, 학기.",
+  ru: "Это слово китайского происхождения (한자어). В узбекском и русском нет общего корня, поэтому угадать нельзя — нужно запомнить. Зато один корень повторяется во многих словах: 학(學)=учёба → 학교, 학생, 학기.",
+  en: "This word has a Chinese root (한자어). Uzbek and Russian share no such root, so it cannot be guessed — it must be learned. One root repeats across many words: 학 (study) → 학교, 학생, 학기.",
+  note: "TOPIK II 읽기의 핵심 격차. 베트남어 화자와 달리 중앙아시아 학습자는 기댈 배경이 없다." },
+topic: { ko: "조사 (은/는 vs 이/가)", n: { ko: "조사 (은/는 vs 이/가)", uz: "Kelishik qo'shimchalari", ru: "Падежные частицы", en: "Particles" }, sk: "R",
+  uz: "O'zbek tilida ham kelishik qo'shimchalari bor, lekin 은/는 va 이/가 farqi bir xil emas. 은/는 = gap mavzusi, 이/가 = yangi yoki ta'kidlangan ega.",
+  ru: "В узбекском тоже есть падежные окончания, но различие 은/는 и 이/가 не совпадает. 은/는 — тема предложения, 이/가 — новое или выделенное подлежащее.",
+  en: "Uzbek also marks case, but the 은/는 vs 이/가 split does not map onto it. 은/는 marks the topic, 이/가 marks a new or focused subject.",
+  note: "우즈베크어는 교착어라 격 표지 자체는 유리하지만 주제-주격 구분은 일대일로 옮겨지지 않는다." },
+conn: { ko: "연결어미", n: { ko: "연결어미", uz: "Bog'lovchi qo'shimchalar", ru: "Соединительные окончания", en: "Connective endings" }, sk: "R",
+  uz: "O'zbek tilidagi bitta ravishdosh shakli koreys tilida bir nechta qo'shimchaga bo'linadi: -어서 (sabab), -는데 (zid/fon), -으면 (shart). Ularni alohida yodlang.",
+  ru: "Одна узбекская деепричастная форма в корейском распадается на несколько: -어서 (причина), -는데 (фон/противопоставление), -으면 (условие). Учите их по отдельности.",
+  en: "One Uzbek converb form splits into several Korean endings: -어서 (cause), -는데 (background/contrast), -으면 (condition). Learn them separately.",
+  note: "다대일 구간. 오답이 몰릴 것으로 예상한 지점." },
+stop3: { ko: "삼중 파열음 (ㄱ/ㅋ/ㄲ)", n: { ko: "삼중 파열음 (ㄱ/ㅋ/ㄲ)", uz: "Uch xil undosh", ru: "Три типа согласных", en: "Three-way consonants" }, sk: "L",
+  uz: "Koreys tilida uch xil tovush bor: 가/카/까. O'zbek va rus tilida bu farq yo'q, shuning uchun quloq bilan ajratish qiyin. Ovozni ikki marta tinglang.",
+  ru: "В корейском три разных звука: 가/카/까. В узбекском и русском такого различия нет, поэтому на слух их трудно различить. Прослушайте запись дважды.",
+  en: "Korean has a three-way contrast: 가/카/까. Neither Uzbek nor Russian has it, so it is hard to hear. Listen twice.",
+  note: "듣기 변별 오류의 1순위 가설." },
+batchim: { ko: "받침과 연음", n: { ko: "받침과 연음", uz: "So'z oxiri va bog'lanish", ru: "Конечный согласный и связывание", en: "Final consonants and linking" }, sk: "L",
+  uz: "So'z oxiridagi undosh (받침) keyingi bo'g'inga ko'chadi: 한국어 → [한구거]. Shuning uchun eshitganda so'z chegarasi boshqacha tuyuladi.",
+  ru: "Конечный согласный (받침) переходит в следующий слог: 한국어 → [한구거]. Поэтому на слух граница слова кажется другой.",
+  en: "A final consonant (받침) links into the next syllable: 한국어 → [한구거]. Word boundaries therefore sound different from how they are written.",
+  note: "듣기에서 단어 경계를 잘못 끊는 오류." },
+spell: { ko: "표기·받침 쓰기", n: { ko: "표기·받침 쓰기", uz: "Imlo", ru: "Правописание", en: "Spelling" }, sk: "W",
+  uz: "Eshitilishi va yozilishi farq qiladi. 같이 [가치] deb o'qiladi, lekin 같이 deb yoziladi. Yozishda asl shaklni eslang.",
+  ru: "Произношение и написание различаются. 같이 читается [가치], но пишется 같이. При письме вспоминайте исходную форму.",
+  en: "Spelling and sound differ. 같이 is read [가치] but written 같이. When writing, recall the underlying form.",
+  note: "쓰기 영역 오류의 주요 원인." },
+count: { ko: "수 분류사", n: { ko: "수 분류사", uz: "Sanoq so'zlari", ru: "Счётные слова", en: "Counters" }, sk: "R",
+  uz: "Koreys tilida sanaganda tur so'zi kerak: odam 명, narsa 개, kitob 권, hayvon 마리. O'zbek tilida bunday majburiy ajratish yo'q.",
+  ru: "При счёте в корейском нужен классификатор: люди 명, предметы 개, книги 권, животные 마리. В узбекском такого обязательного деления нет.",
+  en: "Korean counting needs a classifier: 명 for people, 개 for things, 권 for books, 마리 for animals. Uzbek has no such obligatory split.",
+  note: "초급에서 자주 틀리는 지점." },
+order: { ko: "어순·격조사", n: { ko: "어순·격조사", uz: "So'z tartibi", ru: "Порядок слов", en: "Word order" }, sk: "R",
+  uz: "Yaxshi xabar: koreys tili ham o'zbek tili kabi SOV (ega–to'ldiruvchi–kesim). Bu qism siz uchun oson bo'ladi.",
+  ru: "Хорошая новость: корейский, как и узбекский, имеет порядок SOV (подлежащее–дополнение–сказуемое). Эта часть будет для вас лёгкой.",
+  en: "Good news: Korean is SOV like Uzbek (subject–object–verb). This part should come easily to you.",
+  note: "긍정 전이. 학습자에게 강점을 알려 주는 용도." },
+honor: { ko: "높임·격식체", n: { ko: "높임·격식체", uz: "Hurmat shakllari", ru: "Вежливые формы", en: "Politeness forms" }, sk: "R",
+  uz: "Koreys tilida hurmat fe'l oxiriga qo'shiladi: 해요 / 합니다 / 해. TOPIK matnlarida ko'pincha 합니다 shakli ishlatiladi.",
+  ru: "Вежливость в корейском выражается окончанием глагола: 해요 / 합니다 / 해. В текстах TOPIK обычно используется форма 합니다.",
+  en: "Korean politeness is carried by the verb ending: 해요 / 합니다 / 해. TOPIK texts mostly use the 합니다 form.",
+  note: "시험 문체 적응." },
+infer: { ko: "추론·중심 생각", n: { ko: "추론·중심 생각", uz: "Xulosa va asosiy fikr", ru: "Вывод и главная мысль", en: "Inference and main idea" }, sk: "R",
+  uz: "Javob matnda to'g'ridan-to'g'ri yozilmagan. Matnda ko'rgan so'zni takrorlagan variant ko'pincha noto'g'ri bo'ladi — mazmunni tekshiring.",
+  ru: "Ответ не написан в тексте прямо. Вариант, повторяющий слово из текста, часто оказывается неверным — проверяйте смысл.",
+  en: "The answer is not stated directly. An option that repeats a word from the text is often wrong — check the meaning.",
+  note: "함정 선택지(E04)와 함께 나타난다." }
+};
+
+/* 오류 원인 코드 */
+D.ERR = {
+E01: { ko: "어휘·문법", uz: "Lug'at va grammatika", ru: "Лексика и грамматика", en: "Vocabulary and grammar" },
+E02: { ko: "연결어미", uz: "Bog'lovchi qo'shimcha", ru: "Соединительное окончание", en: "Connective ending" },
+E03: { ko: "추론", uz: "Xulosa chiqarish", ru: "Вывод по тексту", en: "Inference" },
+E04: { ko: "함정 선택지", uz: "Tuzoq variant", ru: "Ловушка в вариантах", en: "Keyword trap" },
+E05: { ko: "시간 압박", uz: "Vaqt yetishmovchiligi", ru: "Нехватка времени", en: "Time pressure" },
+E06: { ko: "과잉 수정", uz: "Javobni o'zgartirish", ru: "Исправление верного ответа", en: "Over-correction" }
+};
+
+/* 시험 프로필. EPS-TOPIK = 읽기·듣기, 기초 수준(레벨 0~2). 학술 TOPIK = 전 영역 */
+D.PROFILES = {
+academic: { ko: "학술 TOPIK", uz: "Akademik TOPIK", ru: "Академический TOPIK", en: "Academic TOPIK", skills: ["R", "L", "W"], maxLv: 4 },
+eps: { ko: "EPS-TOPIK (고용허가제)", uz: "EPS-TOPIK (ish vizasi)", ru: "EPS-TOPIK (рабочая виза)", en: "EPS-TOPIK (work permit)", skills: ["R", "L"], maxLv: 2 }
+};
+
+/* ============================================================
+   한자 어근 태그
+   ------------------------------------------------------------
+   효율 기준으로 고른다: 이 문제은행 안에 실제로 두 개 이상의 단어가 있는 어근만 남겼다.
+   단어 하나에만 나타나는 어근은 외워 봐야 전이가 없으므로 넣지 않았다.
+   w = 이 어근이 들어간 단어(어간). 한 단어는 한 어근에만 속한다.
+   판정은 w의 부분 문자열 일치. 순서대로 먼저 맞는 어근 하나만 붙는다.
+   ============================================================ */
+D.ROOTS = [
+{ k: "車", s: "차", ko: "탈것", uz: "transport", ru: "транспорт", en: "vehicle", w: ["자동차", "기차", "자전거"] },
+{ k: "行", s: "행", ko: "가다·다니다", uz: "yurmoq", ru: "идти, ходить", en: "go, move", w: ["비행기", "여행", "은행"] },
+{ k: "學", s: "학", ko: "배우다", uz: "o'rganmoq", ru: "учиться", en: "learn", w: ["학교", "학생"] },
+{ k: "時", s: "시", ko: "때", uz: "vaqt", ru: "время", en: "time", w: ["시간", "시계"] },
+{ k: "決", s: "결", ko: "정하다·끊다", uz: "hal qilmoq", ru: "решать", en: "decide", w: ["결정", "해결"] },
+{ k: "定", s: "정", ko: "정해지다", uz: "belgilanmoq", ru: "быть определённым", en: "be fixed", w: ["긍정", "부정"] },
+{ k: "價", s: "가", ko: "값", uz: "narx, qiymat", ru: "цена", en: "price, value", w: ["가치", "물가"] },
+{ k: "氣", s: "기", ko: "기운·분위기", uz: "kayfiyat", ru: "настроение", en: "air, mood", w: ["기분", "분위기"] },
+{ k: "食", s: "식", ko: "먹다", uz: "yemoq", ru: "есть, пища", en: "eat, food", w: ["음식", "식당"] },
+{ k: "對", s: "대", ko: "마주하다", uz: "qarshi, nisbatan", ru: "по отношению", en: "facing, toward", w: ["대상", "대책"] },
+{ k: "習", s: "습", ko: "익히다", uz: "o'rganish", ru: "привыкать", en: "practise", w: ["습관", "연습"] },
+{ k: "確", s: "확", ko: "확실하다", uz: "aniq", ru: "точный", en: "certain", w: ["정확", "확인"] },
+{ k: "發", s: "발", ko: "떠나다·펴다", uz: "chiqmoq", ru: "отправляться", en: "set out", w: ["출발", "발전"] },
+{ k: "果", s: "과", ko: "열매·결과", uz: "natija", ru: "результат", en: "result", w: ["결과", "효과"] },
+{ k: "用", s: "용", ko: "쓰다", uz: "ishlatmoq", ru: "использовать", en: "use", w: ["활용", "비용"] },
+{ k: "會", s: "회", ko: "모이다·만나다", uz: "to'planmoq", ru: "собираться", en: "meet, gather", w: ["회사", "기회"] },
+{ k: "家", s: "가", ko: "집·전문가", uz: "uy, mutaxassis", ru: "дом, специалист", en: "house, expert", w: ["가족", "전문가"] },
+{ k: "子", s: "자", ko: "물건을 뜻하는 끝말", uz: "narsa bildiruvchi qo'shimcha", ru: "суффикс предмета", en: "noun suffix for objects", w: ["의자", "모자"] }
+];
+
+/* ============================================================
+   대조군 분류 (배치고사 기준)
+   ------------------------------------------------------------
+   배치고사 결과만으로 학생을 줄 세우고, 상위 N명과 하위 N명을 각각 두 집단으로 쪼갠다.
+   A1/A2는 실력이 같은 두 집단, B1/B2도 마찬가지다. 그래서
+   A1 대 A2 비교 = 같은 실력끼리의 차이(= 측정 잡음), A 대 B 비교 = 수준 간 차이가 된다.
+   ============================================================ */
+D.GROUPS = {
+A1: { ko: "상위 A1", uz: "Yuqori A1", band: "A", color: "#0E5A52" },
+A2: { ko: "상위 A2", uz: "Yuqori A2", band: "A", color: "#2E8B7A" },
+B1: { ko: "하위 B1", uz: "Quyi B1", band: "B", color: "#9A5B2E" },
+B2: { ko: "하위 B2", uz: "Quyi B2", band: "B", color: "#C08A4E" }
+};
+D.GROUP_SIZE = 20; // 상위 20명 / 하위 20명
+
+if (typeof module !== "undefined" && module.exports) module.exports = D;
+else root.CHALLON_DATA = D;
+})(typeof window !== "undefined" ? window : this);
+</script>
+<script>
+/* CHALLON learning engine: pure logic shared by the app, the admin page and the simulation tests. */
+(function (root) {
+var E = {};
+E.PRACTICE_N = 8;
+E.TYPES = {
+  VM: { sk: "R", k: "w" }, MV: { sk: "R", k: "w" }, GC: { sk: "R", k: "s" }, RD: { sk: "R", k: "p" },
+  LW: { sk: "L", k: "w" }, LD: { sk: "L", k: "w" }, LC: { sk: "L", k: "s" }, LP: { sk: "L", k: "d" },
+  SP: { sk: "W", k: "w" }, WS: { sk: "W", k: "s" }
+};
+E.SKILLS = ["R", "L", "W"];
+
+E.rng = function (seed) {
+  var a = seed >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) | 0;
+    var t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+function shuffle(arr, rnd) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
 }
-function summaryBox(parent,label,value){const div=document.createElement('div'),small=document.createElement('span'),strong=document.createElement('strong');small.className='muted';small.textContent=label;strong.textContent=text(value);div.append(small,strong);parent.appendChild(div);}
-function selectStudent(uid){selectedUid=uid;renderUsers();renderStudent();}
-function renderStudent(){
- const u=users.find(x=>String(x.uid)===selectedUid);if(!u){el('studentSection').style.display='none';return;}
- el('studentSection').style.display='block';setText('studentTitle',(u.name||'Talaba')+' — batafsil natijalar');
- const st=u.state||{};const mine=sessions.filter(s=>String(s.uid)===selectedUid);
- const summary=el('studentSummary');summary.replaceChildren();
- summaryBox(summary,'Daraja',st.plv==null?'—':'L'+st.plv);
- summaryBox(summary,'TOPIK maqsadi',st.grade==null?'—':'TOPIK '+st.grade);
- summaryBox(summary,'Jami XP',num(st.xp));
- summaryBox(summary,'Mashg‘ulotlar',mine.length);
- const placement=mine.filter(s=>s.kind==='place').sort((a,b)=>String(b.ts).localeCompare(String(a.ts)));
- const p=el('placementResult');p.replaceChildren();
- if(placement.length){const s=placement[0],d=document.createElement('div');
- d.textContent='Sana: '+dateText(s.date)+' | To‘g‘ri: '+num(s.correct)+'/'+num(s.n)+' | Ball: '+(s.score==null?'—':s.score)+'/100';p.appendChild(d);
- }else{p.textContent='Placement Test natijasi mavjud emas.';}
- renderSkills();renderHistory();
+E.shuffle = shuffle;
+function chars(s) { return Array.from(s.replace(/\s/g, "")); }
+E.chars = chars;
+
+/* ---------- bank ---------- */
+function word(str, id, lv) { var p = str.split("|"); return { id: id, k: "w", lv: lv, ko: p[0], em: p[1], uz: p[2], ru: p[3], en: p[4] }; }
+function sent(str, id, lv) {
+  var p = str.split("|"), m = p[0].match(/\[(.+?)\]/);
+  return { id: id, k: "s", lv: lv, full: p[0].replace(/[\[\]]/g, ""), stem: p[0].replace(/\[.+?\]/, "＿＿＿"),
+    blank: m[1], dis: p[1] ? p[1].split(",") : [] };
 }
-function renderSkills(){
- const root=el('skillResults');root.replaceChildren();
- const rows=responses.filter(r=>String(r.uid)===selectedUid);
- const names={R:'Reading',L:'Listening',W:'Writing'};
- let hasAny=false;
- for(const skill of ['R','L','W']){
-  const viewed=rows.filter(r=>String(r.skill||'').toUpperCase()===skill&&Number(r.seen)===1);
-  if(!viewed.length)continue;hasAny=true;
-  const correct=viewed.filter(r=>Number(r.ok)===1).length;
-  const rate=percent(correct,viewed.length);
-  const item=document.createElement('div');item.className='skill';
-  const name=document.createElement('strong');name.textContent=names[skill];
-  const bar=document.createElement('div');bar.className='bar';const fill=document.createElement('div');fill.style.width=rate+'%';bar.appendChild(fill);
-  const count=document.createElement('span');count.className='muted';count.textContent=correct+'/'+viewed.length+' ('+rate+'%)';
-  item.append(name,bar,count);root.appendChild(item);
- }
- if(!hasAny){const d=document.createElement('p');d.className='empty';d.textContent='Ko‘nikmalar bo‘yicha ma’lumot yo‘q.';root.appendChild(d);}
+function quest(str, id, lv, k) { var p = str.split("|"); return { id: id, k: k, lv: lv, text: p[0], q: p[1], opts: p.slice(2) }; }
+
+E.parse = function (D) {
+  var B = { words: [], sents: [], pass: [], dlg: [], test: [], byId: {}, D: D };
+  D.WORDS.forEach(function (l, lv) { l.forEach(function (s, i) { B.words.push(word(s, "W" + lv + "-" + i, lv)); }); });
+  D.SENTS.forEach(function (l, lv) { l.forEach(function (s, i) { B.sents.push(sent(s, "S" + lv + "-" + i, lv)); }); });
+  D.PASS.forEach(function (l, lv) { l.forEach(function (s, i) { B.pass.push(quest(s, "P" + lv + "-" + i, lv, "p")); }); });
+  D.DLG.forEach(function (l, lv) { l.forEach(function (s, i) { B.dlg.push(quest(s, "D" + lv + "-" + i, lv, "d")); }); });
+  B.words.concat(B.sents, B.pass, B.dlg).forEach(function (u) { B.byId[u.id] = u; });
+  B.syl = []; // filler syllables for tile items
+  B.sents.forEach(function (s) { chars(s.blank).forEach(function (c) { if (B.syl.indexOf(c) < 0) B.syl.push(c); }); });
+  D.TEST.forEach(function (F, f) {
+    var p = "T" + f + "-", T = [];
+    F.w0.forEach(function (s, i) { T.push({ u: word(s, p + "w0" + i, 0), type: ["VM", "MV", "LW", "SP"][i] }); });
+    T.push({ u: word(F.w1, p + "w1", 1), type: "VM" });
+    T.push({ u: sent(F.s1[0], p + "s10", 1), type: "GC" });
+    T.push({ u: sent(F.s1[1], p + "s11", 1), type: "LC" });
+    T.push({ u: sent(F.s1[2], p + "s12", 1), type: "WS" });
+    for (var i = 0; i < 3; i++) {
+      var lv = i + 2;
+      T.push({ u: quest(F.rd[i], p + "rd" + i, lv, "p"), type: "RD" });
+      T.push({ u: sent(F.gc[i], p + "gc" + i, lv), type: "GC" });
+      T.push({ u: quest(F.lp[i], p + "lp" + i, lv, "d"), type: "LP" });
+      T.push({ u: sent(F.ws[i], p + "ws" + i, lv), type: "WS" });
+    }
+    B.test.push(T);
+  });
+  return B;
+};
+
+/* ---------- items ---------- */
+function meaning(w, lang) { var t = w[lang === "ko" ? "en" : lang] || w.en; return (w.em ? w.em + " " : "") + t; }
+E.meaning = meaning;
+function others(B, w, n, rnd) {
+  var pool = B.words.filter(function (x) { return x.lv === w.lv && x.ko !== w.ko && x.uz !== w.uz && x.ru !== w.ru && x.en !== w.en; });
+  return shuffle(pool, rnd).slice(0, n);
 }
-function renderHistory(){
- const kind=el('kindFilter').value;
- const mine=sessions.filter(s=>String(s.uid)===selectedUid&&(kind==='all'||s.kind===kind))
-  .sort((a,b)=>String(b.ts).localeCompare(String(a.ts)));
- const tbody=el('historyRows');tbody.replaceChildren();
- if(!mine.length)makeEmpty(tbody,6,'Hozircha mashg‘ulot mavjud emas.');
- for(const s of mine){const tr=document.createElement('tr');
-  cell(tr,dateText(s.date));cell(tr,labelKind[s.kind]||s.kind);
-  cell(tr,num(s.correct)+' / '+num(s.n)+' ('+percent(num(s.correct),num(s.n))+'%)');
-  cell(tr,s.score==null?'—':s.score);
-  cell(tr,num(s.sec)+' s');cell(tr,num(s.xp));tbody.appendChild(tr);
- }
+function mc(correct, wrong, rnd) {
+  var opts = shuffle([correct].concat(wrong), rnd);
+  return { opts: opts, ans: opts.indexOf(correct) };
 }
-function updateDashboard(){
- setText('total',users.length);
- setText('active',users.filter(u=>u.state&&u.state.plv!=null).length);
- setText('xp',users.reduce((sum,u)=>sum+num(u.state&&u.state.xp),0));
- setText('sessionCount',sessions.length);
- setText('practiceCount',sessions.filter(s=>s.kind==='prac').length);
- setText('gameCount',sessions.filter(s=>s.kind==='game').length);
- renderUsers();if(selectedUid&&users.some(u=>String(u.uid)===selectedUid))renderStudent();
- else if(users.length)selectStudent(String(users[0].uid));else el('studentSection').style.display='none';
+function tiles(answer, extra, rnd) {
+  var a = chars(answer), ex = [];
+  shuffle(extra, rnd).forEach(function (c) { if (ex.length < 3 && a.indexOf(c) < 0 && ex.indexOf(c) < 0) ex.push(c); });
+  return shuffle(a.concat(ex), rnd);
 }
-async function load(){
- const key=el('key').value;
- const error=el('error');const button=el('dashboard').style.display==='block'?el('refresh'):el('load');
- if(!key){error.textContent='ADMIN_KEY ni kiriting.';return;}
- button.disabled=true;error.textContent='Yuklanmoqda...';el('status').textContent='Ma’lumotlar yangilanmoqda...';
- try{
-  const res=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin',key})});
-  if(!res.ok)throw Error('Server javobi: '+res.status);
-  const data=await res.json();if(!data.ok)throw Error(data.error||'Admin kirishi rad etildi');
-  if(!Array.isArray(data.users)||!Array.isArray(data.sessions)||!Array.isArray(data.responses))
-   throw Error('Backend sessions/responses ma’lumotlarini qaytarmadi. Version 3 deploymentni tekshiring.');
-  users=data.users;sessions=data.sessions;responses=data.responses;
-  el('login').style.display='none';el('dashboard').style.display='block';error.textContent='';
-  updateDashboard();el('status').textContent='Yangilandi: '+new Date().toLocaleString('uz-UZ');
- }catch(e){error.textContent='Xatolik: '+e.message;el('status').textContent='Yangilashda xatolik: '+e.message;}
- finally{button.disabled=false;}
+E.canType = function (u, type) {
+  var T = E.TYPES[type];
+  if (!T || T.k !== u.k) return false;
+  if (type === "SP" || type === "LD") return chars(u.ko).length >= 2;
+  if (type === "WS") return chars(u.blank).length >= 2;
+  return true;
+};
+E.speech = function (text) { return text.replace(/(여자|남자):\s*/g, "").replace(/\n/g, " "); };
+
+E.makeItem = function (u, type, B, rnd, lang) {
+  var it = { uid: u.id, type: type, skill: E.TYPES[type].sk, lv: u.lv, mode: "mc" }, m, ot;
+  if (u.k === "w") {
+    ot = others(B, u, 3, rnd);
+    if (type === "VM") { it.stem = u.ko; it.big = 1; m = mc(meaning(u, lang), ot.map(function (o) { return meaning(o, lang); }), rnd); }
+    if (type === "MV") { it.stem = meaning(u, lang); it.big = 1; m = mc(u.ko, ot.map(function (o) { return o.ko; }), rnd); }
+    if (type === "LW") { it.audio = u.ko; m = mc(u.ko, ot.map(function (o) { return o.ko; }), rnd); }
+    if (type === "SP" || type === "LD") {
+      it.mode = "tiles"; it.answer = u.ko;
+      if (type === "SP") { it.stem = meaning(u, lang); it.big = 1; } else it.audio = u.ko;
+      it.tiles = tiles(u.ko, [].concat.apply([], ot.map(function (o) { return chars(o.ko); })), rnd);
+    }
+    it.reveal = u.ko + " = " + meaning(u, lang);
+  } else if (u.k === "s") {
+    it.stem = u.stem;
+    if (type === "LC") it.audio = u.full;
+    if (type === "WS") {
+      it.mode = "tiles"; it.answer = u.blank.replace(/\s/g, "");
+      it.tiles = tiles(u.blank, [].concat.apply([], u.dis.map(chars)).concat(B.syl), rnd);
+    } else m = mc(u.blank, u.dis, rnd);
+    it.reveal = u.full;
+  } else {
+    if (type === "LP") { it.audio = E.speech(u.text); it.script = u.text; } else it.stem = u.text;
+    it.q = u.q;
+    m = mc(u.opts[0], u.opts.slice(1), rnd);
+    it.reveal = u.opts[0];
+  }
+  if (m) { it.opts = m.opts; it.ans = m.ans; }
+  var tgt = E.targetOf(u);
+  it.sino = E.isSino(tgt, B);
+  it.root = E.rootOf(tgt, B);
+  it.l1 = E.l1key(u, type, B);
+  return it;
+};
+/* 이 문항이 실제로 묻는 한국어 문자열 */
+E.targetOf = function (u) { return u.k === "w" ? u.ko : u.k === "s" ? u.blank : (u.opts ? u.opts[0] : ""); };
+E.check = function (item, resp) {
+  if (resp === null || resp === undefined) return false;
+  return item.mode === "tiles" ? String(resp).replace(/\s/g, "") === item.answer.replace(/\s/g, "") : resp === item.ans;
+};
+
+
+/* ---------- 차별 기능: 한자어 태그 / 모국어 대조 / 오류 원인 ----------
+   모두 규칙 기반 자동 분류다. 사람이 문항마다 붙인 태그가 아니다. */
+var ASP = /[ㅋㅌㅍㅊㄲㄸㅃㅆㅉ]/;
+function decomp(ch) { // 한글 음절 -> 초성·종성 인덱스
+  var c = ch.charCodeAt(0) - 0xAC00;
+  if (c < 0 || c > 11171) return null;
+  return { cho: Math.floor(c / 588), jong: c % 28 };
 }
-function logout(){users=[];sessions=[];responses=[];selectedUid=null;el('key').value='';el('dashboard').style.display='none';el('login').style.display='block';el('error').textContent='';}
-el('load').onclick=load;el('refresh').onclick=load;el('logout').onclick=logout;
-el('search').oninput=renderUsers;el('kindFilter').onchange=renderHistory;
-el('key').addEventListener('keydown',e=>{if(e.key==='Enter')load();});
+var CHO = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
+E.hasAspirate = function (t) {
+  return Array.from(String(t)).some(function (ch) { var d = decomp(ch); return d && ASP.test(CHO[d.cho]); });
+};
+E.hasBatchim = function (t) {
+  return Array.from(String(t)).some(function (ch) { var d = decomp(ch); return d && d.jong > 0; });
+};
+E.isSino = function (t, B) {
+  var s = String(t || ""), L = B && B.D && B.D.SINO ? B.D.SINO : [];
+  for (var i = 0; i < L.length; i++) if (s.indexOf(L[i]) >= 0) return true;
+  return false;
+};
+function inList(t, list) {
+  var s = String(t || "");
+  for (var i = 0; i < list.length; i++) if (s.indexOf(list[i]) >= 0) return true;
+  return false;
+}
+/* 한자 어근 태그. 목록 순서대로 먼저 맞는 어근 하나만 붙인다. 없으면 null */
+E.rootOf = function (t, B) {
+  var s = String(t || ""), R = B && B.D && B.D.ROOTS ? B.D.ROOTS : [];
+  if (!s) return null;
+  for (var i = 0; i < R.length; i++) {
+    for (var j = 0; j < R[i].w.length; j++) if (s.indexOf(R[i].w[j]) >= 0) return R[i].k;
+  }
+  return null;
+};
+E.rootDef = function (key, B) {
+  var R = B && B.D && B.D.ROOTS ? B.D.ROOTS : [];
+  for (var i = 0; i < R.length; i++) if (R[i].k === key) return R[i];
+  return null;
+};
+/* 문항이 어느 모국어 대조 패턴에 해당하는가. 해당 없으면 null */
+E.l1key = function (u, type, B) {
+  var D = B && B.D ? B.D : {}, sk = E.TYPES[type].sk;
+  var target = u.k === "w" ? u.ko : u.k === "s" ? u.blank : (u.opts ? u.opts[0] : "");
+  if (sk === "W") return "spell";
+  if (type === "RD" || type === "LP") return "infer";
+  if (type === "LW" || type === "LD") return E.hasAspirate(target) ? "stop3" : "batchim";
+  if (u.k === "s" && inList(target, D.CONN || [])) return "conn";
+  if (u.k === "s" && (D.PART || []).indexOf(String(target).trim()) >= 0) return "topic";
+  if (E.isSino(target, B)) return "sino";
+  if (type === "LC") return "batchim";
+  return null;
+};
+/* 선택한 보기의 말이 지문에 그대로 나오면 함정 선택지로 본다 */
+E.isTrap = function (item, pick) {
+  if (item.mode !== "mc" || pick === null || pick === undefined || pick === item.ans) return false;
+  var src = String(item.script || item.stem || "");
+  if (src.length < 20) return false;
+  var opt = String(item.opts[pick] || "").replace(/[.,?!]/g, "");
+  for (var i = 0; i + 3 <= opt.length; i++) {
+    var piece = opt.slice(i, i + 3);
+    if (/\s/.test(piece)) continue;
+    if (src.indexOf(piece) >= 0) return true;
+  }
+  return false;
+};
+/* 오류 원인 판정. 우선순위는 E06 → E05 → E04 → E02 → E03 → E01 */
+E.classify = function (item, rec) {
+  if (!rec || rec.ok) return null;
+  if (rec.firstOk) return "E06";                       // 맞았다가 바꿔서 틀림
+  if (rec.skip || (rec.ms !== undefined && rec.ms < 4000)) return "E05";
+  if (E.isTrap(item, rec.pick)) return "E04";
+  if (item.l1 === "conn") return "E02";
+  if (item.type === "RD" || item.type === "LP") return "E03";
+  return "E01";
+};
+
+/* ---------- state ---------- */
+E.newState = function (uid, lang, today) {
+  return { v: 2, uid: uid, lang: lang, profile: "academic", start: today, plv: null, grade: null, xp: 0, seen: {}, wrong: [], types: {},
+    recent: [], days: {}, tests: [], sec: { prac: 0, test: 0, game: 0 }, nPrac: 0, events: [],
+    errs: {}, defend: { held: 0, lost: 0 }, sino: { n: 0, c: 0 }, nonsino: { n: 0, c: 0 }, l1: {}, roots: {} };
+};
+function dayDiff(a, b) { return Math.round((Date.parse(b) - Date.parse(a)) / 864e5); }
+E.dayDiff = dayDiff;
+
+
+/* 한 문항의 결과를 진단 카운터에 반영한다 (연습·시험 공통) */
+E.record = function (st, item, rec) {
+  if (!st.errs) { st.errs = {}; st.defend = { held: 0, lost: 0 }; st.sino = { n: 0, c: 0 }; st.l1 = {}; }
+  if (!st.nonsino) st.nonsino = { n: 0, c: 0 };
+  if (!st.roots) st.roots = {};
+  var bucket = item.sino ? st.sino : st.nonsino;
+  bucket.n++; if (rec.ok) bucket.c++;
+  if (item.root) {
+    var R = st.roots[item.root] || (st.roots[item.root] = { n: 0, c: 0 });
+    R.n++; if (rec.ok) R.c++;
+  }
+  if (item.l1) {
+    var L = st.l1[item.l1] || (st.l1[item.l1] = { n: 0, c: 0 });
+    L.n++; if (rec.ok) L.c++;
+  }
+  if (rec.firstOk) { if (rec.ok) st.defend.held++; else st.defend.lost++; }
+  var code = E.classify(item, rec);
+  if (code) st.errs[code] = (st.errs[code] || 0) + 1;
+  return code;
+};
+
+/* ---------- tests ---------- */
+E.buildTest = function (form, B, rnd, lang) {
+  return B.test[form].map(function (t) { return E.makeItem(t.u, t.type, B, rnd, lang); });
+};
+/* stop early so beginners are not pushed through 20 items they cannot read:
+   after a level block (4 items) with 0 correct, or two blocks in a row with 0-1 correct. The rest counts as wrong. */
+E.testStop = function (oks) {
+  var n = oks.length; if (n % 4 || n >= 20) return false;
+  var c = oks.slice(n - 4).filter(Boolean).length;
+  if (c === 0) return true;
+  return n >= 8 && c <= 1 && oks.slice(n - 8, n - 4).filter(Boolean).length <= 1;
+};
+E.scoreTest = function (items, oks) {
+  var per = [0, 0, 0, 0, 0], sk = { R: [0, 0], L: [0, 0], W: [0, 0] }, c = 0;
+  items.forEach(function (it, i) { var ok = !!oks[i]; if (ok) { per[it.lv]++; c++; } sk[it.skill][1]++; if (ok) sk[it.skill][0]++; });
+  var lvl = 0; while (lvl < 5 && per[lvl] >= 3) lvl++;
+  return { score: c * 5, correct: c, per: per, sk: sk, plv: Math.min(4, lvl) };
+};
+E.applyTest = function (st, form, items, oks, today, sec, recs) {
+  var r = E.scoreTest(items, oks);
+  if (recs) items.forEach(function (it, i) { if (recs[i]) E.record(st, it, recs[i]); });
+  st.tests.push({ form: form, date: today, score: r.score, per: r.per, sk: r.sk, lvl: r.plv, sec: sec });
+  if (form === 0) { st.plv = r.plv; st.grade = r.plv + 1; st.start = today; }
+  st.sec.test += sec; st.xp += 30; r.xp = 30;
+  return r;
+};
+/* which weekly test (1-4) is open today, if any */
+E.weekDue = function (st, today, weekDays) {
+  if (st.plv === null) return null;
+  var w = Math.min(4, Math.floor(dayDiff(st.start, today) / (weekDays || 7)));
+  if (w < 1) return null;
+  return st.tests.some(function (t) { return t.form === w; }) ? null : w;
+};
+E.nextTestIn = function (st, today, weekDays) {
+  weekDays = weekDays || 7;
+  var d = dayDiff(st.start, today), done = st.tests.filter(function (t) { return t.form > 0; }).map(function (t) { return t.form; });
+  for (var w = 1; w <= 4; w++) if (done.indexOf(w) < 0 && w * weekDays > d) return w * weekDays - d;
+  return null;
+};
+
+/* ---------- daily practice ---------- */
+function acc(T) { return T && T.n ? T.c / T.n : null; }
+E.skillAcc = function (st, sk) {
+  var n = 0, c = 0;
+  Object.keys(st.types).forEach(function (t) { if (E.TYPES[t].sk === sk) { n += st.types[t].n; c += st.types[t].c; } });
+  return n ? c / n : null;
+};
+function weakestSkill(st) {
+  var best = "R", lo = 2;
+  E.SKILLS.forEach(function (s) { var a = E.skillAcc(st, s); if (a !== null && a < lo) { lo = a; best = s; } });
+  return best;
+}
+function weight(st, type, plv) {
+  var T = st.types[type], base = E.TYPES[type].k === "w" ? (plv <= 1 ? 2 : 1) : (plv <= 1 ? 2 : 3);
+  var a = acc(T), err = T && T.n >= 3 ? 1 - a : 0.3;
+  return base * (1 + 2 * err) * (T && T.weak ? 1.5 : 1);
+}
+function orderTypes(st, sk, rnd) {
+  var ts = Object.keys(E.TYPES).filter(function (t) { return E.TYPES[t].sk === sk; }), out = [];
+  var ws = ts.map(function (t) { return weight(st, t, st.plv); });
+  while (ts.length) {
+    var sum = ws.reduce(function (a, b) { return a + b; }, 0), r = rnd() * sum, i = 0;
+    while (i < ts.length - 1 && r > ws[i]) { r -= ws[i]; i++; }
+    out.push(ts[i]); ts.splice(i, 1); ws.splice(i, 1);
+  }
+  return out;
+}
+function unitsOf(B, k) { return k === "w" ? B.words : k === "s" ? B.sents : k === "p" ? B.pass : B.dlg; }
+
+E.pickPractice = function (st, B, rnd, lang) {
+  var skills = ["R", "R", "R", "L", "L", "W", "W", weakestSkill(st)], used = {}, items = [];
+  skills.forEach(function (sk) {
+    var order = orderTypes(st, sk, rnd), found = null;
+    for (var d = 0; d <= 4 && !found; d++) {
+      var lvs = d === 0 ? [st.plv] : [st.plv + d, st.plv - d];
+      for (var li = 0; li < lvs.length && !found; li++) {
+        for (var ti = 0; ti < order.length && !found; ti++) {
+          var type = order[ti], lv = lvs[li];
+          var c = unitsOf(B, E.TYPES[type].k).filter(function (u) {
+            return u.lv === lv && !st.seen[u.id] && !used[u.id] && E.canType(u, type);
+          });
+          if (c.length) found = { u: c[Math.floor(rnd() * c.length)], type: type };
+        }
+      }
+    }
+    var recycled = false;
+    if (!found) { // bank exhausted for this learner: review something answered wrong before, oldest first
+      recycled = true;
+      var ids = st.wrong.filter(function (id) { return !used[id]; });
+      if (!ids.length) ids = shuffle(Object.keys(st.seen).filter(function (id) { return !used[id]; }), rnd);
+      for (var i = 0; i < ids.length && !found; i++) {
+        var u = B.byId[ids[i]];
+        for (var t = 0; u && t < order.length; t++) if (E.canType(u, order[t])) { found = { u: u, type: order[t] }; break; }
+      }
+    }
+    if (found) {
+      used[found.u.id] = 1;
+      var it = E.makeItem(found.u, found.type, B, rnd, lang);
+      if (recycled) it.recycled = 1;
+      items.push(it);
+    }
+  });
+  return shuffle(items, rnd);
+};
+
+E.applyPractice = function (st, items, oks, today, sec, recs) {
+  var c = 0, ev = [], codes = [];
+  if (recs) items.forEach(function (it, i) { if (recs[i]) codes.push(E.record(st, it, recs[i])); });
+  items.forEach(function (it, i) {
+    var ok = !!oks[i], T = st.types[it.type] || (st.types[it.type] = { n: 0, c: 0, miss: 0, run: 0, weak: 0, over: 0 });
+    T.n++; st.seen[it.uid] = 1;
+    var wi = st.wrong.indexOf(it.uid);
+    if (ok) {
+      c++; T.c++;
+      if (wi >= 0) st.wrong.splice(wi, 1);
+      if (T.weak) { T.run++; if (T.run >= 3) { T.weak = 0; T.run = 0; T.miss = 0; T.over++; ev.push({ e: "overcome", type: it.type }); } }
+    } else {
+      if (wi < 0) st.wrong.push(it.uid);
+      T.run = 0; T.miss++;
+      if (!T.weak && T.miss >= 2) { T.weak = 1; ev.push({ e: "weak", type: it.type }); }
+    }
+  });
+  var a = items.length ? c / items.length : 0;
+  st.recent.push(a);
+  var r2 = st.recent.slice(-2);
+  if (r2.length === 2 && r2[0] >= 0.85 && r2[1] >= 0.85 && st.plv < 4) { st.plv++; st.recent = []; ev.push({ e: "level_up", to: st.plv }); }
+  else if (r2.length === 2 && r2[0] <= 0.35 && r2[1] <= 0.35 && st.plv > 0) { st.plv--; st.recent = []; ev.push({ e: "level_down", to: st.plv }); }
+  var xp = c * 5 + 10;
+  st.xp += xp; st.nPrac++; st.sec.prac += sec;
+  st.days[today] = (st.days[today] || 0) + 1;
+  ev.forEach(function (e) { e.date = today; st.events.push(e); });
+  if (st.events.length > 60) st.events = st.events.slice(-60);
+  return { correct: c, n: items.length, xp: xp, events: ev, codes: codes };
+};
+E.practicedToday = function (st, today) { return !!st.days[today]; };
+E.streak = function (st, today) {
+  var n = 0, d = new Date(Date.parse(today));
+  if (!st.days[today]) d.setUTCDate(d.getUTCDate() - 1);
+  while (st.days[d.toISOString().slice(0, 10)]) { n++; d.setUTCDate(d.getUTCDate() - 1); }
+  return n;
+};
+
+/* ---------- word game (free play, never used for measurement) ---------- */
+E.gameWords = function (st, B, rnd, n) {
+  var top = Math.min(4, (st.plv || 0) + 1);
+  var pool = B.words.filter(function (w) { return w.lv <= top && w.lv >= Math.max(0, top - 2); });
+  var out = [], seenM = {};
+  shuffle(pool, rnd).forEach(function (w) { if (out.length < n && !seenM[w.en]) { seenM[w.en] = 1; out.push(w); } });
+  return out;
+};
+E.gameXp = function (correct, activeSec) { return correct * 2 + Math.floor(activeSec / 30); };
+
+/* ---------- summary used by the progress screen and the admin page ---------- */
+E.summary = function (st) {
+  var base = null, last = null, best = null;
+  st.tests.forEach(function (t) { if (t.form === 0) base = t.score; else { last = t.score; best = best === null ? t.score : Math.max(best, t.score); } });
+  var min = Math.round((st.sec.prac + st.sec.test + st.sec.game) / 60);
+  var gain = base !== null && last !== null ? last - base : null;
+  return { base: base, last: last, best: best, gain: gain, minutes: min, days: Object.keys(st.days).length,
+    gainPerHour: gain !== null && min > 0 ? Math.round(gain / (min / 60) * 10) / 10 : null,
+    weak: Object.keys(st.types).filter(function (t) { return st.types[t].weak; }),
+    over: Object.keys(st.types).reduce(function (a, t) { return a + st.types[t].over; }, 0),
+    defend: E.defendRate(st), sinoAcc: E.sinoAcc(st), topErr: E.topErr(st), profile: st.profile || "academic" };
+};
+
+
+/* 아는 문제 사수율: 처음에 맞혔던 문항을 끝까지 지킨 비율 */
+E.defendRate = function (st) {
+  var d = st.defend || { held: 0, lost: 0 }, n = d.held + d.lost;
+  return n ? Math.round(d.held / n * 100) : null;
+};
+E.sinoAcc = function (st) {
+  var s = st.sino || { n: 0, c: 0 };
+  return s.n ? Math.round(s.c / s.n * 100) : null;
+};
+E.nonSinoAcc = function (st) {
+  var s = st.nonsino || { n: 0, c: 0 };
+  return s.n ? Math.round(s.c / s.n * 100) : null;
+};
+E.topErr = function (st) {
+  var e = st.errs || {}, best = null;
+  Object.keys(e).forEach(function (k) { if (!best || e[k] > e[best]) best = k; });
+  return best;
+};
+/* 시험 프로필에 맞는 영역·레벨만 쓴다 */
+E.profileOf = function (st, B) {
+  var P = B && B.D && B.D.PROFILES ? B.D.PROFILES : null;
+  if (!P) return { skills: E.SKILLS, maxLv: 4 };
+  return P[st && st.profile ? st.profile : "academic"] || P.academic;
+};
+
+
+/* EPS-TOPIK은 읽기·듣기만, 기초 수준까지만 낸다. 걸러낸 자리는 조건에 맞는 다른 문항으로 채운다. */
+E.applyProfile = function (st, items, B, rnd, lang) {
+  var P = E.profileOf(st, B);
+  if (P.skills.length === 3 && P.maxLv >= 4) return items;
+  var keep = items.filter(function (it) { return P.skills.indexOf(it.skill) >= 0 && it.lv <= P.maxLv; });
+  if (keep.length === items.length) return keep;
+  var used = {}; keep.forEach(function (it) { used[it.uid] = 1; });
+  var types = Object.keys(E.TYPES).filter(function (t) { return P.skills.indexOf(E.TYPES[t].sk) >= 0; });
+  var pool = B.words.concat(B.sents, B.pass, B.dlg).filter(function (u) {
+    return u.lv <= P.maxLv && !st.seen[u.id] && !used[u.id];
+  });
+  pool = shuffle(pool, rnd);
+  for (var i = 0; keep.length < items.length && i < pool.length; i++) {
+    for (var j = 0; j < types.length; j++) {
+      if (E.canType(pool[i], types[j])) { used[pool[i].id] = 1; keep.push(E.makeItem(pool[i], types[j], B, rnd, lang)); break; }
+    }
+  }
+  return keep;
+};
+
+/* ---------- 대조군 분류 ----------
+   배치고사 한 번만 보고 학생을 줄 세운다. 그 뒤에 쓰는 자료는 쓰지 않는다.
+   p = { n: 푼 문항, c: 맞힌 문항, hi: 레벨 3~4를 맞힌 수, fast: 4초 미만으로 틀린 수, skip: 모름으로 넘긴 수 } */
+E.groupIndex = function (p) {
+  if (!p || !p.n) return null;
+  var accP = p.c / p.n * 100;             // 정답률 — 주 기준
+  var hiP = (p.hi || 0) / p.n * 100;      // 어려운 문항을 맞혔는가 (천장 확인)
+  var fastP = (p.fast || 0) / p.n * 100;  // 읽지 않고 찍은 흔적
+  var skipP = (p.skip || 0) / p.n * 100;  // 모름으로 넘긴 비율
+  return Math.round((accP + hiP * 0.3 - fastP * 0.25 - skipP * 0.1) * 10) / 10;
+};
+/* 상위 size명을 A1/A2로, 하위 size명을 B1/B2로 가른다.
+   1,4,5,8…번을 A1에 2,3,6,7…번을 A2에 넣으므로 두 집단의 평균 실력이 거의 같아진다. */
+E.makeGroups = function (list, size) {
+  var ranked = list.filter(function (x) { return x.idx !== null && x.idx !== undefined; })
+    .sort(function (a, b) { return b.idx - a.idx || String(a.uid).localeCompare(String(b.uid)); });
+  var n = ranked.length, k = Math.max(0, Math.min(size || 20, Math.floor(n / 2))), map = {};
+  function snake(i) { return (i % 4 === 0 || i % 4 === 3) ? 0 : 1; }
+  for (var i = 0; i < k; i++) map[ranked[i].uid] = snake(i) ? "A2" : "A1";
+  for (var j = 0; j < k; j++) map[ranked[n - 1 - j].uid] = snake(j) ? "B2" : "B1";
+  ranked.forEach(function (x, i) { x.rank = i + 1; x.grp = map[x.uid] || ""; });
+  return { map: map, ranked: ranked, k: k, n: n };
+};
+
+if (typeof module !== "undefined" && module.exports) module.exports = E;
+else root.CHALLON_ENGINE = E;
+})(typeof window !== "undefined" ? window : this);
+</script>
+<script>
+/* CHALLON 관리자 v3 — 라이브 v2 구조 + 경쟁 우위 분석 화면
+   서버에서 받은 값은 textContent로만 넣는다 (HTML로 해석하지 않는다). */
+(function () {
+var E = window.CHALLON_ENGINE, D = window.CHALLON_DATA, B = E.parse(D);
+var C = window.CHALLON_CONFIG || {}, app = document.getElementById("app");
+
+/* ---------- 라벨 (한국어 / 우즈베크어) ---------- */
+var LANGS = ["ko", "uz"];
+var L = {
+  title: ["관리자 페이지", "Admin panel"],
+  keyph: ["관리자 키", "ADMIN_KEY"],
+  login: ["불러오기", "Kirish"],
+  refresh: ["새로고침", "Yangilash"],
+  logout: ["나가기", "Chiqish"],
+  sample: ["가상 데이터 보기", "Namuna ma'lumot"],
+  csv: ["CSV 내보내기", "CSV yuklash"],
+  loading: ["불러오는 중…", "Yuklanmoqda…"],
+  needKey: ["관리자 키를 입력하세요.", "ADMIN_KEY ni kiriting."],
+  noNet: ["서버에 연결하지 못했습니다.", "Serverga ulanib bo'lmadi."],
+  sampleWarn: ["지금 보이는 숫자는 화면 확인용 가상 데이터입니다. 실제 학생 결과가 아닙니다.", "Bu namuna ma'lumot, haqiqiy natija emas."],
+  oldBackend: ["백엔드가 sessions·responses를 돌려주지 않습니다. Code.gs를 새 버전으로 다시 배포하세요. 지금은 학생 요약만 보입니다.", "Backend sessions/responses qaytarmadi. Code.gs ni yangilang."],
+  students: ["가입 학생", "O'quvchilar"],
+  placed: ["배치 시험 완료", "Placement topshirgan"],
+  tested: ["주간 시험 1회 이상", "Haftalik test topshirgan"],
+  avgGain: ["평균 점수 상승", "O'rtacha o'sish"],
+  gainers: ["상승한 학생", "O'sgan o'quvchilar"],
+  avgMin: ["1인 평균 이용", "O'rtacha vaqt"],
+  perHour: ["시간당 상승 (중앙값)", "Soatiga o'sish"],
+  corr: ["이용 시간과 상승의 상관", "Vaqt va o'sish bog'liqligi"],
+  sessions: ["총 세션", "Mashg'ulotlar"],
+  practice: ["일일 연습", "Daily Practice"],
+  games: ["단어 게임", "O'yinlar"],
+  edge: ["CHALLON 차별 지표", "CHALLON ko'rsatkichlari"],
+  defend: ["아는 문제 사수율", "Bilgan javobni saqlash"],
+  defendD: ["처음 맞힌 답을 바꾸지 않고 지킨 비율", "To'g'ri javobni o'zgartirmaganlar ulushi"],
+  errDist: ["오류 원인 분포", "Xato sabablari"],
+  sinoCmp: ["한자어 vs 그 외 정답률", "한자어 va boshqa so'zlar"],
+  sinoY: ["한자어 문항", "한자어 savollar"],
+  sinoN: ["그 외 문항", "Boshqa savollar"],
+  l1tab: ["어려움 패턴별 정답률 (중앙아시아 오답 DB)", "Qiyinchilik turlari"],
+  pattern: ["패턴", "Tur"],
+  area: ["영역", "Soha"],
+  items: ["문항 수", "Savollar"],
+  acc: ["정답률", "Aniqlik"],
+  learners: ["학생 수", "O'quvchilar"],
+  byUsage: ["연습 일수별 평균 점수 상승", "Kunlar bo'yicha o'sish"],
+  scatter: ["이용 시간(분)과 점수 상승", "Vaqt va o'sish"],
+  noTest: ["주간 시험 결과가 아직 없습니다.", "Haftalik test natijasi yo'q."],
+  table: ["학생 목록", "O'quvchilar ro'yxati"],
+  search: ["이름으로 검색", "Ism bo'yicha qidirish"],
+  name: ["학생", "Ism"],
+  lvl0: ["배치 단계", "Boshlang'ich daraja"],
+  plv: ["현재 단계", "Hozirgi daraja"],
+  goal: ["목표", "Maqsad"],
+  exam: ["시험", "Imtihon"],
+  base: ["배치 점수", "Boshlang'ich ball"],
+  last: ["최근 점수", "Oxirgi ball"],
+  gain: ["상승", "O'sish"],
+  wtests: ["주간 시험", "Testlar"],
+  days: ["연습 일수", "Kunlar"],
+  mins: ["이용(분)", "Daqiqa"],
+  gph: ["시간당 상승", "Soatiga"],
+  weakN: ["약한 유형", "Zaif turlar"],
+  overN: ["극복", "Yengilgan"],
+  detail: ["상세", "Batafsil"],
+  noStudent: ["학생이 없습니다.", "O'quvchi topilmadi."],
+  placement: ["배치 시험", "Placement Test"],
+  skills: ["영역별 정답률", "Ko'nikmalar"],
+  history: ["학습 기록", "Mashg'ulotlar tarixi"],
+  allKinds: ["전체", "Barchasi"],
+  date: ["날짜", "Sana"],
+  kind: ["종류", "Turi"],
+  result: ["결과", "Natija"],
+  score: ["점수", "Ball"],
+  time: ["시간", "Vaqt"],
+  none: ["기록이 없습니다.", "Ma'lumot yo'q."],
+  ruleNote: ["한자어·패턴·오류 원인은 규칙 기반 자동 분류입니다. 사람이 문항마다 붙인 태그가 아닙니다.", "Bu tasniflar avtomatik, qo'lda emas."],
+  /* 대조군 */
+  grpSec: ["대조군 (배치고사 기준 자동 분류)", "Nazorat guruhlari"],
+  grpHow: ["배치고사 한 번만 보고 줄을 세워, 상위 20명을 A1·A2로, 하위 20명을 B1·B2로 나눕니다. 1·4·5·8등이 A1, 2·3·6·7등이 A2로 가므로 A1과 A2의 평균 실력은 거의 같습니다. 따라서 A1↔A2 차이는 측정 잡음, A↔B 차이는 수준 간 차이로 읽습니다.", "Placement bo'yicha yuqori 20 va quyi 20 ikkitadan guruhga bo'linadi."],
+  grpIdx: ["분류 지수 = 정답률 + 상위문항(L3~4) 비율×0.3 − 찍기(4초 미만 오답) 비율×0.25 − 포기 비율×0.1", "Indeks formulasi"],
+  grp: ["그룹", "Guruh"],
+  grpN: ["인원", "Soni"],
+  grpIdxAvg: ["평균 지수", "O'rtacha indeks"],
+  grpFree: ["분류 고정", "Guruhni qotirish"],
+  grpUnfree: ["고정 해제", "Bekor qilish"],
+  grpFrozen: ["고정됨", "Qotirilgan"],
+  grpDraft: ["잠정 (아직 고정 전)", "Vaqtinchalik"],
+  grpFreezeHelp: ["100명이 모두 배치고사를 마친 뒤 한 번 고정하세요. 고정하면 학생이 더 들어와도 기존 학생의 소속이 바뀌지 않습니다.", "Hamma placement topshirgach bir marta qotiring."],
+  grpNone: ["배치고사를 마친 학생이 아직 부족합니다 (최소 4명).", "Placement topshirganlar yetarli emas."],
+  grpSaved: ["분류를 고정했습니다.", "Guruh qotirildi."],
+  grpMid: ["중간 (미분류)", "O'rta"],
+  /* 어근 */
+  rootSec: ["한자 어근별 정답률", "Xitoy ildizlari bo'yicha"],
+  rootHow: ["문제은행 안에 단어가 두 개 이상 있는 어근만 태그합니다. 한 단어에만 나오는 어근은 외워도 전이가 없어 제외했습니다.", "Faqat ikki va undan ortiq so'zda uchraydigan ildizlar."],
+  rootK: ["어근", "Ildiz"],
+  rootMean: ["뜻", "Ma'nosi"],
+  rootWords: ["해당 단어", "So'zlar"],
+  rootPlace: ["배치", "Placement"],
+  rootWeek: ["주간시험", "Haftalik"],
+  rootEarly: ["전반", "Birinchi yarim"],
+  rootLate: ["후반", "Ikkinchi yarim"],
+  rootSplit: ["전반/후반은 쌓인 응답을 시간 순으로 반씩 나눈 것입니다. 같은 어근이 4주 동안 나아졌는지를 봅니다.", "Javoblar vaqt bo'yicha ikkiga bo'lingan."],
+  rootDelta: ["변화", "O'zgarish"],
+  rootThin: ["표본이 적어 아직 해석하지 마세요 (문항 20개 미만).", "Namuna kichik."],
+  /* 알림 */
+  noteSec: ["부재 알림 현황", "Eslatmalar"],
+  noteHow: ["마지막 학습 결과로부터 48시간이 지나면 1차, 그로부터 18시간 뒤에도 반응이 없으면 2차를 보냅니다. 2차 이후에는 보내지 않습니다. 접속하거나 결과를 내면 주기가 처음으로 돌아갑니다.", "48 soatdan keyin 1-xat, 18 soatdan keyin 2-xat."],
+  noteOk: ["정상 (48시간 내 활동)", "Faol"],
+  note1: ["1차 발송", "1-xat yuborilgan"],
+  note2: ["2차 발송 (중단)", "2-xat (to'xtatilgan)"],
+  noteSent: ["총 발송", "Yuborilgan"],
+  noteBack: ["알림 뒤 복귀", "Qaytganlar"],
+  noteAbsent: ["부재(시간)", "Yo'qlik (soat)"]
+};
+var lang = (localStorage.getItem("challon_admin_lang") || "ko");
+if (LANGS.indexOf(lang) < 0) lang = "ko";
+function t(k) { var r = L[k]; return r ? r[LANGS.indexOf(lang)] : k; }
+function esc(v) { return String(v === null || v === undefined ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function num(v) { return Number(v) || 0; }
+function pct(c, n) { return n > 0 ? Math.round(c / n * 100) : 0; }
+function mean(a) { return a.length ? a.reduce(function (x, y) { return x + y; }, 0) / a.length : null; }
+function median(a) { if (!a.length) return null; var s = a.slice().sort(function (x, y) { return x - y; }), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+function corr(xs, ys) {
+  var n = xs.length; if (n < 3) return null;
+  var mx = mean(xs), my = mean(ys), a = 0, b = 0, c = 0;
+  for (var i = 0; i < n; i++) { a += (xs[i] - mx) * (ys[i] - my); b += Math.pow(xs[i] - mx, 2); c += Math.pow(ys[i] - my, 2); }
+  return b && c ? a / Math.sqrt(b * c) : null;
+}
+function signed(v) { return v === null ? '<span class="mut">–</span>' : '<span class="' + (v > 0 ? "up" : v < 0 ? "down" : "mut") + '">' + (v > 0 ? "+" : "") + v + "</span>"; }
+function nz(v, d) { return v === null || v === undefined ? "–" : (d ? v.toFixed(d) : v); }
+
+/* ---------- 상태 ---------- */
+var users = [], sessions = [], responses = [], agg = null, sample = false, partial = false, err = "";
+var place = {}, groupRows = [], notices = [], groupMsg = "";
+var sortKey = "gain", sortDir = -1, selected = null, query = "", kindFilter = "all", adminKey = "";
+
+/* ---------- 집계 ---------- */
+function row(u) {
+  var st = u.state || {}, s = st.tests ? E.summary(st) : { base: null, last: null, gain: null, minutes: 0, days: 0, gainPerHour: null, weak: [], over: 0, defend: null, sinoAcc: null, topErr: null };
+  return { uid: String(u.uid), name: u.name || u.username || u.uid, lang: st.lang || "", joined: st.start || "",
+    lvl0: st.tests && st.tests.length && st.tests[0].form === 0 ? st.tests[0].lvl : null,
+    plv: st.plv === undefined ? null : st.plv, grade: st.grade === undefined ? null : st.grade,
+    profile: st.profile || "academic", base: s.base, last: s.last, gain: s.gain,
+    nTests: (st.tests || []).filter(function (x) { return x.form > 0; }).length,
+    days: s.days, minutes: s.minutes, gph: s.gainPerHour, xp: num(st.xp),
+    weak: (s.weak || []).length, over: s.over || 0, defend: s.defend, sinoAcc: s.sinoAcc, topErr: s.topErr,
+    notify: u.notify || null, grp: "", idx: null, rank: null, st: st };
+}
+/* responses가 있으면 그쪽을, 없으면 학생 state를 합산해 코호트 지표를 만든다 */
+function cohort(rows) {
+  var o = { err: {}, defend: { held: 0, lost: 0 }, sino: { n: 0, c: 0 }, other: { n: 0, c: 0 }, l1: {}, roots: {}, src: "" };
+  if (agg && agg.total) { agg.src = "agg"; if (!agg.roots) agg.roots = {}; return agg; } // 서버가 전체 응답으로 계산한 값을 우선 쓴다
+  var seen = responses.filter(function (r) { return num(r.seen) === 1; });
+  if (seen.length) {
+    o.src = "responses";
+    var half = Math.floor(seen.length / 2);
+    seen.forEach(function (r, i) {
+      var ok = num(r.ok) === 1;
+      if (r.err) o.err[r.err] = (o.err[r.err] || 0) + 1;
+      if (num(r.fok) === 1) { if (ok) o.defend.held++; else o.defend.lost++; }
+      var bucket = num(r.sino) === 1 ? o.sino : o.other;
+      bucket.n++; if (ok) bucket.c++;
+      if (r.l1) { var g = o.l1[r.l1] || (o.l1[r.l1] = { n: 0, c: 0 }); g.n++; if (ok) g.c++; }
+      if (r.root) {
+        var k = o.roots[r.root] || (o.roots[r.root] = { n: 0, c: 0, pn: 0, pc: 0, wn: 0, wc: 0, en: 0, ec: 0, ln: 0, lc: 0 });
+        k.n++; if (ok) k.c++;
+        if (r.kind === "place") { k.pn++; if (ok) k.pc++; }
+        else if (r.kind === "week") { k.wn++; if (ok) k.wc++; }
+        if (i < half) { k.en++; if (ok) k.ec++; } else { k.ln++; if (ok) k.lc++; }
+      }
+    });
+    return o;
+  }
+  o.src = "state";
+  rows.forEach(function (x) {
+    var st = x.st;
+    Object.keys(st.errs || {}).forEach(function (k) { o.err[k] = (o.err[k] || 0) + st.errs[k]; });
+    if (st.defend) { o.defend.held += num(st.defend.held); o.defend.lost += num(st.defend.lost); }
+    if (st.sino) { o.sino.n += num(st.sino.n); o.sino.c += num(st.sino.c); }
+    Object.keys(st.roots || {}).forEach(function (k) { var g = o.roots[k] || (o.roots[k] = { n: 0, c: 0, pn: 0, pc: 0, wn: 0, wc: 0, en: 0, ec: 0, ln: 0, lc: 0 }); g.n += num(st.roots[k].n); g.c += num(st.roots[k].c); });
+    var tot = 0, cor = 0;
+    Object.keys(st.types || {}).forEach(function (ty) { tot += num(st.types[ty].n); cor += num(st.types[ty].c); });
+    o.other.n += tot - num(st.sino && st.sino.n); o.other.c += cor - num(st.sino && st.sino.c);
+    Object.keys(st.l1 || {}).forEach(function (k) { var g = o.l1[k] || (o.l1[k] = { n: 0, c: 0 }); g.n += num(st.l1[k].n); g.c += num(st.l1[k].c); });
+  });
+  return o;
+}
+
+/* ---------- 대조군 ----------
+   배치고사 문항 자료가 어디까지 있느냐에 따라 세 단계로 내려간다.
+   1) 서버가 계산해 준 place  2) 받아온 responses에서 직접  3) 그것도 없으면 상태의 배치고사 결과만 */
+var respPlace = null;
+function placeFromResponses() {
+  if (respPlace) return respPlace;
+  respPlace = {};
+  responses.forEach(function (r) {
+    if (r.kind !== "place" || num(r.seen) !== 1) return;
+    var p = respPlace[r.uid] || (respPlace[r.uid] = { n: 0, c: 0, hi: 0, fast: 0, skip: 0, ms: 0 });
+    var ok = num(r.ok) === 1;
+    p.n++; if (ok) p.c++;
+    if (ok && num(r.level) >= 3) p.hi++;
+    if (!ok && num(r.ms) > 0 && num(r.ms) < 4000) p.fast++;
+    if (num(r.skipped) === 1) p.skip++;
+    p.ms += num(r.ms);
+  });
+  return respPlace;
+}
+function placeStat(x) {
+  if (place && place[x.uid] && place[x.uid].n) return place[x.uid];
+  var rp = placeFromResponses();
+  if (rp[x.uid] && rp[x.uid].n) return rp[x.uid];
+  var t0 = (x.st && x.st.tests || [])[0];
+  if (t0 && t0.form === 0) { // 문항 자료가 없을 때: 점수와 레벨별 정답 수만으로
+    var per = t0.per || [], hi = num(per[3]) + num(per[4]);
+    return { n: 20, c: Math.round(num(t0.score) / 5), hi: hi, fast: 0, skip: 0, ms: num(t0.sec) * 1000, thin: 1 };
+  }
+  return null;
+}
+/* 분류를 계산하고(또는 고정된 값을 읽고) 각 학생 행에 붙인다 */
+function applyGroups(rows) {
+  var frozen = {};
+  groupRows.forEach(function (g) { if (g && g.uid) frozen[String(g.uid)] = g; });
+  var hasFrozen = Object.keys(frozen).length > 0;
+  var list = rows.map(function (x) {
+    var p = placeStat(x);
+    x.pstat = p;
+    return { uid: x.uid, name: x.name, score: x.base, idx: E.groupIndex(p) };
+  });
+  var calc = E.makeGroups(list, D.GROUP_SIZE), by = {};
+  calc.ranked.forEach(function (c) { by[c.uid] = c; });
+  rows.forEach(function (x) {
+    var c = by[x.uid];
+    x.idx = c ? c.idx : null;
+    x.rank = c ? c.rank : null;
+    x.calcGrp = c ? c.grp : "";
+    x.grp = hasFrozen ? (frozen[x.uid] ? String(frozen[x.uid].grp) : "") : x.calcGrp;
+  });
+  return { frozen: hasFrozen, k: calc.k, n: calc.n, ranked: calc.ranked, by: by };
+}
+function groupStats(rows) {
+  var out = {};
+  ["A1", "A2", "B1", "B2"].forEach(function (k) {
+    var g = rows.filter(function (x) { return x.grp === k; });
+    var tested = g.filter(function (x) { return x.gain !== null; });
+    out[k] = { n: g.length,
+      idx: mean(g.map(function (x) { return x.idx; }).filter(function (v) { return v !== null; })),
+      base: mean(g.map(function (x) { return x.base; }).filter(function (v) { return v !== null; })),
+      last: mean(tested.map(function (x) { return x.last; })),
+      gain: mean(tested.map(function (x) { return x.gain; })),
+      days: mean(g.map(function (x) { return x.days; })),
+      mins: mean(g.map(function (x) { return x.minutes; })),
+      gph: median(tested.map(function (x) { return x.gph; }).filter(function (v) { return v !== null; })),
+      defend: mean(g.map(function (x) { return x.defend; }).filter(function (v) { return v !== null; })),
+      sino: mean(g.map(function (x) { return x.sinoAcc; }).filter(function (v) { return v !== null; })) };
+  });
+  return out;
+}
+function groupSection(rows, info) {
+  var gs = groupStats(rows), ks = ["A1", "A2", "B1", "B2"];
+  var any = ks.some(function (k) { return gs[k].n; });
+  var h = '<h2 class="sec">' + esc(t("grpSec")) + ' <span class="' + (info.frozen ? "pill" : "mut") + '">' + esc(info.frozen ? t("grpFrozen") : t("grpDraft")) + "</span></h2>";
+  h += '<div class="card"><p class="mut small">' + esc(t("grpHow")) + '</p><p class="mut small">' + esc(t("grpIdx")) + "</p>";
+  if (!any) { h += '<p class="mut">' + esc(t("grpNone")) + "</p></div>"; return h; }
+  var cols = [t("grp"), t("grpN"), t("grpIdxAvg"), t("base"), t("last"), t("gain"), t("days"), t("mins"), t("gph"), t("defend"), t("sinoY")];
+  h += '<div class="scroll"><table><thead><tr>' + cols.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr></thead><tbody>" +
+    ks.map(function (k) {
+      var s = gs[k], g = D.GROUPS[k];
+      return '<tr><td><b style="color:' + g.color + '">' + esc(lang === "ko" ? g.ko : g.uz) + "</b></td><td>" + s.n + "</td><td>" + nz(s.idx, 1) + "</td><td>" + nz(s.base, 1) +
+        "</td><td>" + nz(s.last, 1) + "</td><td>" + (s.gain === null ? "–" : signed(Math.round(s.gain * 10) / 10)) + "</td><td>" + nz(s.days, 1) +
+        "</td><td>" + nz(s.mins, 0) + "</td><td>" + nz(s.gph, 1) + "</td><td>" + (s.defend === null ? "–" : Math.round(s.defend) + "%") +
+        "</td><td>" + (s.sino === null ? "–" : Math.round(s.sino) + "%") + "</td></tr>";
+    }).join("");
+  var mid = rows.length - ks.reduce(function (a, k) { return a + gs[k].n; }, 0);
+  h += '<tr><td class="mut">' + esc(t("grpMid")) + '</td><td class="mut">' + mid + '</td><td colspan="9"></td></tr>';
+  h += "</tbody></table></div>";
+  /* 동질성 확인과 수준 간 차이를 한 줄로 */
+  function diff(a, b, key) { return gs[a][key] === null || gs[b][key] === null ? null : Math.round((gs[a][key] - gs[b][key]) * 10) / 10; }
+  var ab = diff("A1", "A2", "gain"), band = (gs.A1.gain !== null && gs.B1.gain !== null)
+    ? Math.round((((gs.A1.gain + gs.A2.gain) / 2) - ((gs.B1.gain + gs.B2.gain) / 2)) * 10) / 10 : null;
+  h += '<table style="margin-top:14px"><tbody><tr><td>A1 − A2 ' + esc(t("gain")) + ' <span class="mut">(같은 실력끼리의 차이 = 측정 잡음)</span></td><td style="text-align:right">' +
+    (ab === null ? "–" : signed(ab)) + '</td></tr><tr><td>A(상위) − B(하위) ' + esc(t("gain")) + ' <span class="mut">(수준 간 차이)</span></td><td style="text-align:right">' +
+    (band === null ? "–" : signed(band)) + "</td></tr></tbody></table>";
+  if (C.API && !sample) {
+    h += '<p class="mut small" style="margin-top:12px">' + esc(t("grpFreezeHelp")) + '</p>' +
+      '<button id="freeze">' + esc(t("grpFree")) + '</button> ' +
+      (info.frozen ? '<button class="ghost" id="unfreeze">' + esc(t("grpUnfree")) + "</button>" : "");
+    if (groupMsg) h += ' <span class="pill">' + esc(groupMsg) + "</span>";
+  }
+  return h + "</div>";
+}
+
+/* ---------- 한자 어근 ---------- */
+function rootSection(co) {
+  var R = co.roots || {}, ks = D.ROOTS.map(function (r) { return r.k; }).filter(function (k) { return R[k] && R[k].n; });
+  var h = '<h2 class="sec">' + esc(t("rootSec")) + "</h2><div class=\"card\"><p class=\"mut small\">" + esc(t("rootHow")) + "</p>";
+  if (!ks.length) return h + '<p class="mut">' + esc(t("none")) + "</p></div>";
+  ks.sort(function (a, b) { return R[a].c / R[a].n - R[b].c / R[b].n; });
+  h += '<div class="scroll"><table><thead><tr><th>' + esc(t("rootK")) + "</th><th>" + esc(t("rootMean")) + "</th><th>" + esc(t("rootWords")) +
+    "</th><th>" + esc(t("items")) + "</th><th>" + esc(t("acc")) + "</th><th>" + esc(t("rootEarly")) + "</th><th>" + esc(t("rootLate")) + "</th><th>" + esc(t("rootDelta")) + "</th></tr></thead><tbody>";
+  var thin = false;
+  h += ks.map(function (k) {
+    var g = R[k], d = E.rootDef(k, B) || { s: "", ko: k, w: [] };
+    var e = num(g.en) ? pct(num(g.ec), num(g.en)) : null, l = num(g.ln) ? pct(num(g.lc), num(g.ln)) : null;
+    if (g.n < 20) thin = true;
+    return "<tr><td><b>" + esc(k) + "</b> " + esc(d.s) + "</td><td>" + esc(lang === "ko" ? d.ko : (d.uz || d.en)) + "</td><td class=\"mut\">" + esc(d.w.join(", ")) +
+      "</td><td>" + g.n + (g.n < 20 ? " *" : "") + "</td><td>" + pct(g.c, g.n) + "%</td><td>" + (e === null ? "–" : e + "%") + "</td><td>" + (l === null ? "–" : l + "%") +
+      "</td><td>" + (e === null || l === null ? "–" : signed(l - e)) + "</td></tr>";
+  }).join("");
+  h += "</tbody></table></div>";
+  h += '<p class="mut small">' + esc(t("rootSplit")) + "</p>";
+  if (thin) h += '<p class="mut small">* ' + esc(t("rootThin")) + "</p>";
+  return h + "</div>";
+}
+
+/* ---------- 부재 알림 ---------- */
+function noticeSection(rows) {
+  var h = '<h2 class="sec">' + esc(t("noteSec")) + '</h2><div class="card"><p class="mut small">' + esc(t("noteHow")) + "</p>";
+  var st = { 0: 0, 1: 0, 2: 0 };
+  rows.forEach(function (x) { var s = x.notify ? num(x.notify.stage) : 0; st[s > 2 ? 2 : s]++; });
+  var back = 0, byUid = {};
+  notices.forEach(function (n) { byUid[String(n.uid)] = n; });
+  rows.forEach(function (x) { if (byUid[x.uid] && x.notify && num(x.notify.stage) === 0) back++; });
+  var kp = [[t("noteOk"), st[0]], [t("note1"), st[1]], [t("note2"), st[2]], [t("noteSent"), notices.length], [t("noteBack"), back]];
+  h += '<div class="kpis">' + kp.map(function (k) { return '<div class="kpi"><b>' + esc(k[1]) + "</b><span>" + esc(k[0]) + "</span></div>"; }).join("") + "</div>";
+  var waiting = rows.filter(function (x) { return x.notify && num(x.notify.stage) > 0; })
+    .sort(function (a, b) { return num(b.notify.absentH) - num(a.notify.absentH); }).slice(0, 25);
+  if (waiting.length) {
+    h += '<div class="scroll"><table><thead><tr><th>' + esc(t("name")) + "</th><th>" + esc(t("grp")) + "</th><th>" + esc(t("noteAbsent")) + "</th><th>" + esc(t("kind")) + "</th></tr></thead><tbody>" +
+      waiting.map(function (x) {
+        return "<tr><td>" + esc(x.name) + "</td><td>" + esc(x.grp || "–") + "</td><td>" + (x.notify.absentH === null ? "–" : x.notify.absentH) +
+          "</td><td>" + esc(num(x.notify.stage) === 2 ? t("note2") : t("note1")) + "</td></tr>";
+      }).join("") + "</tbody></table></div>";
+  }
+  return h + "</div>";
+}
+
+/* ---------- 그리기 ---------- */
+function draw() {
+  var rows = users.map(row);
+  var h = '<div class="head"><div><div class="brand">CHALLON</div><h1>' + esc(t("title")) + '</h1></div><div>';
+  h += '<button class="ghost" id="lang">' + (lang === "ko" ? "O'zbekcha" : "한국어") + "</button> ";
+  if (C.API) h += '<input id="key" type="password" placeholder="' + esc(t("keyph")) + '" value="' + esc(adminKey) + '"> <button id="load">' + esc(users.length ? t("refresh") : t("login")) + "</button> ";
+  if (users.length) h += '<button class="ghost" id="out">' + esc(t("logout")) + "</button> ";
+  h += '<button class="ghost" id="sample">' + esc(t("sample")) + "</button> ";
+  if (rows.length) h += '<button class="ghost" id="csv">' + esc(t("csv")) + "</button>";
+  h += "</div></div>";
+  if (err) h += '<div class="warn">' + esc(err) + "</div>";
+  if (sample) h += '<div class="warn">' + esc(t("sampleWarn")) + "</div>";
+  if (partial) h += '<div class="warn">' + esc(t("oldBackend")) + "</div>";
+  if (!rows.length) {
+    h += '<div class="card">' + (C.API ? esc(t("needKey")) : "API가 설정되지 않았습니다. 가상 데이터로 화면을 확인할 수 있습니다.") + "</div>";
+    app.innerHTML = h; bind(rows); return;
+  }
+
+  var ginfo = applyGroups(rows);
+  var placed = rows.filter(function (r) { return r.base !== null; });
+  var tested = rows.filter(function (r) { return r.gain !== null; });
+  var gains = tested.map(function (r) { return r.gain; });
+  var r2 = corr(tested.map(function (x) { return x.minutes; }), gains);
+  var kpis = [
+    [t("students"), rows.length], [t("placed"), placed.length], [t("tested"), tested.length],
+    [t("avgGain"), gains.length ? (mean(gains) > 0 ? "+" : "") + mean(gains).toFixed(1) : "–"],
+    [t("gainers"), gains.length ? gains.filter(function (g) { return g > 0; }).length : "–"],
+    [t("avgMin"), Math.round(mean(rows.map(function (x) { return x.minutes; })) || 0)],
+    [t("perHour"), nz(median(tested.filter(function (x) { return x.gph !== null; }).map(function (x) { return x.gph; })), 1)],
+    [t("corr"), r2 === null ? "–" : r2.toFixed(2)]
+  ];
+  if (sessions.length) kpis.push([t("sessions"), sessions.length],
+    [t("practice"), sessions.filter(function (s) { return s.kind === "prac"; }).length],
+    [t("games"), sessions.filter(function (s) { return s.kind === "game"; }).length]);
+  h += '<div class="kpis">' + kpis.map(function (k) { return '<div class="kpi"><b>' + esc(k[1]) + "</b><span>" + esc(k[0]) + "</span></div>"; }).join("") + "</div>";
+
+  /* --- 차별 지표 --- */
+  var co = cohort(rows);
+  var dn = co.defend.held + co.defend.lost;
+  h += '<h2 class="sec">' + esc(t("edge")) + "</h2>";
+  h += '<div class="grid">';
+  h += '<div class="card"><h2>' + esc(t("defend")) + '</h2><div class="big">' + (dn ? pct(co.defend.held, dn) + "<small>%</small>" : "–") +
+    '</div><p class="mut">' + esc(t("defendD")) + (dn ? " · " + co.defend.held + " / " + dn : "") + "</p></div>";
+  var eks = Object.keys(co.err).sort(function (a, b) { return co.err[b] - co.err[a]; });
+  var etot = eks.reduce(function (a, k) { return a + co.err[k]; }, 0);
+  h += '<div class="card"><h2>' + esc(t("errDist")) + "</h2>" + (etot ? eks.map(function (k) {
+    var nm = D.ERR[k] ? (D.ERR[k][lang] || D.ERR[k].ko) : k;
+    return '<div class="barrow"><span>' + esc(k + " " + nm) + '</span><div class="bar"><i style="width:' + pct(co.err[k], etot) + '%"></i></div><b>' + co.err[k] + " (" + pct(co.err[k], etot) + "%)</b></div>";
+  }).join("") : '<p class="mut">' + esc(t("none")) + "</p>") + "</div></div>";
+
+  h += '<div class="grid"><div class="card"><h2>' + esc(t("sinoCmp")) + "</h2>" +
+    [[t("sinoY"), co.sino], [t("sinoN"), co.other]].map(function (p) {
+      return '<div class="barrow"><span>' + esc(p[0]) + '</span><div class="bar"><i style="width:' + pct(p[1].c, p[1].n) + '%"></i></div><b>' + (p[1].n ? pct(p[1].c, p[1].n) + "% (" + p[1].n + ")" : "–") + "</b></div>";
+    }).join("") + "</div>";
+  var l1k = Object.keys(co.l1).sort(function (a, b) { return co.l1[a].c / co.l1[a].n - co.l1[b].c / co.l1[b].n; });
+  h += '<div class="card"><h2>' + esc(t("l1tab")) + '</h2><div class="scroll"><table><thead><tr><th>' + esc(t("pattern")) + "</th><th>" + esc(t("area")) + "</th><th>" + esc(t("items")) + "</th><th>" + esc(t("acc")) + "</th></tr></thead><tbody>" +
+    (l1k.length ? l1k.map(function (k) {
+      var g = co.l1[k], d = D.L1[k] || { ko: k, sk: "" };
+      return "<tr><td>" + esc((d.n && d.n[lang]) || d.ko) + "</td><td>" + esc(d.sk) + "</td><td>" + g.n + "</td><td>" + pct(g.c, g.n) + "%</td></tr>";
+    }).join("") : '<tr><td colspan="4" class="mut">' + esc(t("none")) + "</td></tr>") + "</tbody></table></div></div></div>";
+  h += '<p class="mut small">' + esc(t("ruleNote")) + "</p>";
+
+  /* --- 한자 어근 --- */
+  h += rootSection(co);
+
+  /* --- 대조군 --- */
+  h += groupSection(rows, ginfo);
+
+  /* --- 부재 알림 --- */
+  if (notices.length || rows.some(function (x) { return x.notify; })) h += noticeSection(rows);
+
+  /* --- 효과 분석 --- */
+  var buckets = [["0~3", 0, 3], ["4~7", 4, 7], ["8~14", 8, 14], ["15+", 15, 9999]];
+  h += '<h2 class="sec">' + esc(t("byUsage")) + "</h2><div class=\"grid\"><div class=\"card\">" + buckets.map(function (b) {
+    var g = tested.filter(function (x) { return x.days >= b[1] && x.days <= b[2]; }).map(function (x) { return x.gain; }), m = mean(g);
+    return '<div class="barrow"><span>' + esc(b[0] + " " + t("days")) + ' <span class="mut">(' + g.length + ')</span></span><div class="bar"><i style="width:' + Math.max(0, Math.min(100, (m || 0) * 2.5)) + '%"></i></div><b>' + (m === null ? "–" : (m > 0 ? "+" : "") + m.toFixed(1)) + "</b></div>";
+  }).join("") + "</div>";
+  h += '<div class="card"><h2>' + esc(t("scatter")) + "</h2>" + scatter(tested) + "</div></div>";
+
+  /* --- 학생 표 --- */
+  var list = rows.filter(function (x) { return !query || x.name.toLowerCase().indexOf(query.toLowerCase()) >= 0; });
+  list.sort(function (a, b) { var x = a[sortKey], y = b[sortKey]; if (x === null) return 1; if (y === null) return -1; return (x > y ? 1 : x < y ? -1 : 0) * sortDir; });
+  var cols = [["name", t("name")], ["grp", t("grp")], ["idx", t("grpIdxAvg")], ["lvl0", t("lvl0")], ["plv", t("plv")], ["grade", t("goal")], ["profile", t("exam")], ["base", t("base")], ["last", t("last")], ["gain", t("gain")],
+    ["defend", t("defend")], ["sinoAcc", t("sinoY")], ["nTests", t("wtests")], ["days", t("days")], ["minutes", t("mins")], ["gph", t("gph")], ["xp", "XP"], ["weak", t("weakN")], ["over", t("overN")]];
+  h += '<h2 class="sec">' + esc(t("table")) + " (" + list.length + ')</h2><div class="card"><input id="q" placeholder="' + esc(t("search")) + '" value="' + esc(query) + '"><div class="scroll"><table><thead><tr>' +
+    cols.map(function (c) { return '<th data-k="' + c[0] + '">' + esc(c[1]) + (sortKey === c[0] ? (sortDir > 0 ? " ▲" : " ▼") : "") + "</th>"; }).join("") + "</tr></thead><tbody>" +
+    (list.length ? list.map(function (x) {
+      var G = D.GROUPS[x.grp];
+      return '<tr data-u="' + esc(x.uid) + '"' + (selected === x.uid ? ' class="sel"' : "") + "><td>" + esc(x.name) +
+        "</td><td>" + (G ? '<b style="color:' + G.color + '">' + esc(lang === "ko" ? G.ko : G.uz) + "</b>" : '<span class="mut">–</span>') +
+        "</td><td>" + nz(x.idx, 1) + "</td><td>" + (x.lvl0 === null ? "–" : "L" + x.lvl0) + "</td><td>" + (x.plv === null ? "–" : "L" + x.plv) +
+        "</td><td>" + (x.grade === null ? "–" : "TOPIK " + x.grade) + "</td><td>" + esc(x.profile === "eps" ? "EPS" : "학술") + "</td><td>" + nz(x.base) + "</td><td>" + nz(x.last) + "</td><td>" + signed(x.gain) +
+        "</td><td>" + (x.defend === null ? "–" : x.defend + "%") + "</td><td>" + (x.sinoAcc === null ? "–" : x.sinoAcc + "%") + "</td><td>" + x.nTests + "</td><td>" + x.days + "</td><td>" + x.minutes + "</td><td>" + nz(x.gph, 1) +
+        "</td><td>" + x.xp + "</td><td>" + x.weak + "</td><td>" + x.over + "</td></tr>";
+    }).join("") : '<tr><td colspan="' + cols.length + '" class="mut">' + esc(t("noStudent")) + "</td></tr>") + "</tbody></table></div></div>";
+
+  if (selected) { var u = list.concat(rows).filter(function (x) { return x.uid === selected; })[0]; if (u) h += detail(u); }
+  app.innerHTML = h; bind(rows);
+}
+
+function scatter(rows) {
+  if (!rows.length) return '<p class="mut">' + esc(t("noTest")) + "</p>";
+  var W = 520, H = 230, Lf = 34, Bm = 26;
+  var mx = Math.max.apply(null, rows.map(function (r) { return r.minutes; })) || 1;
+  var lo = Math.min(-10, Math.min.apply(null, rows.map(function (r) { return r.gain; })));
+  var hi = Math.max(10, Math.max.apply(null, rows.map(function (r) { return r.gain; })));
+  function X(v) { return Lf + v / mx * (W - Lf - 10); }
+  function Y(v) { return 8 + (hi - v) / (hi - lo) * (H - Bm - 8); }
+  return '<svg viewBox="0 0 ' + W + " " + H + '" width="100%" role="img"><line x1="' + Lf + '" x2="' + (W - 10) + '" y1="' + Y(0) + '" y2="' + Y(0) + '" stroke="#C9C3B4"/><line x1="' + Lf + '" x2="' + Lf + '" y1="8" y2="' + (H - Bm) + '" stroke="#C9C3B4"/>' +
+    '<text x="4" y="' + (Y(hi) + 8) + '">+' + hi + '</text><text x="4" y="' + (Y(0) + 4) + '">0</text><text x="4" y="' + Y(lo) + '">' + lo + '</text>' +
+    '<text x="' + (W - 10) + '" y="' + (H - 6) + '" text-anchor="end">' + mx + '분</text><text x="' + Lf + '" y="' + (H - 6) + '">0</text>' +
+    rows.map(function (r) { return '<circle cx="' + X(r.minutes).toFixed(1) + '" cy="' + Y(r.gain).toFixed(1) + '" r="4" fill="#0E5A52" fill-opacity=".55"><title>' + esc(r.name + ": " + r.minutes + "분, " + r.gain) + "</title></circle>"; }).join("") + "</svg>";
+}
+
+function detail(u) {
+  var st = u.st, h = '<div class="card" id="detail"><h2>' + esc(u.name) + ' <span class="mut">· ' + esc(u.uid) + (u.joined ? " · " + esc(u.joined) : "") + "</span></h2>";
+  var G = D.GROUPS[u.grp];
+  h += '<div class="kpis">' + [[t("plv"), st.plv === undefined || st.plv === null ? "–" : "L" + st.plv], [t("goal"), st.grade ? "TOPIK " + st.grade : "–"],
+    ["XP", num(st.xp)], [t("defend"), u.defend === null ? "–" : u.defend + "%"],
+    [t("grp"), G ? (lang === "ko" ? G.ko : G.uz) : "–"], [t("grpIdxAvg"), u.idx === null ? "–" : u.idx]
+  ].map(function (k) { return '<div class="kpi"><b>' + esc(k[1]) + "</b><span>" + esc(k[0]) + "</span></div>"; }).join("") + "</div>";
+
+  h += '<div class="grid"><div><h2>' + esc(t("placement")) + ' / ' + esc(t("wtests")) + '</h2><table><thead><tr><th>' + esc(t("kind")) + "</th><th>" + esc(t("date")) + "</th><th>" + esc(t("score")) + "</th><th>R</th><th>L</th><th>W</th></tr></thead><tbody>" +
+    ((st.tests || []).length ? st.tests.map(function (x) {
+      return "<tr><td>" + (x.form ? x.form + "주차" : t("placement")) + "</td><td>" + esc(x.date) + "</td><td>" + x.score + "</td>" +
+        ["R", "L", "W"].map(function (k) { return "<td>" + (x.sk && x.sk[k] ? x.sk[k][0] + "/" + x.sk[k][1] : "–") + "</td>"; }).join("") + "</tr>";
+    }).join("") : '<tr><td colspan="6" class="mut">' + esc(t("none")) + "</td></tr>") + "</tbody></table></div>";
+
+  h += '<div><h2>' + esc(t("skills")) + "</h2>" + E.SKILLS.map(function (k) {
+    var a = st.types ? E.skillAcc(st, k) : null, p = a === null ? 0 : Math.round(a * 100);
+    return '<div class="barrow"><span>' + esc({ R: "읽기", L: "듣기", W: "쓰기" }[k]) + '</span><div class="bar"><i style="width:' + p + '%"></i></div><b>' + (a === null ? "–" : p + "%") + "</b></div>";
+  }).join("");
+  var ue = st.errs || {}, uek = Object.keys(ue).sort(function (a, b) { return ue[b] - ue[a]; });
+  h += "<h2 style='margin-top:14px'>" + esc(t("errDist")) + "</h2>" + (uek.length ? uek.map(function (k) {
+    return '<span class="pill">' + esc(k + " " + (D.ERR[k] ? (D.ERR[k][lang] || D.ERR[k].ko) : k) + " · " + ue[k]) + "</span>"; }).join("") : '<span class="mut">' + esc(t("none")) + "</span>");
+  var ur = st.roots || {}, urk = Object.keys(ur).sort(function (a, b) { return ur[a].c / ur[a].n - ur[b].c / ur[b].n; });
+  h += "<h2 style='margin-top:14px'>" + esc(t("rootSec")) + "</h2>" + (urk.length ? urk.map(function (k) {
+    var d = E.rootDef(k, B) || { s: "" };
+    return '<span class="pill">' + esc(k + d.s + " " + pct(ur[k].c, ur[k].n) + "% (" + ur[k].n + ")") + "</span>"; }).join("") : '<span class="mut">' + esc(t("none")) + "</span>");
+  h += "</div></div>";
+
+  var mine = sessions.filter(function (s) { return String(s.uid) === u.uid && (kindFilter === "all" || s.kind === kindFilter); })
+    .sort(function (a, b) { return String(b.ts).localeCompare(String(a.ts)); });
+  if (sessions.length) {
+    var KN = { place: t("placement"), prac: t("practice"), week: t("wtests"), game: t("games") };
+    h += '<h2 style="margin-top:16px">' + esc(t("history")) + '</h2><select id="kind"><option value="all">' + esc(t("allKinds")) + "</option>" +
+      ["place", "prac", "week", "game"].map(function (k) { return '<option value="' + k + '"' + (kindFilter === k ? " selected" : "") + ">" + esc(KN[k]) + "</option>"; }).join("") + "</select>";
+    h += '<div class="scroll"><table><thead><tr><th>' + esc(t("date")) + "</th><th>" + esc(t("kind")) + "</th><th>" + esc(t("result")) + "</th><th>" + esc(t("score")) + "</th><th>" + esc(t("time")) + "</th><th>XP</th></tr></thead><tbody>" +
+      (mine.length ? mine.map(function (s) {
+        return "<tr><td>" + esc(String(s.date).slice(0, 10)) + "</td><td>" + esc(KN[s.kind] || s.kind) + "</td><td>" + num(s.correct) + " / " + num(s.n) + " (" + pct(num(s.correct), num(s.n)) + "%)</td><td>" +
+          (s.score === null || s.score === "" ? "–" : esc(s.score)) + "</td><td>" + num(s.sec) + "s</td><td>" + num(s.xp) + "</td></tr>";
+      }).join("") : '<tr><td colspan="6" class="mut">' + esc(t("none")) + "</td></tr>") + "</tbody></table></div>";
+  }
+  return h + "</div>";
+}
+
+/* ---------- 동작 ---------- */
+function bind(rows) {
+  function q(s) { return app.querySelector(s); }
+  if (q("#lang")) q("#lang").onclick = function () { lang = lang === "ko" ? "uz" : "ko"; try { localStorage.setItem("challon_admin_lang", lang); } catch (e) {} draw(); };
+  if (q("#load")) q("#load").onclick = function () { adminKey = q("#key").value; load(); };
+  if (q("#out")) q("#out").onclick = function () { users = []; sessions = []; responses = []; agg = null; place = {}; groupRows = []; notices = []; respPlace = null; selected = null; sample = false; partial = false; adminKey = ""; draw(); };
+  if (q("#sample")) q("#sample").onclick = function () {
+    var d = simulate(); users = d.users; sessions = d.sessions; responses = d.responses; notices = d.notices;
+    agg = null; place = {}; groupRows = []; respPlace = null; groupMsg = ""; sample = true; partial = false; err = ""; selected = null; draw();
+  };
+  if (q("#freeze")) q("#freeze").onclick = function () { freeze(rows, false); };
+  if (q("#unfreeze")) q("#unfreeze").onclick = function () { freeze(rows, true); };
+  if (q("#csv")) q("#csv").onclick = function () { exportCsv(rows); };
+  if (q("#q")) { var inp = q("#q"); inp.oninput = function () { query = inp.value; draw(); var n = app.querySelector("#q"); if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); } }; }
+  if (q("#kind")) q("#kind").onchange = function () { kindFilter = q("#kind").value; draw(); };
+  Array.prototype.forEach.call(app.querySelectorAll("th[data-k]"), function (th) {
+    th.onclick = function () { var k = th.getAttribute("data-k"); if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = -1; } draw(); };
+  });
+  Array.prototype.forEach.call(app.querySelectorAll("tr[data-u]"), function (tr) {
+    tr.onclick = function () { selected = tr.getAttribute("data-u"); draw(); var d = document.getElementById("detail"); if (d) d.scrollIntoView({ behavior: "smooth" }); };
+  });
+}
+function load() {
+  if (!adminKey) { err = t("needKey"); return draw(); }
+  err = t("loading"); draw();
+  fetch(C.API, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "admin", key: adminKey }) })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d || !d.ok) { err = (d && d.error) || "불러오지 못했습니다."; users = []; return draw(); }
+      users = (d.users || []).filter(function (u) { return u.state; });
+      sessions = Array.isArray(d.sessions) ? d.sessions : [];
+      responses = Array.isArray(d.responses) ? d.responses : [];
+      agg = d.agg && d.agg.total ? d.agg : null;
+      place = d.place || {}; groupRows = d.groups || []; notices = d.notices || []; respPlace = null; groupMsg = "";
+      partial = !Array.isArray(d.sessions) || !Array.isArray(d.responses);
+      sample = false; err = ""; selected = null; draw();
+    })
+    .catch(function () { err = t("noNet"); users = []; draw(); });
+}
+/* 계산한 분류를 서버에 박아 둔다. 해제하면 다시 잠정 계산으로 돌아간다. */
+function freeze(rows, clear) {
+  if (!C.API || !adminKey) { groupMsg = t("needKey"); return draw(); }
+  var payload = clear ? [] : rows.filter(function (x) { return x.calcGrp; }).map(function (x) {
+    return { uid: x.uid, name: x.name, grp: x.calcGrp, idx: x.idx, rank: x.rank, score: x.base };
+  });
+  groupMsg = t("loading"); draw();
+  fetch(C.API, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "setgroups", key: adminKey, groups: payload, clear: !!clear }) })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d || !d.ok) { groupMsg = (d && d.error) || "실패"; return draw(); }
+      groupRows = clear ? [] : payload.map(function (p) { return { uid: p.uid, name: p.name, grp: p.grp, idx: p.idx, rank: p.rank, score: p.score }; });
+      groupMsg = clear ? "" : t("grpSaved"); draw();
+    })
+    .catch(function () { groupMsg = t("noNet"); draw(); });
+}
+
+function exportCsv(rows) {
+  var head = ["uid", "name", "lang", "joined", "control_group", "group_index", "group_rank", "exam_profile", "placement_level", "current_level", "goal_grade", "placement_score", "latest_score", "gain",
+    "defend_rate", "sino_accuracy", "top_error", "weekly_tests", "practice_days", "minutes", "gain_per_hour", "xp", "weak_types", "overcome", "notify_stage", "absent_hours"];
+  var lines = [head].concat(rows.map(function (x) {
+    return [x.uid, x.name, x.lang, x.joined, x.grp, x.idx, x.rank, x.profile, x.lvl0, x.plv, x.grade, x.base, x.last, x.gain, x.defend, x.sinoAcc, x.topErr,
+      x.nTests, x.days, x.minutes, x.gph, x.xp, x.weak, x.over, x.notify ? x.notify.stage : "", x.notify ? x.notify.absentH : ""];
+  }));
+  /* 어근별 집계: 배치 대비 주간시험 변화까지 한 표에 */
+  var R = cohort(rows).roots || {};
+  var rk = Object.keys(R);
+  if (rk.length) {
+    lines.push([]); lines.push(["--- sino roots ---"]);
+    lines.push(["root", "syllable", "meaning_ko", "words", "items", "correct", "accuracy", "first_half_items", "first_half_accuracy", "second_half_items", "second_half_accuracy", "delta", "place_items", "place_accuracy", "week_items", "week_accuracy"]);
+    rk.forEach(function (k) {
+      var g = R[k], d = E.rootDef(k, B) || { s: "", ko: k, w: [] };
+      var p = num(g.pn) ? pct(num(g.pc), num(g.pn)) : "", w = num(g.wn) ? pct(num(g.wc), num(g.wn)) : "";
+      var e = num(g.en) ? pct(num(g.ec), num(g.en)) : "", l = num(g.ln) ? pct(num(g.lc), num(g.ln)) : "";
+      lines.push([k, d.s, d.ko, d.w.join(" "), g.n, g.c, pct(g.c, g.n), num(g.en), e, num(g.ln), l, e === "" || l === "" ? "" : l - e, num(g.pn), p, num(g.wn), w]);
+    });
+  }
+  if (responses.length) {
+    lines.push([]); lines.push(["--- responses ---"]);
+    lines.push(["uid", "control_group", "session_id", "unit", "type", "skill", "level", "ok", "first_ok", "error", "l1_pattern", "sino", "root", "ms", "changes", "skipped"]);
+    var grpOf = {}; rows.forEach(function (x) { grpOf[x.uid] = x.grp; });
+    responses.forEach(function (r) { lines.push([r.uid, grpOf[String(r.uid)] || "", r.session_id, r.unit, r.type, r.skill, r.level, r.ok, r.fok, r.err, r.l1, r.sino, r.root, r.ms, r.changes, r.skipped]); });
+  }
+  var csv = "﻿" + lines.map(function (l) { return l.map(function (c) { return '"' + String(c === null || c === undefined ? "" : c).replace(/"/g, '""') + '"'; }).join(","); }).join("\n");
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = "challon_export.csv"; a.click();
+}
+
+/* ---------- 가상 데이터 (화면 확인용) ---------- */
+function simulate() {
+  var names = ["Aziz", "Dilnoza", "Jasur", "Madina", "Sardor", "Nigora", "Bekzod", "Zarina", "Otabek", "Shahlo"];
+  var U = [], S = [], R = [], N = [];
+  function day(n) { return new Date(Date.UTC(2026, 10, 16) + n * 864e5).toISOString().slice(0, 10); }
+  for (var i = 0; i < 100; i++) {
+    var rnd = E.rng(7000 + i), ability = i < 40 ? -1 + rnd() * 0.9 : 0.3 + rnd() * 3.2, attend = 0.15 + rnd() * 0.85, learned = 0;
+    var st = E.newState("sample-" + i, i % 3 ? "uz" : "ru", day(0));
+    st.profile = i % 5 === 0 ? "eps" : "academic";
+    var uid = st.uid;
+    function answer(it) {
+      var p = Math.max(0.03, Math.min(0.97, 0.5 + (ability + learned - it.lv) * 0.35)), k = rnd() < p;
+      return it.mode === "tiles" ? (k ? it.answer : null) : (k || rnd() < 0.25 ? it.ans : (it.ans + 1) % 4);
+    }
+    function recsOf(items, oks) {
+      return items.map(function (it, j) {
+        var changed = rnd() < 0.18;
+        return { ok: oks[j], firstOk: changed && !oks[j] ? true : (oks[j] && rnd() < 0.12), pick: it.mode === "mc" ? (oks[j] ? it.ans : (it.ans + 1) % 4) : null, ms: 3000 + Math.floor(rnd() * 20000), skip: !oks[j] && rnd() < 0.1 ? 1 : 0 };
+      });
+    }
+    function push(kind, form, items, oks, recs, d, sec, score, xp) {
+      var sid = uid + "-" + S.length;
+      S.push({ uid: uid, session_id: sid, kind: kind, form: form, date: d, ts: d + "T10:00:00Z", n: items.length, correct: oks.filter(Boolean).length, score: score, sec: sec, xp: xp });
+      items.forEach(function (it, j) {
+        R.push({ uid: uid, session_id: sid, kind: kind, unit: it.uid, type: it.type, skill: it.skill, level: it.lv, seen: 1, ok: oks[j] ? 1 : 0,
+          fok: recs[j].firstOk ? 1 : 0, err: E.classify(it, recs[j]) || "", l1: it.l1 || "", sino: it.sino ? 1 : 0, root: it.root || "", ms: recs[j].ms, changes: 0, skipped: recs[j].skip });
+      });
+    }
+    function test(f, d) {
+      var items = E.buildTest(f, B, rnd, st.lang), oks = [];
+      for (var j = 0; j < items.length; j++) { oks.push(E.check(items[j], answer(items[j]))); if (E.testStop(oks)) break; }
+      while (oks.length < items.length) oks.push(false);
+      var recs = recsOf(items, oks), sec = 240 + Math.floor(rnd() * 240);
+      var r = E.applyTest(st, f, items, oks, d, sec, recs);
+      push(f === 0 ? "place" : "week", f, items, oks, recs, d, sec, r.score, 30);
+    }
+    test(0, day(0));
+    var lastD = 0;
+    for (var d2 = 0; d2 < 28; d2++) {
+      var due = E.weekDue(st, day(d2), 7);
+      if (due && rnd() < attend + 0.2) { test(due, day(d2)); lastD = d2; }
+      if (rnd() > attend) continue;
+      lastD = d2;
+      var items = E.pickPractice(st, B, rnd, st.lang), oks = items.map(function (it) { return E.check(it, answer(it)); });
+      var recs = recsOf(items, oks), sec = 300 + Math.floor(rnd() * 240);
+      var pr = E.applyPractice(st, items, oks, day(d2), sec, recs);
+      push("prac", null, items, oks, recs, day(d2), sec, null, pr.xp);
+      learned += 0.035;
+      if (rnd() < 0.3) { var g = 60 + Math.floor(rnd() * 240); st.sec.game += g; var gx = E.gameXp(Math.floor(g / 6), g); st.xp += gx;
+        S.push({ uid: uid, session_id: uid + "-g" + d2, kind: "game", form: "match", date: day(d2), ts: day(d2) + "T20:00:00Z", n: 10, correct: 7, score: null, sec: g, xp: gx }); }
+    }
+    /* 부재 알림 상태: 마지막 학습일로부터 얼마나 지났는지로 단계를 만든다 */
+    var absentH = (27 - lastD) * 24, stage = absentH >= 66 ? 2 : absentH >= 48 ? 1 : 0;
+    var nm = names[i % 10] + " " + (i + 1);
+    if (stage >= 1) N.push({ ts: day(27) + "T19:00:00Z", uid: uid, email: "s" + i + "@example.com", stage: stage, absent_hours: absentH });
+    U.push({ uid: uid, name: nm, username: "u" + i, state: st, notify: { stage: stage, at: "", absentH: absentH, lastLoginH: absentH } });
+  }
+  return { users: U, sessions: S, responses: R, notices: N };
+}
+draw();
+})();
 </script>
 </body>
 </html>

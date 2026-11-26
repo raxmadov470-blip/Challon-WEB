@@ -10,7 +10,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
-#app{max-width:520px;margin:0 auto;padding:18px 16px 110px;min-height:100vh}
+#app{max-width:520px;margin:0 auto;padding:18px 16px 132px;min-height:100vh}
 h1{font-size:24px;line-height:1.3;margin:10px 0 16px;font-weight:700;letter-spacing:-.01em}
 h2{font-size:17px;margin:0 0 6px;font-weight:700}
 p{margin:0 0 12px;color:var(--mut)}
@@ -82,6 +82,14 @@ input:focus,button:focus-visible{outline:2px solid var(--pri);outline-offset:2px
 .toast{position:fixed;left:16px;right:16px;bottom:90px;background:var(--ink);color:#fff;border-radius:12px;padding:12px 16px;font-size:14px;text-align:center;z-index:9}
 .hello{margin-top:6px}
 @media (prefers-reduced-motion:no-preference){.bar i{transition:width .25s}}
+
+.l1{border:1px solid #CFE0DC;background:#F2F8F6;border-radius:12px;padding:14px 16px;margin-top:10px;font-size:15px;line-height:1.6}
+.l1 b{display:block;color:var(--pri);font-size:13.5px;margin-bottom:6px}
+.root{border:1px solid #E3D6BE;background:#FBF6EC;border-radius:12px;padding:12px 16px;margin-top:10px}
+.root b{display:block;color:#8A6520;font-size:13.5px;margin-bottom:8px}
+.root .rootw .pill{background:#F2E6CE;color:#7A5A1C}
+
+select{width:100%;font:inherit;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -89,9 +97,9 @@ input:focus,button:focus-visible{outline:2px solid var(--pri);outline-offset:2px
 <script>
 /* ===== Settings: fill these in before deployment (see README) ===== */
 window.CHALLON_CONFIG = {
-  API: "https://script.google.com/macros/s/AKfycbzvbsDw5n-gOkB3z7AHA3Zjem2lyBEp9nl0uLiaFv7-I-sUSPYaK7x_pZudcs8mSK7xRw/exec",          // Apps Script web app URL (…/exec). Empty = local test mode, nothing is sent.
-  GOOGLE_CLIENT_ID: "278228549339-rpbhi0kc2iakhug2b43cc4pae9fdmv7l.apps.googleusercontent.com", // Google OAuth client ID (….apps.googleusercontent.com). Empty = no Google button. Needs API as well.
-  DEMO: false,       // true shows the name-only test login. Set false for the real pilot.
+  API: "https://script.google.com/macros/s/AKfycbzvbsDw5n-gOkB3z7AHA3Zjem2lyBEp9nl0uLiaFv7-I-sUSPYaK7x_pZudcs8mSK7xRw/exec", // Apps Script 웹앱 주소(…/exec). 비우면 로컬 테스트 모드.
+  GOOGLE_CLIENT_ID: "278228549339-rpbhi0kc2iakhug2b43cc4pae9fdmv7l.apps.googleusercontent.com", // 구글 OAuth 클라이언트 ID
+  DEMO: false,      // true면 이름만 넣는 테스트 로그인이 보입니다. 실제 운영은 false.
   WEEK_DAYS: 7,     // days between weekly tests
   TZ_OFFSET: 5,     // Uzbekistan time (UTC+5) decides what "today" is
   AUDIO_FILES: false, // true = play audio/<item id>.mp3; false = phone's built-in Korean voice
@@ -410,6 +418,146 @@ D.TEST = [
       "여자: 단어를 하루에 백 개씩 외우는 것이 좋을까요?\n남자: 개수를 늘리는 것보다 적은 단어를 문장 속에서 여러 번 써 보는 것이 더 효과적이라고 생각합니다.|남자의 중심 생각은 무엇입니까?|단어는 개수보다 외우는 방법이 중요하다.|단어는 많이 외울수록 좋다.|단어를 외울 필요가 없다.|단어는 문장 없이 외워야 한다."]
 }];
 
+
+/* ============================================================
+   차별 기능 데이터 계층 (2026-11-20 추가)
+   - SINO : 한자어 표제어. 중앙아시아 학습자의 최대 격차 가설을 재기 위한 태그
+   - L1   : 모국어 대조 설명. 문항마다가 아니라 "패턴"마다 하나씩 둔다
+   모든 분류는 규칙 기반 자동 분류이며 원어민 검수 전 초안이다.
+   ============================================================ */
+
+D.SINO = [
+"학교","학생","선생","병원","전화","자동차","비행기","시계","모자","의자","우유","공부",
+"시간","주말","가족","음식","영화","음악","운동","여행","약속","준비","도착","출발","초대",
+"연습","편리","복잡","건강","경험","계획","교통","문화","회사","취미","선물","기분","방법","이유",
+"결정","참석","신청","취소","확인","설명","해결","비교","포기","부족","충분","다양","정확",
+"환경","관심","결과","원인","기회","습관","성격","분위기","정보","의견","물가","자료",
+"영향","발전","증가","감소","유지","제공","극복","예상","주장","강조","개선","활용","적응",
+"효과","경쟁","책임","가치","태도","현상","세대","갈등","조사","비용","대책","전문","긍정","부정","심각",
+"교실","수업","시험","문제","질문","대답","사진","지하철","은행","식당","시장","공원","도서관",
+"주차","참여","활동","생활","사용","관리","중요","필요","가능","시작","계속","변화","방문","예약"
+];
+
+/* 연결어미·조사 목록: l1 패턴 자동 판정에 쓴다 */
+D.CONN = ["는데","은데","ㄴ데","어서","아서","으면","면서","자마자","느라고","바람에","덕분에",
+"김에","탓에","거나","지만","더니","수록","도록","니까","려면","으려고","려고","아도","어도",
+"만큼","처럼","대신","불구하고","따라","위해","위해서","반면","바탕","대상","비해","마련"];
+D.PART = ["을","를","이","가","은","는","에","에서","와","과","에게","보다","으로","로","도","만","부터","까지","의"];
+
+/* 모국어 대조 설명. applies = 이 패턴이 어느 영역에서 주로 나타나는가 */
+D.L1 = {
+sino: { ko: "한자어", n: { ko: "한자어", uz: "Xitoy ildizli so'zlar", ru: "Слова китайского корня", en: "Sino-Korean words" }, sk: "R",
+  uz: "Bu so'z xitoy ildizli (한자어). O'zbek va rus tilida bunday umumiy ildiz yo'q, shuning uchun taxmin qilib bo'lmaydi — yodlab olish kerak. Lekin bir ildiz ko'p so'zda takrorlanadi: 학(學)=o'qish → 학교, 학생, 학기.",
+  ru: "Это слово китайского происхождения (한자어). В узбекском и русском нет общего корня, поэтому угадать нельзя — нужно запомнить. Зато один корень повторяется во многих словах: 학(學)=учёба → 학교, 학생, 학기.",
+  en: "This word has a Chinese root (한자어). Uzbek and Russian share no such root, so it cannot be guessed — it must be learned. One root repeats across many words: 학 (study) → 학교, 학생, 학기.",
+  note: "TOPIK II 읽기의 핵심 격차. 베트남어 화자와 달리 중앙아시아 학습자는 기댈 배경이 없다." },
+topic: { ko: "조사 (은/는 vs 이/가)", n: { ko: "조사 (은/는 vs 이/가)", uz: "Kelishik qo'shimchalari", ru: "Падежные частицы", en: "Particles" }, sk: "R",
+  uz: "O'zbek tilida ham kelishik qo'shimchalari bor, lekin 은/는 va 이/가 farqi bir xil emas. 은/는 = gap mavzusi, 이/가 = yangi yoki ta'kidlangan ega.",
+  ru: "В узбекском тоже есть падежные окончания, но различие 은/는 и 이/가 не совпадает. 은/는 — тема предложения, 이/가 — новое или выделенное подлежащее.",
+  en: "Uzbek also marks case, but the 은/는 vs 이/가 split does not map onto it. 은/는 marks the topic, 이/가 marks a new or focused subject.",
+  note: "우즈베크어는 교착어라 격 표지 자체는 유리하지만 주제-주격 구분은 일대일로 옮겨지지 않는다." },
+conn: { ko: "연결어미", n: { ko: "연결어미", uz: "Bog'lovchi qo'shimchalar", ru: "Соединительные окончания", en: "Connective endings" }, sk: "R",
+  uz: "O'zbek tilidagi bitta ravishdosh shakli koreys tilida bir nechta qo'shimchaga bo'linadi: -어서 (sabab), -는데 (zid/fon), -으면 (shart). Ularni alohida yodlang.",
+  ru: "Одна узбекская деепричастная форма в корейском распадается на несколько: -어서 (причина), -는데 (фон/противопоставление), -으면 (условие). Учите их по отдельности.",
+  en: "One Uzbek converb form splits into several Korean endings: -어서 (cause), -는데 (background/contrast), -으면 (condition). Learn them separately.",
+  note: "다대일 구간. 오답이 몰릴 것으로 예상한 지점." },
+stop3: { ko: "삼중 파열음 (ㄱ/ㅋ/ㄲ)", n: { ko: "삼중 파열음 (ㄱ/ㅋ/ㄲ)", uz: "Uch xil undosh", ru: "Три типа согласных", en: "Three-way consonants" }, sk: "L",
+  uz: "Koreys tilida uch xil tovush bor: 가/카/까. O'zbek va rus tilida bu farq yo'q, shuning uchun quloq bilan ajratish qiyin. Ovozni ikki marta tinglang.",
+  ru: "В корейском три разных звука: 가/카/까. В узбекском и русском такого различия нет, поэтому на слух их трудно различить. Прослушайте запись дважды.",
+  en: "Korean has a three-way contrast: 가/카/까. Neither Uzbek nor Russian has it, so it is hard to hear. Listen twice.",
+  note: "듣기 변별 오류의 1순위 가설." },
+batchim: { ko: "받침과 연음", n: { ko: "받침과 연음", uz: "So'z oxiri va bog'lanish", ru: "Конечный согласный и связывание", en: "Final consonants and linking" }, sk: "L",
+  uz: "So'z oxiridagi undosh (받침) keyingi bo'g'inga ko'chadi: 한국어 → [한구거]. Shuning uchun eshitganda so'z chegarasi boshqacha tuyuladi.",
+  ru: "Конечный согласный (받침) переходит в следующий слог: 한국어 → [한구거]. Поэтому на слух граница слова кажется другой.",
+  en: "A final consonant (받침) links into the next syllable: 한국어 → [한구거]. Word boundaries therefore sound different from how they are written.",
+  note: "듣기에서 단어 경계를 잘못 끊는 오류." },
+spell: { ko: "표기·받침 쓰기", n: { ko: "표기·받침 쓰기", uz: "Imlo", ru: "Правописание", en: "Spelling" }, sk: "W",
+  uz: "Eshitilishi va yozilishi farq qiladi. 같이 [가치] deb o'qiladi, lekin 같이 deb yoziladi. Yozishda asl shaklni eslang.",
+  ru: "Произношение и написание различаются. 같이 читается [가치], но пишется 같이. При письме вспоминайте исходную форму.",
+  en: "Spelling and sound differ. 같이 is read [가치] but written 같이. When writing, recall the underlying form.",
+  note: "쓰기 영역 오류의 주요 원인." },
+count: { ko: "수 분류사", n: { ko: "수 분류사", uz: "Sanoq so'zlari", ru: "Счётные слова", en: "Counters" }, sk: "R",
+  uz: "Koreys tilida sanaganda tur so'zi kerak: odam 명, narsa 개, kitob 권, hayvon 마리. O'zbek tilida bunday majburiy ajratish yo'q.",
+  ru: "При счёте в корейском нужен классификатор: люди 명, предметы 개, книги 권, животные 마리. В узбекском такого обязательного деления нет.",
+  en: "Korean counting needs a classifier: 명 for people, 개 for things, 권 for books, 마리 for animals. Uzbek has no such obligatory split.",
+  note: "초급에서 자주 틀리는 지점." },
+order: { ko: "어순·격조사", n: { ko: "어순·격조사", uz: "So'z tartibi", ru: "Порядок слов", en: "Word order" }, sk: "R",
+  uz: "Yaxshi xabar: koreys tili ham o'zbek tili kabi SOV (ega–to'ldiruvchi–kesim). Bu qism siz uchun oson bo'ladi.",
+  ru: "Хорошая новость: корейский, как и узбекский, имеет порядок SOV (подлежащее–дополнение–сказуемое). Эта часть будет для вас лёгкой.",
+  en: "Good news: Korean is SOV like Uzbek (subject–object–verb). This part should come easily to you.",
+  note: "긍정 전이. 학습자에게 강점을 알려 주는 용도." },
+honor: { ko: "높임·격식체", n: { ko: "높임·격식체", uz: "Hurmat shakllari", ru: "Вежливые формы", en: "Politeness forms" }, sk: "R",
+  uz: "Koreys tilida hurmat fe'l oxiriga qo'shiladi: 해요 / 합니다 / 해. TOPIK matnlarida ko'pincha 합니다 shakli ishlatiladi.",
+  ru: "Вежливость в корейском выражается окончанием глагола: 해요 / 합니다 / 해. В текстах TOPIK обычно используется форма 합니다.",
+  en: "Korean politeness is carried by the verb ending: 해요 / 합니다 / 해. TOPIK texts mostly use the 합니다 form.",
+  note: "시험 문체 적응." },
+infer: { ko: "추론·중심 생각", n: { ko: "추론·중심 생각", uz: "Xulosa va asosiy fikr", ru: "Вывод и главная мысль", en: "Inference and main idea" }, sk: "R",
+  uz: "Javob matnda to'g'ridan-to'g'ri yozilmagan. Matnda ko'rgan so'zni takrorlagan variant ko'pincha noto'g'ri bo'ladi — mazmunni tekshiring.",
+  ru: "Ответ не написан в тексте прямо. Вариант, повторяющий слово из текста, часто оказывается неверным — проверяйте смысл.",
+  en: "The answer is not stated directly. An option that repeats a word from the text is often wrong — check the meaning.",
+  note: "함정 선택지(E04)와 함께 나타난다." }
+};
+
+/* 오류 원인 코드 */
+D.ERR = {
+E01: { ko: "어휘·문법", uz: "Lug'at va grammatika", ru: "Лексика и грамматика", en: "Vocabulary and grammar" },
+E02: { ko: "연결어미", uz: "Bog'lovchi qo'shimcha", ru: "Соединительное окончание", en: "Connective ending" },
+E03: { ko: "추론", uz: "Xulosa chiqarish", ru: "Вывод по тексту", en: "Inference" },
+E04: { ko: "함정 선택지", uz: "Tuzoq variant", ru: "Ловушка в вариантах", en: "Keyword trap" },
+E05: { ko: "시간 압박", uz: "Vaqt yetishmovchiligi", ru: "Нехватка времени", en: "Time pressure" },
+E06: { ko: "과잉 수정", uz: "Javobni o'zgartirish", ru: "Исправление верного ответа", en: "Over-correction" }
+};
+
+/* 시험 프로필. EPS-TOPIK = 읽기·듣기, 기초 수준(레벨 0~2). 학술 TOPIK = 전 영역 */
+D.PROFILES = {
+academic: { ko: "학술 TOPIK", uz: "Akademik TOPIK", ru: "Академический TOPIK", en: "Academic TOPIK", skills: ["R", "L", "W"], maxLv: 4 },
+eps: { ko: "EPS-TOPIK (고용허가제)", uz: "EPS-TOPIK (ish vizasi)", ru: "EPS-TOPIK (рабочая виза)", en: "EPS-TOPIK (work permit)", skills: ["R", "L"], maxLv: 2 }
+};
+
+/* ============================================================
+   한자 어근 태그
+   ------------------------------------------------------------
+   효율 기준으로 고른다: 이 문제은행 안에 실제로 두 개 이상의 단어가 있는 어근만 남겼다.
+   단어 하나에만 나타나는 어근은 외워 봐야 전이가 없으므로 넣지 않았다.
+   w = 이 어근이 들어간 단어(어간). 한 단어는 한 어근에만 속한다.
+   판정은 w의 부분 문자열 일치. 순서대로 먼저 맞는 어근 하나만 붙는다.
+   ============================================================ */
+D.ROOTS = [
+{ k: "車", s: "차", ko: "탈것", uz: "transport", ru: "транспорт", en: "vehicle", w: ["자동차", "기차", "자전거"] },
+{ k: "行", s: "행", ko: "가다·다니다", uz: "yurmoq", ru: "идти, ходить", en: "go, move", w: ["비행기", "여행", "은행"] },
+{ k: "學", s: "학", ko: "배우다", uz: "o'rganmoq", ru: "учиться", en: "learn", w: ["학교", "학생"] },
+{ k: "時", s: "시", ko: "때", uz: "vaqt", ru: "время", en: "time", w: ["시간", "시계"] },
+{ k: "決", s: "결", ko: "정하다·끊다", uz: "hal qilmoq", ru: "решать", en: "decide", w: ["결정", "해결"] },
+{ k: "定", s: "정", ko: "정해지다", uz: "belgilanmoq", ru: "быть определённым", en: "be fixed", w: ["긍정", "부정"] },
+{ k: "價", s: "가", ko: "값", uz: "narx, qiymat", ru: "цена", en: "price, value", w: ["가치", "물가"] },
+{ k: "氣", s: "기", ko: "기운·분위기", uz: "kayfiyat", ru: "настроение", en: "air, mood", w: ["기분", "분위기"] },
+{ k: "食", s: "식", ko: "먹다", uz: "yemoq", ru: "есть, пища", en: "eat, food", w: ["음식", "식당"] },
+{ k: "對", s: "대", ko: "마주하다", uz: "qarshi, nisbatan", ru: "по отношению", en: "facing, toward", w: ["대상", "대책"] },
+{ k: "習", s: "습", ko: "익히다", uz: "o'rganish", ru: "привыкать", en: "practise", w: ["습관", "연습"] },
+{ k: "確", s: "확", ko: "확실하다", uz: "aniq", ru: "точный", en: "certain", w: ["정확", "확인"] },
+{ k: "發", s: "발", ko: "떠나다·펴다", uz: "chiqmoq", ru: "отправляться", en: "set out", w: ["출발", "발전"] },
+{ k: "果", s: "과", ko: "열매·결과", uz: "natija", ru: "результат", en: "result", w: ["결과", "효과"] },
+{ k: "用", s: "용", ko: "쓰다", uz: "ishlatmoq", ru: "использовать", en: "use", w: ["활용", "비용"] },
+{ k: "會", s: "회", ko: "모이다·만나다", uz: "to'planmoq", ru: "собираться", en: "meet, gather", w: ["회사", "기회"] },
+{ k: "家", s: "가", ko: "집·전문가", uz: "uy, mutaxassis", ru: "дом, специалист", en: "house, expert", w: ["가족", "전문가"] },
+{ k: "子", s: "자", ko: "물건을 뜻하는 끝말", uz: "narsa bildiruvchi qo'shimcha", ru: "суффикс предмета", en: "noun suffix for objects", w: ["의자", "모자"] }
+];
+
+/* ============================================================
+   대조군 분류 (배치고사 기준)
+   ------------------------------------------------------------
+   배치고사 결과만으로 학생을 줄 세우고, 상위 N명과 하위 N명을 각각 두 집단으로 쪼갠다.
+   A1/A2는 실력이 같은 두 집단, B1/B2도 마찬가지다. 그래서
+   A1 대 A2 비교 = 같은 실력끼리의 차이(= 측정 잡음), A 대 B 비교 = 수준 간 차이가 된다.
+   ============================================================ */
+D.GROUPS = {
+A1: { ko: "상위 A1", uz: "Yuqori A1", band: "A", color: "#0E5A52" },
+A2: { ko: "상위 A2", uz: "Yuqori A2", band: "A", color: "#2E8B7A" },
+B1: { ko: "하위 B1", uz: "Quyi B1", band: "B", color: "#9A5B2E" },
+B2: { ko: "하위 B2", uz: "Quyi B2", band: "B", color: "#C08A4E" }
+};
+D.GROUP_SIZE = 20; // 상위 20명 / 하위 20명
+
 if (typeof module !== "undefined" && module.exports) module.exports = D;
 else root.CHALLON_DATA = D;
 })(typeof window !== "undefined" ? window : this);
@@ -454,7 +602,7 @@ function sent(str, id, lv) {
 function quest(str, id, lv, k) { var p = str.split("|"); return { id: id, k: k, lv: lv, text: p[0], q: p[1], opts: p.slice(2) }; }
 
 E.parse = function (D) {
-  var B = { words: [], sents: [], pass: [], dlg: [], test: [], byId: {} };
+  var B = { words: [], sents: [], pass: [], dlg: [], test: [], byId: {}, D: D };
   D.WORDS.forEach(function (l, lv) { l.forEach(function (s, i) { B.words.push(word(s, "W" + lv + "-" + i, lv)); }); });
   D.SENTS.forEach(function (l, lv) { l.forEach(function (s, i) { B.sents.push(sent(s, "S" + lv + "-" + i, lv)); }); });
   D.PASS.forEach(function (l, lv) { l.forEach(function (s, i) { B.pass.push(quest(s, "P" + lv + "-" + i, lv, "p")); }); });
@@ -534,20 +682,126 @@ E.makeItem = function (u, type, B, rnd, lang) {
     it.reveal = u.opts[0];
   }
   if (m) { it.opts = m.opts; it.ans = m.ans; }
+  var tgt = E.targetOf(u);
+  it.sino = E.isSino(tgt, B);
+  it.root = E.rootOf(tgt, B);
+  it.l1 = E.l1key(u, type, B);
   return it;
 };
+/* 이 문항이 실제로 묻는 한국어 문자열 */
+E.targetOf = function (u) { return u.k === "w" ? u.ko : u.k === "s" ? u.blank : (u.opts ? u.opts[0] : ""); };
 E.check = function (item, resp) {
   if (resp === null || resp === undefined) return false;
   return item.mode === "tiles" ? String(resp).replace(/\s/g, "") === item.answer.replace(/\s/g, "") : resp === item.ans;
 };
 
+
+/* ---------- 차별 기능: 한자어 태그 / 모국어 대조 / 오류 원인 ----------
+   모두 규칙 기반 자동 분류다. 사람이 문항마다 붙인 태그가 아니다. */
+var ASP = /[ㅋㅌㅍㅊㄲㄸㅃㅆㅉ]/;
+function decomp(ch) { // 한글 음절 -> 초성·종성 인덱스
+  var c = ch.charCodeAt(0) - 0xAC00;
+  if (c < 0 || c > 11171) return null;
+  return { cho: Math.floor(c / 588), jong: c % 28 };
+}
+var CHO = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
+E.hasAspirate = function (t) {
+  return Array.from(String(t)).some(function (ch) { var d = decomp(ch); return d && ASP.test(CHO[d.cho]); });
+};
+E.hasBatchim = function (t) {
+  return Array.from(String(t)).some(function (ch) { var d = decomp(ch); return d && d.jong > 0; });
+};
+E.isSino = function (t, B) {
+  var s = String(t || ""), L = B && B.D && B.D.SINO ? B.D.SINO : [];
+  for (var i = 0; i < L.length; i++) if (s.indexOf(L[i]) >= 0) return true;
+  return false;
+};
+function inList(t, list) {
+  var s = String(t || "");
+  for (var i = 0; i < list.length; i++) if (s.indexOf(list[i]) >= 0) return true;
+  return false;
+}
+/* 한자 어근 태그. 목록 순서대로 먼저 맞는 어근 하나만 붙인다. 없으면 null */
+E.rootOf = function (t, B) {
+  var s = String(t || ""), R = B && B.D && B.D.ROOTS ? B.D.ROOTS : [];
+  if (!s) return null;
+  for (var i = 0; i < R.length; i++) {
+    for (var j = 0; j < R[i].w.length; j++) if (s.indexOf(R[i].w[j]) >= 0) return R[i].k;
+  }
+  return null;
+};
+E.rootDef = function (key, B) {
+  var R = B && B.D && B.D.ROOTS ? B.D.ROOTS : [];
+  for (var i = 0; i < R.length; i++) if (R[i].k === key) return R[i];
+  return null;
+};
+/* 문항이 어느 모국어 대조 패턴에 해당하는가. 해당 없으면 null */
+E.l1key = function (u, type, B) {
+  var D = B && B.D ? B.D : {}, sk = E.TYPES[type].sk;
+  var target = u.k === "w" ? u.ko : u.k === "s" ? u.blank : (u.opts ? u.opts[0] : "");
+  if (sk === "W") return "spell";
+  if (type === "RD" || type === "LP") return "infer";
+  if (type === "LW" || type === "LD") return E.hasAspirate(target) ? "stop3" : "batchim";
+  if (u.k === "s" && inList(target, D.CONN || [])) return "conn";
+  if (u.k === "s" && (D.PART || []).indexOf(String(target).trim()) >= 0) return "topic";
+  if (E.isSino(target, B)) return "sino";
+  if (type === "LC") return "batchim";
+  return null;
+};
+/* 선택한 보기의 말이 지문에 그대로 나오면 함정 선택지로 본다 */
+E.isTrap = function (item, pick) {
+  if (item.mode !== "mc" || pick === null || pick === undefined || pick === item.ans) return false;
+  var src = String(item.script || item.stem || "");
+  if (src.length < 20) return false;
+  var opt = String(item.opts[pick] || "").replace(/[.,?!]/g, "");
+  for (var i = 0; i + 3 <= opt.length; i++) {
+    var piece = opt.slice(i, i + 3);
+    if (/\s/.test(piece)) continue;
+    if (src.indexOf(piece) >= 0) return true;
+  }
+  return false;
+};
+/* 오류 원인 판정. 우선순위는 E06 → E05 → E04 → E02 → E03 → E01 */
+E.classify = function (item, rec) {
+  if (!rec || rec.ok) return null;
+  if (rec.firstOk) return "E06";                       // 맞았다가 바꿔서 틀림
+  if (rec.skip || (rec.ms !== undefined && rec.ms < 4000)) return "E05";
+  if (E.isTrap(item, rec.pick)) return "E04";
+  if (item.l1 === "conn") return "E02";
+  if (item.type === "RD" || item.type === "LP") return "E03";
+  return "E01";
+};
+
 /* ---------- state ---------- */
 E.newState = function (uid, lang, today) {
-  return { v: 1, uid: uid, lang: lang, start: today, plv: null, grade: null, xp: 0, seen: {}, wrong: [], types: {},
-    recent: [], days: {}, tests: [], sec: { prac: 0, test: 0, game: 0 }, nPrac: 0, events: [] };
+  return { v: 2, uid: uid, lang: lang, profile: "academic", start: today, plv: null, grade: null, xp: 0, seen: {}, wrong: [], types: {},
+    recent: [], days: {}, tests: [], sec: { prac: 0, test: 0, game: 0 }, nPrac: 0, events: [],
+    errs: {}, defend: { held: 0, lost: 0 }, sino: { n: 0, c: 0 }, nonsino: { n: 0, c: 0 }, l1: {}, roots: {} };
 };
 function dayDiff(a, b) { return Math.round((Date.parse(b) - Date.parse(a)) / 864e5); }
 E.dayDiff = dayDiff;
+
+
+/* 한 문항의 결과를 진단 카운터에 반영한다 (연습·시험 공통) */
+E.record = function (st, item, rec) {
+  if (!st.errs) { st.errs = {}; st.defend = { held: 0, lost: 0 }; st.sino = { n: 0, c: 0 }; st.l1 = {}; }
+  if (!st.nonsino) st.nonsino = { n: 0, c: 0 };
+  if (!st.roots) st.roots = {};
+  var bucket = item.sino ? st.sino : st.nonsino;
+  bucket.n++; if (rec.ok) bucket.c++;
+  if (item.root) {
+    var R = st.roots[item.root] || (st.roots[item.root] = { n: 0, c: 0 });
+    R.n++; if (rec.ok) R.c++;
+  }
+  if (item.l1) {
+    var L = st.l1[item.l1] || (st.l1[item.l1] = { n: 0, c: 0 });
+    L.n++; if (rec.ok) L.c++;
+  }
+  if (rec.firstOk) { if (rec.ok) st.defend.held++; else st.defend.lost++; }
+  var code = E.classify(item, rec);
+  if (code) st.errs[code] = (st.errs[code] || 0) + 1;
+  return code;
+};
 
 /* ---------- tests ---------- */
 E.buildTest = function (form, B, rnd, lang) {
@@ -567,8 +821,9 @@ E.scoreTest = function (items, oks) {
   var lvl = 0; while (lvl < 5 && per[lvl] >= 3) lvl++;
   return { score: c * 5, correct: c, per: per, sk: sk, plv: Math.min(4, lvl) };
 };
-E.applyTest = function (st, form, items, oks, today, sec) {
+E.applyTest = function (st, form, items, oks, today, sec, recs) {
   var r = E.scoreTest(items, oks);
+  if (recs) items.forEach(function (it, i) { if (recs[i]) E.record(st, it, recs[i]); });
   st.tests.push({ form: form, date: today, score: r.score, per: r.per, sk: r.sk, lvl: r.plv, sec: sec });
   if (form === 0) { st.plv = r.plv; st.grade = r.plv + 1; st.start = today; }
   st.sec.test += sec; st.xp += 30; r.xp = 30;
@@ -653,8 +908,9 @@ E.pickPractice = function (st, B, rnd, lang) {
   return shuffle(items, rnd);
 };
 
-E.applyPractice = function (st, items, oks, today, sec) {
-  var c = 0, ev = [];
+E.applyPractice = function (st, items, oks, today, sec, recs) {
+  var c = 0, ev = [], codes = [];
+  if (recs) items.forEach(function (it, i) { if (recs[i]) codes.push(E.record(st, it, recs[i])); });
   items.forEach(function (it, i) {
     var ok = !!oks[i], T = st.types[it.type] || (st.types[it.type] = { n: 0, c: 0, miss: 0, run: 0, weak: 0, over: 0 });
     T.n++; st.seen[it.uid] = 1;
@@ -679,7 +935,7 @@ E.applyPractice = function (st, items, oks, today, sec) {
   st.days[today] = (st.days[today] || 0) + 1;
   ev.forEach(function (e) { e.date = today; st.events.push(e); });
   if (st.events.length > 60) st.events = st.events.slice(-60);
-  return { correct: c, n: items.length, xp: xp, events: ev };
+  return { correct: c, n: items.length, xp: xp, events: ev, codes: codes };
 };
 E.practicedToday = function (st, today) { return !!st.days[today]; };
 E.streak = function (st, today) {
@@ -708,7 +964,79 @@ E.summary = function (st) {
   return { base: base, last: last, best: best, gain: gain, minutes: min, days: Object.keys(st.days).length,
     gainPerHour: gain !== null && min > 0 ? Math.round(gain / (min / 60) * 10) / 10 : null,
     weak: Object.keys(st.types).filter(function (t) { return st.types[t].weak; }),
-    over: Object.keys(st.types).reduce(function (a, t) { return a + st.types[t].over; }, 0) };
+    over: Object.keys(st.types).reduce(function (a, t) { return a + st.types[t].over; }, 0),
+    defend: E.defendRate(st), sinoAcc: E.sinoAcc(st), topErr: E.topErr(st), profile: st.profile || "academic" };
+};
+
+
+/* 아는 문제 사수율: 처음에 맞혔던 문항을 끝까지 지킨 비율 */
+E.defendRate = function (st) {
+  var d = st.defend || { held: 0, lost: 0 }, n = d.held + d.lost;
+  return n ? Math.round(d.held / n * 100) : null;
+};
+E.sinoAcc = function (st) {
+  var s = st.sino || { n: 0, c: 0 };
+  return s.n ? Math.round(s.c / s.n * 100) : null;
+};
+E.nonSinoAcc = function (st) {
+  var s = st.nonsino || { n: 0, c: 0 };
+  return s.n ? Math.round(s.c / s.n * 100) : null;
+};
+E.topErr = function (st) {
+  var e = st.errs || {}, best = null;
+  Object.keys(e).forEach(function (k) { if (!best || e[k] > e[best]) best = k; });
+  return best;
+};
+/* 시험 프로필에 맞는 영역·레벨만 쓴다 */
+E.profileOf = function (st, B) {
+  var P = B && B.D && B.D.PROFILES ? B.D.PROFILES : null;
+  if (!P) return { skills: E.SKILLS, maxLv: 4 };
+  return P[st && st.profile ? st.profile : "academic"] || P.academic;
+};
+
+
+/* EPS-TOPIK은 읽기·듣기만, 기초 수준까지만 낸다. 걸러낸 자리는 조건에 맞는 다른 문항으로 채운다. */
+E.applyProfile = function (st, items, B, rnd, lang) {
+  var P = E.profileOf(st, B);
+  if (P.skills.length === 3 && P.maxLv >= 4) return items;
+  var keep = items.filter(function (it) { return P.skills.indexOf(it.skill) >= 0 && it.lv <= P.maxLv; });
+  if (keep.length === items.length) return keep;
+  var used = {}; keep.forEach(function (it) { used[it.uid] = 1; });
+  var types = Object.keys(E.TYPES).filter(function (t) { return P.skills.indexOf(E.TYPES[t].sk) >= 0; });
+  var pool = B.words.concat(B.sents, B.pass, B.dlg).filter(function (u) {
+    return u.lv <= P.maxLv && !st.seen[u.id] && !used[u.id];
+  });
+  pool = shuffle(pool, rnd);
+  for (var i = 0; keep.length < items.length && i < pool.length; i++) {
+    for (var j = 0; j < types.length; j++) {
+      if (E.canType(pool[i], types[j])) { used[pool[i].id] = 1; keep.push(E.makeItem(pool[i], types[j], B, rnd, lang)); break; }
+    }
+  }
+  return keep;
+};
+
+/* ---------- 대조군 분류 ----------
+   배치고사 한 번만 보고 학생을 줄 세운다. 그 뒤에 쓰는 자료는 쓰지 않는다.
+   p = { n: 푼 문항, c: 맞힌 문항, hi: 레벨 3~4를 맞힌 수, fast: 4초 미만으로 틀린 수, skip: 모름으로 넘긴 수 } */
+E.groupIndex = function (p) {
+  if (!p || !p.n) return null;
+  var accP = p.c / p.n * 100;             // 정답률 — 주 기준
+  var hiP = (p.hi || 0) / p.n * 100;      // 어려운 문항을 맞혔는가 (천장 확인)
+  var fastP = (p.fast || 0) / p.n * 100;  // 읽지 않고 찍은 흔적
+  var skipP = (p.skip || 0) / p.n * 100;  // 모름으로 넘긴 비율
+  return Math.round((accP + hiP * 0.3 - fastP * 0.25 - skipP * 0.1) * 10) / 10;
+};
+/* 상위 size명을 A1/A2로, 하위 size명을 B1/B2로 가른다.
+   1,4,5,8…번을 A1에 2,3,6,7…번을 A2에 넣으므로 두 집단의 평균 실력이 거의 같아진다. */
+E.makeGroups = function (list, size) {
+  var ranked = list.filter(function (x) { return x.idx !== null && x.idx !== undefined; })
+    .sort(function (a, b) { return b.idx - a.idx || String(a.uid).localeCompare(String(b.uid)); });
+  var n = ranked.length, k = Math.max(0, Math.min(size || 20, Math.floor(n / 2))), map = {};
+  function snake(i) { return (i % 4 === 0 || i % 4 === 3) ? 0 : 1; }
+  for (var i = 0; i < k; i++) map[ranked[i].uid] = snake(i) ? "A2" : "A1";
+  for (var j = 0; j < k; j++) map[ranked[n - 1 - j].uid] = snake(j) ? "B2" : "B1";
+  ranked.forEach(function (x, i) { x.rank = i + 1; x.grp = map[x.uid] || ""; });
+  return { map: map, ranked: ranked, k: k, n: n };
 };
 
 if (typeof module !== "undefined" && module.exports) module.exports = E;
@@ -732,6 +1060,7 @@ hello: ["Salom", "Здравствуйте", "Hello", "안녕하세요"],
 level: ["Mashq darajasi", "Уровень практики", "Practice level", "연습 단계"],
 goal: ["Maqsad", "Цель", "Goal", "도전 등급"],
 grade: ["TOPIK {n}-daraja", "TOPIK {n} уровень", "TOPIK level {n}", "TOPIK {n}급"],
+grade_s: ["TOPIK {n}", "TOPIK {n}", "TOPIK {n}", "{n}급"],
 streak: ["kun ketma-ket", "дн. подряд", "day streak", "일 연속"],
 place_title: ["Boshlang'ich test", "Входной тест", "Placement test", "배치 시험"],
 place_desc: ["20 ta savol, taxminan 10 daqiqa. Darajangizni aniqlaymiz. Bilmasangiz, «Bilmayman» tugmasini bosing.", "20 вопросов, около 10 минут. Определим ваш уровень. Если не знаете, нажмите «Не знаю».", "20 questions, about 10 minutes. We find your level. If you don't know, tap \"I don't know\".", "20문항, 약 10분입니다. 현재 수준을 확인합니다. 모르면 '모르겠어요'를 누르세요."],
@@ -805,7 +1134,22 @@ n_LD: ["Diktant", "Диктант", "Dictation", "받아쓰기"],
 n_LC: ["Gap tinglash", "Предложение на слух", "Sentence listening", "문장 듣기"],
 n_LP: ["Suhbat tinglash", "Диалог на слух", "Dialogue listening", "대화 듣기"],
 n_SP: ["So'z yozish", "Написание слова", "Word spelling", "단어 쓰기"],
-n_WS: ["Gapni to'ldirish", "Завершение предложения", "Sentence completion", "문장 완성"]
+n_WS: ["Gapni to'ldirish", "Завершение предложения", "Sentence completion", "문장 완성"],
+why: ["Nega xato bo'ldi", "Почему ошибка", "Why it went wrong", "왜 틀렸나"],
+tip_l1: ["Ona tilingiz bilan taqqoslash", "Сравнение с родным языком", "Compared with your language", "모국어와 비교"],
+goal_title: ["TOPIK maqsadingiz", "Ваша цель TOPIK", "Your TOPIK goal", "목표 등급"],
+exam_title: ["Qaysi imtihon", "Какой экзамен", "Which exam", "시험 종류"],
+save: ["Saqlash", "Сохранить", "Save", "저장"],
+saved: ["Saqlandi", "Сохранено", "Saved", "저장했습니다"],
+defend_t: ["Bilgan savolni saqlab qolish", "Удержание известных ответов", "Answers you knew and kept", "아는 문제 사수율"],
+defend_d: ["To'g'ri tanlagan javobingizni o'zgartirmay qoldirgan ulush", "Доля верных ответов, которые вы не изменили", "Share of answers you had right and did not change", "처음 맞힌 답을 끝까지 지킨 비율"],
+sino_t: ["Xitoy ildizli so'zlar (한자어)", "Слова китайского корня (한자어)", "Sino-Korean words (한자어)", "한자어 문항"],
+other_t: ["Boshqa so'zlar", "Прочие слова", "Other words", "그 외 문항"],
+err_t: ["Asosiy xato sababi", "Основная причина ошибок", "Main cause of errors", "주요 오류 원인"],
+l1_t: ["Qiyinchilik turlari", "Типы трудностей", "Difficulty patterns", "어려움 패턴별 정답률"],
+day_count: ["{n}/30 kun", "{n}/30 дн.", "{n}/30 days", "{n}/30일"],
+root_t: ["Xitoy ildizlari bo'yicha", "По китайским корням", "By Sino-Korean root", "한자 어근별 정답률"],
+root_d: ["Bitta ildiz ko'p so'zda takrorlanadi. Ildizni bilsangiz, yangi so'zni ham taxmin qila olasiz.", "Один корень повторяется во многих словах. Зная корень, вы угадаете и новое слово.", "One root repeats across many words. Learn the root and new words become guessable.", "어근 하나가 여러 단어에 반복된다. 어근을 알면 처음 보는 단어도 추측할 수 있다."]
 };
 var I = { langs: L, names: { uz: "O'zbekcha", ru: "Русский", en: "English", ko: "한국어" },
   t: function (lang, key, n) { var r = T[key]; if (!r) return key; var s = r[Math.max(0, L.indexOf(lang))]; return n === undefined ? s : s.replace("{n}", n); } };
@@ -815,7 +1159,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = I; else ro
 <script>
 /* CHALLON student web app */
 (function () {
-var E = window.CHALLON_ENGINE, I = window.CHALLON_I18N, B = E.parse(window.CHALLON_DATA);
+var E = window.CHALLON_ENGINE, I = window.CHALLON_I18N, D = window.CHALLON_DATA, B = E.parse(D);
 var C = Object.assign({ API: "", GOOGLE_CLIENT_ID: "", DEMO: true, WEEK_DAYS: 7, TZ_OFFSET: 5, AUDIO_FILES: false, AUDIO_BASE: "audio/" }, window.CHALLON_CONFIG || {});
 var KEY = "challon_v1", app = document.getElementById("app");
 var qs = new URLSearchParams(location.search);
@@ -898,11 +1242,8 @@ function draw() {
 }
 function on(sel, fn) { Array.prototype.forEach.call(app.querySelectorAll(sel), function (el) { el.addEventListener("click", function (ev) { fn(el, ev); }); }); }
 function brand() { return '<div class="brand" data-home style="cursor:pointer">CHALLON</div>'; }
-document.addEventListener("click", function(e) {
-  if (e.target.closest("[data-home]")) {
-    if (view !== "login") go("home");
-  }
-});
+document.addEventListener("click", function (e) { if (e.target.closest("[data-home]") && view !== "login" && view !== "run") go("home"); });
+
 /* ---------- login ---------- */
 function vLogin() {
   var h = '<div class="login">' + brand() + '<p class="tag">' + esc(t("tagline")) + '</p>' +
@@ -973,39 +1314,35 @@ function vHome() {
   var st = S.state, td = today(), h = '<div class="top">' + brand() + '<button class="link" id="out">' + esc(t("logout")) + "</button></div>";
   h += '<h1 class="hello">' + esc(t("hello")) + (S.profile.name ? ", " + esc(S.profile.name) : "") + "</h1>";
   if (st.plv !== null) {
-    h += '<div class="stats"><div><b>L' + st.plv + "</b><span>" + esc(t("level")) + "</span></div><div><b>" + esc(t("grade", st.grade)) + "</b><span>" + esc(t("goal")) + "</span></div><div><b>" +
+    h += '<div class="stats"><div><b>L' + st.plv + "</b><span>" + esc(t("level")) + "</span></div><div><b>" + esc(t("grade_s", st.grade)) + "</b><span>" + esc(t("goal")) + "</span></div><div><b>" +
       E.streak(st, td) + "</b><span>" + esc(t("streak")) + "</span></div><div><b class='xp'>" + st.xp + "</b><span>XP</span></div></div>";
   }
-  var dailyCount = (st.days ? Object.keys(st.days).filter(function(d) {
-  return st.days[d];
-}).length : 0);
-var dailyProgress = Math.min(dailyCount, 30) + "/30";
-  h += '<div class="card"><h2>TOPIK maqsadingizni tanlang</h2><select id="goalSelect" style="width:100%;padding:12px;font-size:16px;border-radius:8px">' +
-  [1,2,3,4,5,6].map(function(n) {
-    return '<option value="' + n + '"' + (st.grade === n ? ' selected' : '') + '>TOPIK ' + n + '</option>';
-  }).join('') +
-  '</select><button class="btn" id="saveGoal" style="margin-top:10px">Saqlash</button></div>';
   if (S.cur) h += card(S.cur.kind === "prac" ? t("today_title") : S.cur.kind === "place" ? t("place_title") : t("week_title"), (S.cur.i + 1) + " / " + S.cur.items.length, "resume", t("resume"), true);
   else if (st.plv === null) h += card(t("place_title"), t("place_desc"), "place", t("start"), true);
   else {
     var due = E.weekDue(st, td, C.WEEK_DAYS), wait = E.nextTestIn(st, td, C.WEEK_DAYS);
     if (due) h += card(t("week_title"), t("week_open", due), "week", t("start"), true);
-    if (E.practicedToday(st, td)) h += card("Daily Practice (" + dailyProgress + ")", t("today_done"), null, null, false, "done");
-    else h += card("Daily Practice (" + dailyProgress + ")", t("today_desc"), "prac", t("start"), !due);
+    var dayN = Object.keys(st.days || {}).length, dayLabel = t("today_title") + " (" + t("day_count", dayN) + ")";
+    if (E.practicedToday(st, td)) h += card(dayLabel, t("today_done"), null, null, false, "done");
+    else h += card(dayLabel, t("today_desc"), "prac", t("start"), !due);
     if (!due) h += card(t("week_title"), wait === null ? t("week_all") : t("week_wait", wait), null, null, false, "muted");
   }
   if (st.plv !== null) {
     h += card(t("game_title"), t("game_desc"), "game", t("start"), false);
+    h += '<div class="card"><div class="label">' + esc(t("exam_title")) + '</div><select id="examSel">' +
+      Object.keys(D.PROFILES).map(function (k) { return '<option value="' + k + '"' + ((st.profile || "academic") === k ? " selected" : "") + ">" + esc(D.PROFILES[k][lang] || D.PROFILES[k].en) + "</option>"; }).join("") +
+      '</select><div class="label" style="margin-top:14px">' + esc(t("goal_title")) + '</div><select id="goalSel">' +
+      [1, 2, 3, 4, 5, 6].map(function (n) { return '<option value="' + n + '"' + (st.grade === n ? " selected" : "") + ">" + esc(t("grade", n)) + "</option>"; }).join("") +
+      '</select><button class="btn ghost" id="saveGoal" style="margin-top:12px">' + esc(t("save")) + "</button></div>";
     h += '<button class="btn ghost" id="prog">' + esc(t("progress")) + "</button>";
   }
   app.innerHTML = h;
   on("#saveGoal", function () {
-  var selected = document.getElementById("goalSelect");
-  if (!selected) return;
-  S.state.grade = Number(selected.value);
-  save();
-  draw();
-});
+    var g = document.getElementById("goalSel"), x = document.getElementById("examSel");
+    if (g) S.state.grade = Number(g.value);
+    if (x) S.state.profile = x.value;
+    save(); alertBar(t("saved")); draw();
+  });
   on("#out", function () {
     if (gsiState === 2) google.accounts.id.disableAutoSelect(); // so a shared phone does not sign the next learner in as this one
     S.profile = null; save(); view = "login"; draw();
@@ -1030,6 +1367,7 @@ function startSession(kind, form) {
   if (kind !== "prac" && (form === null || form === undefined)) return;
   if (kind === "prac" && E.practicedToday(S.state, today())) return;
   var items = kind === "prac" ? E.pickPractice(S.state, B, rnd, lang) : E.buildTest(form, B, rnd, lang);
+  if (kind === "prac") items = E.applyProfile(S.state, items, B, rnd, lang);
   cur = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), kind: kind, form: kind === "prac" ? null : form, items: items, i: 0,
     resp: [], meta: items.map(function () { return { ms: 0, chg: 0, skip: 0, am: "" }; }), date: today(), fb: false };
   S.cur = cur; save(); go("run");
@@ -1052,40 +1390,6 @@ function vRun() {
     if (meta.am === "text") h += '<div class="note">' + esc(t("text_mode")) + '</div><div class="passage">' + esc(it.script || it.audio).replace(/\n/g, "<br>") + "</div>";
     else h += '<div class="center"><button class="audio" id="play">▶ ' + esc(t("play")) + '</button><br><button class="link small" id="nosound">' + esc(t("no_sound")) + "</button></div>";
   }
-  if (it.audio && cur.fb && !E.check(it, respValue(cur.i))) {
-  h += '<div class="note" style="padding:14px;margin-top:12px;background:#fff3e0;border-radius:8px;">';
-  h += '<b>Listening Hint — Tinglash uchun yordam</b>';
-  h += '<p>Audio matnini qayta o‘qing va asosiy so‘zlarni aniqlang:</p>';
-  h += '<p>' + esc(it.script || it.audio) + '</p>';
-    var vocab = {
-  "여자": "ayol",
-  "남자": "erkak",
-  "얼마예요": "qancha turadi?",
-  "지금": "hozir",
-  "사시면": "sotib olsangiz",
-  "양말": "paypoq",
-  "드려요": "beraman",
-  "병원": "kasalxona",
-  "옆": "yonida",
-  "가게": "do‘kon",
-  "직원": "xodim",
-  "학교": "maktab",
-  "선생님": "o‘qituvchi"
-};
-
-var script = it.script || it.audio || "";
-var words = Object.keys(vocab).filter(function(w) {
-  return script.includes(w);
-});
-
-if (words.length) {
-  h += '<p><b>Asosiy so‘zlar:</b></p>';
-  h += '<ul>' + words.map(function(w) {
-    return '<li>' + esc(w) + ' — ' + esc(vocab[w]) + '</li>';
-  }).join('') + '</ul>';
-}
-  h += '</div>';
-}
   if (it.stem) h += '<div class="' + (it.big ? "stem big" : it.q ? "passage" : "stem") + '">' + esc(it.stem) + "</div>";
   if (it.q) h += '<div class="question">' + esc(it.q) + "</div>";
   var locked = cur.fb;
@@ -1105,17 +1409,17 @@ if (words.length) {
   if (locked) {
     var ok = E.check(it, respValue(cur.i));
     h += '<div class="fb ' + (ok ? "good" : "bad") + '"><b>' + esc(t(ok ? "correct" : "wrong")) + "</b>" + (ok ? "" : "<div>" + esc(t("answer_is")) + ": " + esc(it.mode === "tiles" ? it.answer : it.opts[it.ans]) + "</div>") + '<div class="reveal">' + esc(it.reveal) + "</div></div>";
-  if (!ok) {
-  h += '<div class="note" style="margin-top:12px;padding:14px;background:#fff3e0;border-radius:8px;">';
-  h += '<b>Nima uchun xato?</b><p>';
-  h += esc(it.explanation || (
-  (it.stem || "").includes("음악을") ?
-  "들으면서 = tinglayotgan holda. -(으)면서 grammatikasi ikki harakat bir vaqtda bajarilishini bildiradi. 음악을 들으면서 공부해요 — Musiqa tinglab dars qilaman." :
-  "To‘g‘ri javobni yuqorida ko‘ring. Savolning grammatik tuzilishini qayta o‘rganing."
-));
-  h += '</p></div>';
+    if (!ok && it.l1 && D.L1[it.l1]) {
+      var L = D.L1[it.l1];
+      h += '<div class="l1"><b>' + esc(t("tip_l1")) + " · " + esc((L.n && L.n[lang]) || L.ko) + "</b><div>" + esc(L[lang] || L.en) + "</div></div>";
+    }
+    /* 한자 어근: 같은 뿌리를 쓰는 다른 단어를 같이 보여 준다. 한 단어가 여러 단어로 퍼진다. */
+    if (it.root) {
+      var R = E.rootDef(it.root, B);
+      if (R) h += '<div class="root"><b>' + esc(R.k) + " " + esc(R.s) + " · " + esc(R[lang] || R.en) + '</b><div class="rootw">' +
+        R.w.map(function (w) { return '<span class="pill">' + esc(w) + "</span>"; }).join("") + "</div></div>";
+    }
   }
-}
   var lastQ = cur.i === n - 1;
   h += '<div class="foot">';
   if (isTest()) h += '<button class="btn ghost" id="prev"' + (canPrev() ? "" : " disabled") + ">" + esc(t("prev")) + "</button>";
@@ -1130,15 +1434,24 @@ if (words.length) {
   on("#quit", function () { tick(); shownAt = 0; S.cur = cur; save(); cur = null; go("home"); });
   on("#play", function () { playItem(it, meta); });
   on("#nosound", function () { meta.am = "text"; stopAudio(); draw(); });
-  on("[data-o]", function (el) { var k = +el.getAttribute("data-o"); if (r !== undefined && r !== null && r !== k) meta.chg++; cur.resp[cur.i] = k; meta.skip = 0; S.cur = cur; save(); draw(); });
+  on("[data-o]", function (el) { var k = +el.getAttribute("data-o"); if (r !== undefined && r !== null && r !== k) meta.chg++; if (meta.first === undefined) meta.first = k; cur.resp[cur.i] = k; meta.skip = 0; S.cur = cur; save(); draw(); });
   on("[data-t]", function (el) { var a = (cur.resp[cur.i] || []).slice(); a.push(+el.getAttribute("data-t")); cur.resp[cur.i] = a; meta.skip = 0; S.cur = cur; save(); draw(); });
   on("[data-p]", function (el) { var a = cur.resp[cur.i].slice(); a.splice(+el.getAttribute("data-p"), 1); meta.chg++; cur.resp[cur.i] = a; S.cur = cur; save(); draw(); });
   on("#prev", function () { if (canPrev()) prevQ(); });
-  on("#skip", function () { cur.resp[cur.i] = null; meta.skip = 1; if (isTest()) advance(); else { cur.fb = true; S.cur = cur; save(); stopAudio(); draw(); } });
-  on("#check", function () { if (!answered()) return; cur.fb = true; S.cur = cur; save(); stopAudio(); draw(); });
+  on("#skip", function () { cur.resp[cur.i] = null; meta.skip = 1; if (meta.first === undefined) meta.first = null; if (isTest()) advance(); else { cur.fb = true; S.cur = cur; save(); stopAudio(); draw(); } });
+  on("#check", function () { if (!answered()) return; sealFirst(cur.i); cur.fb = true; S.cur = cur; save(); stopAudio(); draw(); });
   on("#next", function () { if (isTest() && !answered()) return; advance(); });
 }
+function sealFirst(i) {
+  var m = cur.meta[i];
+  if (m.first === undefined) m.first = respValue(i);
+}
+function firstOk(item, m) {
+  if (m.first === undefined || m.first === null) return false;
+  return E.check(item, item.mode === "tiles" ? (Array.isArray(m.first) ? m.first.map(function (k) { return item.tiles[k]; }).join("") : m.first) : m.first);
+}
 function advance() {
+  sealFirst(cur.i);
   tick(); stopAudio(); cur.fb = false;
   var oks = [];
   for (var k = 0; k <= cur.i; k++) oks.push(E.check(cur.items[k], respValue(k)));
@@ -1148,10 +1461,16 @@ function advance() {
 function finish(oks) {
   var st = S.state, sec = Math.round(cur.meta.reduce(function (a, m) { return a + m.ms; }, 0) / 1000), r, before = E.summary(st);
   while (oks.length < cur.items.length) oks.push(false);
-  if (isTest()) r = E.applyTest(st, cur.form, cur.items, oks, cur.date, sec);
-  else r = E.applyPractice(st, cur.items, oks, cur.date, sec);
+  var recs = cur.items.map(function (it, i) {
+    var m = cur.meta[i];
+    return { ok: !!oks[i], firstOk: firstOk(it, m), pick: it.mode === "mc" ? cur.resp[i] : null, ms: m.ms, skip: m.skip };
+  });
+  var codes = cur.items.map(function (it, i) { return E.classify(it, recs[i]); });
+  if (isTest()) r = E.applyTest(st, cur.form, cur.items, oks, cur.date, sec, recs);
+  else r = E.applyPractice(st, cur.items, oks, cur.date, sec, recs);
   var rec = { id: cur.id, kind: cur.kind, form: cur.form, date: cur.date, ts: Date.now(), sec: sec, n: cur.items.length, correct: r.correct, score: isTest() ? r.score : null, xp: r.xp, plv: st.plv, lang: lang,
-    rows: cur.items.map(function (it, i) { var m = cur.meta[i]; return { u: it.uid, t: it.type, sk: it.skill, lv: it.lv, ok: oks[i] ? 1 : 0, seen: i <= cur.i ? 1 : 0, ms: m.ms, chg: m.chg, skip: m.skip, am: m.am, rc: it.recycled ? 1 : 0 }; }) };
+    rows: cur.items.map(function (it, i) { var m = cur.meta[i]; return { u: it.uid, t: it.type, sk: it.skill, lv: it.lv, ok: oks[i] ? 1 : 0, seen: i <= cur.i ? 1 : 0, ms: m.ms, chg: m.chg, skip: m.skip, am: m.am, rc: it.recycled ? 1 : 0,
+      err: codes[i] || "", l1: it.l1 || "", sino: it.sino ? 1 : 0, root: it.root || "", fok: recs[i].firstOk ? 1 : 0 }; }), profile: st.profile || "academic" };
   pushRecord(rec);
   last = { kind: cur.kind, form: cur.form, r: r, base: before.base };
   cur = null; S.cur = null; shownAt = 0; save(); go("result");
@@ -1172,7 +1491,7 @@ function bars(sk) {
 }
 function vResult() {
   if (!last) { view = "home"; return draw(); }
-  var r = last.r, st = S.state, h = '<div class="top">' + brand() + '</div><h1>' + (last.kind === "place" ? "Initial Placement Test Result" : esc(t("result"))) + '</h1>';
+  var r = last.r, st = S.state, h = '<div class="top">' + brand() + "</div><h1>" + esc(t("result")) + "</h1>";
   if (last.kind === "prac") {
     h += '<div class="card center"><div class="bigscore">' + r.correct + " / " + r.n + '</div><div class="xp">+' + r.xp + " " + esc(t("xp_earned")) + "</div></div>";
     r.events.forEach(function (e) {
@@ -1203,6 +1522,39 @@ function vProgress() {
   h += "</div>";
   h += '<div class="card"><h2>' + esc(t("skills")) + "</h2>" + E.SKILLS.map(function (k) { var a = E.skillAcc(st, k), p = a === null ? 0 : Math.round(a * 100);
     return '<div class="row"><span>' + esc(t("skill_" + k)) + '</span><div class="bar"><i style="width:' + p + '%"></i></div><b>' + (a === null ? "–" : p + "%") + "</b></div>"; }).join("") + "</div>";
+  /* 아는 문제 사수율 */
+  if (s.defend !== null) {
+    h += '<div class="card"><h2>' + esc(t("defend_t")) + '</h2><div class="bigscore">' + s.defend + '<small>%</small></div><p class="fine">' + esc(t("defend_d")) + "</p></div>";
+  }
+  /* 한자어 vs 그 외 */
+  var nonS = E.nonSinoAcc(st);
+  if (s.sinoAcc !== null || nonS !== null) {
+    h += '<div class="card">' +
+      '<div class="row"><span>' + esc(t("sino_t")) + '</span><div class="bar"><i style="width:' + (s.sinoAcc || 0) + '%"></i></div><b>' + (s.sinoAcc === null ? "–" : s.sinoAcc + "%") + "</b></div>" +
+      '<div class="row"><span>' + esc(t("other_t")) + '</span><div class="bar"><i style="width:' + (nonS || 0) + '%"></i></div><b>' + (nonS === null ? "–" : nonS + "%") + "</b></div></div>";
+  }
+  /* 주요 오류 원인 */
+  if (s.topErr && D.ERR[s.topErr]) {
+    var ec = D.ERR[s.topErr];
+    h += '<div class="card"><h2>' + esc(t("err_t")) + '</h2><span class="pill">' + esc(ec[lang] || ec.en) + "</span></div>";
+  }
+  /* 어려움 패턴별 정답률 */
+  var l1k = Object.keys(st.l1 || {}).filter(function (k) { return st.l1[k].n >= 2 && D.L1[k]; })
+    .sort(function (x, y) { return st.l1[x].c / st.l1[x].n - st.l1[y].c / st.l1[y].n; });
+  if (l1k.length) {
+    h += '<div class="card"><h2>' + esc(t("l1_t")) + "</h2>" + l1k.map(function (k) {
+      var L = st.l1[k], pc = Math.round(L.c / L.n * 100);
+      return '<div class="row"><span>' + esc((D.L1[k].n && D.L1[k].n[lang]) || D.L1[k].ko) + '</span><div class="bar"><i style="width:' + pc + '%"></i></div><b>' + pc + "%</b></div>"; }).join("") + "</div>";
+  }
+  /* 한자 어근별 정답률. 문항이 적을 때는 비율 대신 "맞힘/전체"를 같이 보여 준다. */
+  var rk = Object.keys(st.roots || {}).sort(function (x, y) { return st.roots[x].c / st.roots[x].n - st.roots[y].c / st.roots[y].n; });
+  var rtot = rk.reduce(function (a, k) { return a + st.roots[k].n; }, 0);
+  if (rtot >= 3) {
+    h += '<div class="card"><h2>' + esc(t("root_t")) + "</h2>" + rk.map(function (k) {
+      var R = E.rootDef(k, B), g = st.roots[k], pc = Math.round(g.c / g.n * 100);
+      return '<div class="row"><span>' + esc(k + " " + (R ? R.s : "")) + '</span><div class="bar"><i style="width:' + pc + '%"></i></div><b>' + g.c + "/" + g.n + "</b></div>";
+    }).join("") + '<p class="fine">' + esc(t("root_d")) + "</p></div>";
+  }
   var over = Object.keys(st.types).filter(function (k) { return st.types[k].over; });
   function list(a) { return a.length ? a.map(function (k) { return '<span class="pill">' + esc(t("n_" + k)) + "</span>"; }).join("") : '<span class="fine">' + esc(t("none_yet")) + "</span>"; }
   h += '<div class="card"><h2>' + esc(t("weak")) + "</h2>" + list(s.weak) + "<h2 style='margin-top:16px'>" + esc(t("overcame")) + "</h2>" + list(over) + "</div>";
@@ -1251,10 +1603,6 @@ function vGame() {
 }
 function tap() { var now = Date.now(); game.active += Math.min(20, (now - game.lastTap) / 1000); game.lastTap = now; }
 function newRound() {
-  if (game.correct >= 10) {
-    endGame();
-    return;
-  }
   if (game.mode === "match") { var w = E.gameWords(S.state, B, rnd, 4); game.left = E.shuffle(w, rnd); game.right = E.shuffle(w, rnd); game.done = {}; game.pick = null; game.miss = null; }
   else { var x = E.gameWords(S.state, B, rnd, 1)[0], ty = ["MV", "VM", "MV", "VM", "LW"][Math.floor(rnd() * (audioModeNoFile() === "tts" ? 5 : 4))]; game.item = E.makeItem(x, ty, B, rnd, lang); game.shown = null; }
 }
